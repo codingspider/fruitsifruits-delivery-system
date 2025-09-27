@@ -15,7 +15,8 @@ import {
   FcReadingEbook,
   FcAddDatabase,
   FcMindMap,
-  FcManager 
+  FcManager,
+  FcConferenceCall
 } from 'react-icons/fc';
 import { Link as RouterLink, useLocation } from 'react-router-dom';
 import {
@@ -59,7 +60,8 @@ const SidebarContent = ({ onClose, ...rest }) => {
       borderRightColor={useColorModeValue('gray.200', 'gray.700')}
       w={{ base: 'full', md: 60 }}
       pos="fixed"
-      h="full"
+      h="100vh"
+      overflowY="auto" 
       {...rest}
     >
       <Flex h="20" alignItems="center" mx="8" justifyContent="space-between">
@@ -78,6 +80,7 @@ const SidebarContent = ({ onClose, ...rest }) => {
       <NavLink to="/super/admin/pos"      icon={FcShop} activeBg={activeBg} activeColor={activeColor} hoverBg={hoverBg} active={isActive('/super/admin/pos')} label={t('pos')} />
       <NavLink to="/super/admin/orders"   icon={FcList} activeBg={activeBg} activeColor={activeColor} hoverBg={hoverBg} active={isActive('/super/admin/orders')} label={t('orders')} />
       <NavLink to="/super/admin/order-status" icon={FcOk} activeBg={activeBg} activeColor={activeColor} hoverBg={hoverBg} active={isActive('/super/admin/order-status')} label={t('order_status')} />
+      <NavLink to="/super/admin/order-status" icon={FcConferenceCall } activeBg={activeBg} activeColor={activeColor} hoverBg={hoverBg} active={isActive('/super/admin/order-status')} label={t('customers')} />
 
       {/* ----- Dropdown: user management ----- */}
       <DropdownHeader
