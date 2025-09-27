@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useContext} from 'react';
 import { useNavigate } from 'react-router-dom';
 import {
   Box,
@@ -14,21 +14,20 @@ import {
   MenuItem,
   MenuList,
   useColorModeValue,
+  Select
 } from '@chakra-ui/react'
 import { FcGlobe } from "react-icons/fc";
 import {
   FiMenu,
-  FiBell,
   FiChevronDown,
-  FiHome,
-  FiTrendingUp,
-  FiCompass,
-  FiStar,
-  FiSettings,
 } from 'react-icons/fi';
 import { logoutUser } from '../../services/authService';
 
+import { LanguageContext } from '../../LanguageProvider';
+
+
 const TopNav = ({ onOpen, ...rest }) => {
+  const { lang, changeLanguage } = useContext(LanguageContext);
   const navigate = useNavigate();
   const handleLogout = async () => {
     await logoutUser(navigate);
@@ -55,6 +54,11 @@ const TopNav = ({ onOpen, ...rest }) => {
       <Text fontSize="lg" fontWeight="bold">Dashboard</Text>
 
       <HStack spacing="4">
+        <Select value={lang} mr={3} display={{ base: 'none', md: 'block' }}  onChange={(e) => changeLanguage(e.target.value)}>
+          <option value="en">English</option>
+          <option value="bn">বাংলা</option>
+        </Select>
+
         <IconButton size="lg" variant="ghost"w="40px" h="40px" icon={<FcGlobe />} />
         <Menu>
           <MenuButton>

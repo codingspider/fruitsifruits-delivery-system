@@ -1,0 +1,92 @@
+<?php
+
+return [
+
+    /*
+    |--------------------------------------------------------------------------
+    | Authentication Language Lines
+    |--------------------------------------------------------------------------
+    |
+    | The following language lines are used during authentication for various
+    | messages that we need to display to the user. You are free to modify
+    | these language lines according to your application's requirements.
+    |
+    */
+
+    'application_name' => 'Application Name',
+    'password' => 'Password',
+    'throttle' => 'Too many login attempts. Please try again in :seconds seconds.',
+    'master_setting' => 'Master Setting',
+    'welcome' => 'Welcome to the site!',
+    'logout' => 'Logout',
+    'login' => 'Login',
+    'app_logo' => 'App Logo',
+    'fav_icon' => 'Fav Icon',
+    'phone_number' => 'Phone Number',
+    'alternative_phone_number' => 'Alternative Phone Number',
+    'email' => 'Email',
+    'whats_app_number' => 'Whats App Number',
+    'country' => 'Country',
+    'state' => 'State',
+    'city' => 'City',
+    'district' => 'District',
+    'zip' => 'Zip Code',
+    'address' => 'Address',
+    'owner_address' => 'Owner Address',
+    'phone' => 'Phone',
+    'save' => 'Save',
+    'home' => 'Home',
+    'plan' => 'Plans',
+    'add_plan' => 'Add Plan',
+    'plan_name' => 'Plan Name',
+    'number_of_order' => 'Number of orders',
+    'business_location' => 'Business location',
+    'staff_user' => 'Staff User',
+    'sms_remider' => 'SMS/WhatsApp reminders',
+    'status' => 'Status',
+    'active' => 'Active',
+    'inactive' => 'Inactive',
+    'create' => 'Create',
+    'back' => 'Back',
+    'edit' => 'Edit',
+    'update' => 'Update',
+    'owner' => 'Owner List',
+    'company_name' => 'Company Name',
+    'add_owner' => 'Add Owner',
+    'edit_owner' => 'Edit Owner',
+    'is_active' => 'Is Active',
+    'name' => 'Name',
+    'action' => 'Action',
+    'company_address' => 'Company Address',
+    'number_of_branch' => 'Number Of Branch',
+    'details' => 'Details View',
+    'dashboard' => 'Dashboard',
+    'pos' => 'POS (Point Of Sale)',
+    'orders' => 'All Orders',
+    'order_status' => 'Order Status',
+    'delivery_boy' => 'Delivery Boy',
+    'pick_up' => 'Pick Up',
+    'backup' => 'Backup',
+    'login_history' => 'Login History',
+    'expense' => 'Expense',
+    'expense_head' => 'Expense Head',
+    'all_expense' => 'All Expenses',
+    'add_expense' => 'Add Expenses',
+    'services' => 'Services',
+    'service_list' => 'Service List',
+    'add_service' => 'Add Service',
+    'payments' => 'Payments',
+    'reports' => 'Reports',
+    'payment_list' => 'Payment List',
+    'add_payment' => 'Add Payment',
+    'sales_report' => 'Sales Report',
+    'expense_report' => 'Expense Report',
+    'pickup_request' => 'Pickup Request',
+    'stats' => 'Stats',
+    'user_management' => 'User Management',
+    'user_list' => 'User List',
+    'staff_list' => 'Staff List',
+    'add_staff' => 'Add Staff',
+    'business_owner' => 'Business Owner',
+
+];

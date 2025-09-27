@@ -1,17 +1,19 @@
 import React from 'react';
-import { ChakraProvider } from '@chakra-ui/react';
-import theme from '../theme';
-import { Button } from '@chakra-ui/react';
 import ReactDOM from 'react-dom/client';
-import {
-  RouterProvider,
-} from "react-router-dom";
+import { ChakraProvider } from '@chakra-ui/react';
+import { RouterProvider } from 'react-router-dom';
+
+import theme from '../theme';
 import router from './router';
+import api from '../src/axios';
+import { LanguageProvider } from './LanguageProvider';
 
 ReactDOM.createRoot(document.getElementById('app')).render(
   <React.StrictMode>
-    <ChakraProvider theme={theme}>
+    <LanguageProvider api={api}>
+      <ChakraProvider theme={theme}>
         <RouterProvider router={router} />
-    </ChakraProvider>
+      </ChakraProvider>
+    </LanguageProvider>
   </React.StrictMode>
-)
+);
