@@ -30,6 +30,8 @@ import {
   
 } from '@chakra-ui/react';
 import { useTranslation } from 'react-i18next';
+import SaveOrder from '../order/SaveOrder';
+import { USER_LIST_PATH } from '../../router';
 
 const SidebarContent = ({ onClose, ...rest }) => {
   const { t } = useTranslation();
@@ -78,7 +80,7 @@ const SidebarContent = ({ onClose, ...rest }) => {
       {/* ----- Static links ----- */}
       <NavLink to="/super/admin/dashboard" icon={FcHome} activeBg={activeBg} activeColor={activeColor} hoverBg={hoverBg} active={isActive('/super/admin/dashboard')} label={t('dashboard')} />
       <NavLink to="/super/admin/pos"      icon={FcShop} activeBg={activeBg} activeColor={activeColor} hoverBg={hoverBg} active={isActive('/super/admin/pos')} label={t('pos')} />
-      <NavLink to="/super/admin/orders"   icon={FcList} activeBg={activeBg} activeColor={activeColor} hoverBg={hoverBg} active={isActive('/super/admin/orders')} label={t('orders')} />
+      <NavLink to='/super/admin/save/order'  icon={FcList} activeBg={activeBg} activeColor={activeColor} hoverBg={hoverBg} active={isActive('/super/admin/save/order')} label={t('orders')} />
       <NavLink to="/super/admin/order-status" icon={FcOk} activeBg={activeBg} activeColor={activeColor} hoverBg={hoverBg} active={isActive('/super/admin/order-status')} label={t('order_status')} />
       <NavLink to="/super/admin/order-status" icon={FcConferenceCall } activeBg={activeBg} activeColor={activeColor} hoverBg={hoverBg} active={isActive('/super/admin/order-status')} label={t('customers')} />
 
@@ -92,8 +94,7 @@ const SidebarContent = ({ onClose, ...rest }) => {
       />
       <Collapse in={open.user || location.pathname.startsWith('/super/admin/user/list')} animateOpacity>
         <Box ml="8" mt="1"  borderRadius="md">
-          <NavLink to="/super/admin/expense"         icon={null} activeBg={activeBg} activeColor={activeColor} hoverBg={hoverBg} active={isActive('/super/admin/expense')}         label={t('business_owner')} small />
-          <NavLink to="/super/admin/expense"         icon={null} activeBg={activeBg} activeColor={activeColor} hoverBg={hoverBg} active={isActive('/super/admin/expense')}         label={t('user_list')} small />
+          <NavLink to={USER_LIST_PATH}         icon={null} activeBg={activeBg} activeColor={activeColor} hoverBg={hoverBg} active={isActive(USER_LIST_PATH)}         label={t('user_list')} small />
           <NavLink to="/super/admin/expense"         icon={null} activeBg={activeBg} activeColor={activeColor} hoverBg={hoverBg} active={isActive('/super/admin/expense')}         label={t('staff_list')} small />
           <NavLink to="/super/admin/expense/create"  icon={null} activeBg={activeBg} activeColor={activeColor} hoverBg={hoverBg} active={isActive('/super/admin/expense/create')}  label={t('add_staff')}  small />
         </Box>

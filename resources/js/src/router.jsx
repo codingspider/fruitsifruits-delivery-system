@@ -13,6 +13,11 @@ import ProtectedRoute from "./ProtectedRoute";
 import MainLayout from "./components/layouts/MainLayout";
 import ErrorPage from "./components/pages/ErrorPage";
 import MasterSetting from "./components/superadmin/MasterSetting";
+import SaveOrder from "./components/order/SaveOrder";
+import UserList from "./components/user/UserList";
+import UserCreate from "./components/user/UserCreate";
+import UserEdit from "./components/user/UserEdit";
+
 
 // ✅ Public Routes
 export const ROOT = '/';
@@ -30,6 +35,13 @@ export const DASHBOARD = 'dashboard';
 
 export const MASTER_SETTING = `${SUPER_ADMIN_BASE}/settings`;
 export const DASHBOARD_PATH = `${SUPER_ADMIN_BASE}/dashboard`;
+
+export const SAVE_ORDER = `${SUPER_ADMIN_BASE}/save/order`;
+
+
+export const USER_LIST_PATH = `${SUPER_ADMIN_BASE}/user/list`;
+export const USER_ADD_PATH = `${SUPER_ADMIN_BASE}/user/create`;
+export const USER_EDIT_PATH = (id) => `${SUPER_ADMIN_BASE}/user/edit/${id}`;
 
 const router = createBrowserRouter([
   {
@@ -62,6 +74,9 @@ const router = createBrowserRouter([
     children: [
       { path: DASHBOARD, element: <ProtectedRoute role="superadmin"><Dashboard /></ProtectedRoute> },
       { path: MASTER_SETTING, element: <ProtectedRoute role="superadmin"><MasterSetting /></ProtectedRoute> },
+      { path: SAVE_ORDER, element: <ProtectedRoute role="superadmin"><SaveOrder /></ProtectedRoute> },
+      { path: USER_LIST_PATH, element: <ProtectedRoute role="superadmin"><UserList /></ProtectedRoute> },
+      { path: USER_ADD_PATH, element: <ProtectedRoute role="superadmin"><UserCreate /></ProtectedRoute> },
     ],
   },
 ]);

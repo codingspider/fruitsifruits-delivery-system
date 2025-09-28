@@ -1,9 +1,10 @@
 <?php
 
-use App\Http\Controllers\API\RegisterController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\API\UserController;
+use App\Http\Controllers\API\RegisterController;
 
 
 Route::controller(RegisterController::class)->group(function(){
@@ -11,6 +12,12 @@ Route::controller(RegisterController::class)->group(function(){
     Route::post('login', 'login');
     Route::post('forgot-password', 'forgotPassword');
     Route::post('reset-password', 'resetPassword');
+});
+
+Route::middleware(['auth:sanctum'])->prefix('superadmin')->group(function () {
+    // Add more super admin routes here
+    Route::get('users', [UserController::class, 'index']);
+    Route::post('user/store', [UserController::class, 'store']);
 });
 
 

@@ -89,5 +89,6 @@ return [
     'add_staff' => 'Add Staff',
     'business_owner' => 'Business Owner',
     'customers' => 'Customers',
+    'user_list' => 'User List',
 
 ];
