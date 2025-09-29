@@ -16,7 +16,8 @@ import {
   FcAddDatabase,
   FcMindMap,
   FcManager,
-  FcConferenceCall
+  FcConferenceCall,
+  FcSalesPerformance
 } from 'react-icons/fc';
 import { Link as RouterLink, useLocation } from 'react-router-dom';
 import {
@@ -79,6 +80,7 @@ const SidebarContent = ({ onClose, ...rest }) => {
 
       {/* ----- Static links ----- */}
       <NavLink to="/super/admin/dashboard" icon={FcHome} activeBg={activeBg} activeColor={activeColor} hoverBg={hoverBg} active={isActive('/super/admin/dashboard')} label={t('dashboard')} />
+      <NavLink to="/super/admin/pos"      icon={FcSalesPerformance } activeBg={activeBg} activeColor={activeColor} hoverBg={hoverBg} active={isActive('/super/admin/pos')} label={t('subscription_plan')} />
       <NavLink to="/super/admin/pos"      icon={FcShop} activeBg={activeBg} activeColor={activeColor} hoverBg={hoverBg} active={isActive('/super/admin/pos')} label={t('pos')} />
       <NavLink to='/super/admin/save/order'  icon={FcList} activeBg={activeBg} activeColor={activeColor} hoverBg={hoverBg} active={isActive('/super/admin/save/order')} label={t('orders')} />
       <NavLink to="/super/admin/order-status" icon={FcOk} activeBg={activeBg} activeColor={activeColor} hoverBg={hoverBg} active={isActive('/super/admin/order-status')} label={t('order_status')} />

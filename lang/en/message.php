@@ -90,5 +90,6 @@ return [
     'business_owner' => 'Business Owner',
     'customers' => 'Customers',
     'user_list' => 'User List',
+    'subscription_plan' => 'Subscription Plan',
 
 ];

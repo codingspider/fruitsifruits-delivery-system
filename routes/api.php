@@ -3,6 +3,7 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\API\PLanController;
 use App\Http\Controllers\API\UserController;
 use App\Http\Controllers\API\RegisterController;
 
@@ -18,6 +19,7 @@ Route::middleware(['auth:sanctum'])->prefix('superadmin')->group(function () {
     // Add more super admin routes here
     Route::get('users', [UserController::class, 'index']);
     Route::post('user/store', [UserController::class, 'store']);
+    Route::resource('plans', PLanController::class);
 });
 
 

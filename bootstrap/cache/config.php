@@ -118,7 +118,7 @@
     'name' => 'Laravel',
     'env' => 'local',
     'debug' => true,
-    'url' => 'http://127.0.0.1:8000',
+    'url' => 'http://192.168.0.105:8000',
     'frontend_url' => 'http://localhost:3000',
     'asset_url' => NULL,
     'timezone' => 'UTC',
@@ -470,7 +470,7 @@
       array (
         'driver' => 'local',
         'root' => 'C:\\laragon\\www\\laundry-saas-app\\storage\\app/public',
-        'url' => 'http://127.0.0.1:8000/storage',
+        'url' => 'http://192.168.0.105:8000/storage',
         'visibility' => 'public',
         'throw' => false,
         'report' => false,
@@ -607,7 +607,7 @@
         'username' => 'b4ec5729691f06',
         'password' => '2a4b1edc203587',
         'timeout' => NULL,
-        'local_domain' => '127.0.0.1',
+        'local_domain' => '192.168.0.105',
       ),
       'ses' => 
       array (
@@ -763,7 +763,7 @@
       2 => '127.0.0.1',
       3 => '127.0.0.1:8000',
       4 => '::1',
-      5 => '127.0.0.1:8000',
+      5 => '192.168.0.105:8000',
     ),
     'guard' => 
     array (
@@ -776,6 +776,222 @@
       'authenticate_session' => 'Laravel\\Sanctum\\Http\\Middleware\\AuthenticateSession',
       'encrypt_cookies' => 'Illuminate\\Cookie\\Middleware\\EncryptCookies',
       'validate_csrf_token' => 'Illuminate\\Foundation\\Http\\Middleware\\ValidateCsrfToken',
+    ),
+  ),
+  'scribe' => 
+  array (
+    'title' => 'Laravel API Documentation',
+    'description' => '',
+    'intro_text' => '    This documentation aims to provide all the information you need to work with our API.
+
+    <aside>As you scroll, you\'ll see code examples for working with the API in different programming languages in the dark area to the right (or as part of the content on mobile).
+    You can switch the language used with the tabs at the top right (or from the nav menu at the top left on mobile).</aside>',
+    'base_url' => 'http://192.168.0.105:8000',
+    'routes' => 
+    array (
+      0 => 
+      array (
+        'match' => 
+        array (
+          'prefixes' => 
+          array (
+            0 => 'api/*',
+          ),
+          'domains' => 
+          array (
+            0 => '*',
+          ),
+        ),
+        'include' => 
+        array (
+        ),
+        'exclude' => 
+        array (
+        ),
+      ),
+    ),
+    'type' => 'laravel',
+    'theme' => 'default',
+    'static' => 
+    array (
+      'output_path' => 'public/docs',
+    ),
+    'laravel' => 
+    array (
+      'add_routes' => true,
+      'docs_url' => '/docs',
+      'assets_directory' => NULL,
+      'middleware' => 
+      array (
+      ),
+    ),
+    'external' => 
+    array (
+      'html_attributes' => 
+      array (
+      ),
+    ),
+    'try_it_out' => 
+    array (
+      'enabled' => true,
+      'base_url' => NULL,
+      'use_csrf' => false,
+      'csrf_url' => '/sanctum/csrf-cookie',
+    ),
+    'auth' => 
+    array (
+      'enabled' => false,
+      'default' => false,
+      'in' => 'bearer',
+      'name' => 'key',
+      'use_value' => NULL,
+      'placeholder' => '{YOUR_AUTH_KEY}',
+      'extra_info' => 'You can retrieve your token by visiting your dashboard and clicking <b>Generate API token</b>.',
+    ),
+    'example_languages' => 
+    array (
+      0 => 'bash',
+      1 => 'javascript',
+      2 => 'php',
+      3 => 'python',
+    ),
+    'postman' => 
+    array (
+      'enabled' => true,
+      'overrides' => 
+      array (
+      ),
+    ),
+    'openapi' => 
+    array (
+      'enabled' => true,
+      'overrides' => 
+      array (
+      ),
+      'generators' => 
+      array (
+      ),
+    ),
+    'groups' => 
+    array (
+      'default' => 'Endpoints',
+      'order' => 
+      array (
+      ),
+    ),
+    'logo' => false,
+    'last_updated' => 'Last updated: {date:F j, Y}',
+    'examples' => 
+    array (
+      'faker_seed' => 1234,
+      'models_source' => 
+      array (
+        0 => 'factoryCreate',
+        1 => 'factoryMake',
+        2 => 'databaseFirst',
+      ),
+    ),
+    'strategies' => 
+    array (
+      'metadata' => 
+      array (
+        0 => 'Knuckles\\Scribe\\Extracting\\Strategies\\Metadata\\GetFromDocBlocks',
+        1 => 'Knuckles\\Scribe\\Extracting\\Strategies\\Metadata\\GetFromMetadataAttributes',
+      ),
+      'headers' => 
+      array (
+        0 => 'Knuckles\\Scribe\\Extracting\\Strategies\\Headers\\GetFromHeaderAttribute',
+        1 => 'Knuckles\\Scribe\\Extracting\\Strategies\\Headers\\GetFromHeaderTag',
+        2 => 
+        array (
+          0 => 'Knuckles\\Scribe\\Extracting\\Strategies\\StaticData',
+          1 => 
+          array (
+            'only' => 
+            array (
+            ),
+            'except' => 
+            array (
+            ),
+            'data' => 
+            array (
+              'Content-Type' => 'application/json',
+              'Accept' => 'application/json',
+            ),
+          ),
+        ),
+      ),
+      'urlParameters' => 
+      array (
+        0 => 'Knuckles\\Scribe\\Extracting\\Strategies\\UrlParameters\\GetFromLaravelAPI',
+        1 => 'Knuckles\\Scribe\\Extracting\\Strategies\\UrlParameters\\GetFromUrlParamAttribute',
+        2 => 'Knuckles\\Scribe\\Extracting\\Strategies\\UrlParameters\\GetFromUrlParamTag',
+      ),
+      'queryParameters' => 
+      array (
+        0 => 'Knuckles\\Scribe\\Extracting\\Strategies\\QueryParameters\\GetFromFormRequest',
+        1 => 'Knuckles\\Scribe\\Extracting\\Strategies\\QueryParameters\\GetFromInlineValidator',
+        2 => 'Knuckles\\Scribe\\Extracting\\Strategies\\QueryParameters\\GetFromQueryParamAttribute',
+        3 => 'Knuckles\\Scribe\\Extracting\\Strategies\\QueryParameters\\GetFromQueryParamTag',
+      ),
+      'bodyParameters' => 
+      array (
+        0 => 'Knuckles\\Scribe\\Extracting\\Strategies\\BodyParameters\\GetFromFormRequest',
+        1 => 'Knuckles\\Scribe\\Extracting\\Strategies\\BodyParameters\\GetFromInlineValidator',
+        2 => 'Knuckles\\Scribe\\Extracting\\Strategies\\BodyParameters\\GetFromBodyParamAttribute',
+        3 => 'Knuckles\\Scribe\\Extracting\\Strategies\\BodyParameters\\GetFromBodyParamTag',
+      ),
+      'responses' => 
+      array (
+        0 => 'Knuckles\\Scribe\\Extracting\\Strategies\\Responses\\UseResponseAttributes',
+        1 => 'Knuckles\\Scribe\\Extracting\\Strategies\\Responses\\UseTransformerTags',
+        2 => 'Knuckles\\Scribe\\Extracting\\Strategies\\Responses\\UseApiResourceTags',
+        3 => 'Knuckles\\Scribe\\Extracting\\Strategies\\Responses\\UseResponseTag',
+        4 => 'Knuckles\\Scribe\\Extracting\\Strategies\\Responses\\UseResponseFileTag',
+        5 => 
+        array (
+          0 => 'Knuckles\\Scribe\\Extracting\\Strategies\\Responses\\ResponseCalls',
+          1 => 
+          array (
+            'only' => 
+            array (
+              0 => 'GET *',
+            ),
+            'except' => 
+            array (
+            ),
+            'config' => 
+            array (
+              'app.debug' => false,
+            ),
+            'queryParams' => 
+            array (
+            ),
+            'bodyParams' => 
+            array (
+            ),
+            'fileParams' => 
+            array (
+            ),
+            'cookies' => 
+            array (
+            ),
+          ),
+        ),
+      ),
+      'responseFields' => 
+      array (
+        0 => 'Knuckles\\Scribe\\Extracting\\Strategies\\ResponseFields\\GetFromResponseFieldAttribute',
+        1 => 'Knuckles\\Scribe\\Extracting\\Strategies\\ResponseFields\\GetFromResponseFieldTag',
+      ),
+    ),
+    'database_connections_to_transact' => 
+    array (
+      0 => 'mysql',
+    ),
+    'fractal' => 
+    array (
+      'serializer' => NULL,
     ),
   ),
   'services' => 
