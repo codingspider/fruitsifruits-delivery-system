@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import ReactDOM from 'react-dom/client';
 import { ChakraProvider } from '@chakra-ui/react';
 import { RouterProvider } from 'react-router-dom';
@@ -13,6 +13,18 @@ import 'virtual:pwa-register';
 
 function App() {
   useOnlineSync();
+
+  useEffect(() => {
+    // Load favicon from localStorage (if logged in)
+    const favicon = localStorage.getItem('favicon');
+    const faviconTag = document.getElementById('app-favicon');
+
+    if (favicon && faviconTag) {
+      faviconTag.href = favicon;
+    } else if (faviconTag) {
+      faviconTag.href = '/default-favicon.png';
+    }
+  }, []);
 
   return (
     <LanguageProvider api={api}>

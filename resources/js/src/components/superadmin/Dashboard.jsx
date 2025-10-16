@@ -10,9 +10,13 @@ import Stats from '../dashboard/Stats';
 import RecentOrder from '../dashboard/RecentOrder';
 import RecentPayment from '../dashboard/RecentPayment';
 import { useTranslation } from 'react-i18next';
+import { useEffect } from 'react';
 
 const Dashboard = () => {
   const { t } = useTranslation();
+  useEffect(() => {
+    document.title = 'Home | My Laravel React App';
+  }, []);
   return (
     <>
       {/* Breadcrumb */}

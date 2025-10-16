@@ -37,6 +37,7 @@ export default function Login() {
   useEffect(() => {
       const storedToken = localStorage.getItem('auth_token');
       const role = localStorage.getItem('role');
+
       if (storedToken && role === 'superadmin') {
           navigate(`${SUPER_ADMIN_BASE}/${DASHBOARD}`);
       } else if (storedToken && role === 'admin') {
@@ -56,6 +57,9 @@ export default function Login() {
             const res = await loginUser(email, password);
             localStorage.setItem('auth_token', res.data.token);
             localStorage.setItem('role', res.data.role);
+            localStorage.setItem('favicon', res.data.favicon);
+            localStorage.setItem('logo', res.data.logo);
+            localStorage.setItem('app_name', res.data.app_name);
             toast({
                 position: 'bottom-right',
                 title: 'Login successful!',

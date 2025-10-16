@@ -52,6 +52,9 @@ class RegisterController extends BaseController
             $success['token'] =  $user->createToken('MyApp')->plainTextToken; 
             $success['name'] =  $user->name;
             $success['role'] =  $user->role;
+            $success['favicon'] =  asset('icons/favicon.svg');
+            $success['logo'] =  asset('icons/logo.png');
+            $success['app_name'] =  env('APP_NAME');
 
             $user->last_login_at = now();
             $user->save();

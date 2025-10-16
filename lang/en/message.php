@@ -91,5 +91,13 @@ return [
     'customers' => 'Customers',
     'user_list' => 'User List',
     'subscription_plan' => 'Subscription Plan',
-
+    'juice_production' => 'Juice Production',
+    'driver_allocation' => 'Driver Allocation',
+    'manage_locations' => 'Manage Locations',
+    'manage_ingredients' => 'Ingredients',
+    'driver_summery' => 'Driver Summery',
+    'administration_report' => 'Administration Report',
+    'view_report' => 'View Report',
+    'user_management' => 'User Management',
+    'manage_route' => 'Manage Route',
 ];

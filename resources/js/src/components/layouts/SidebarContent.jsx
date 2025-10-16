@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import {
   FcHome,
   FcSettings,
@@ -9,7 +9,7 @@ import {
   FcServices,
   FcCurrencyExchange,
   FcBarChart,
-  FcSupport,
+  FcPositiveDynamic,
   FcAdvance,
   FcShipped,
   FcReadingEbook,
@@ -17,7 +17,8 @@ import {
   FcMindMap,
   FcManager,
   FcConferenceCall,
-  FcSalesPerformance
+  FcHeatMap,
+  FcTimeline
 } from 'react-icons/fc';
 import { Link as RouterLink, useLocation } from 'react-router-dom';
 import {
@@ -31,11 +32,11 @@ import {
   
 } from '@chakra-ui/react';
 import { useTranslation } from 'react-i18next';
-import SaveOrder from '../order/SaveOrder';
 import { USER_LIST_PATH } from '../../router';
 
 const SidebarContent = ({ onClose, ...rest }) => {
   const { t } = useTranslation();
+  const [appName, setAppName] = useState("");
   const [open, setOpen] = useState({
     expense: false,
     services: false,
@@ -56,6 +57,13 @@ const SidebarContent = ({ onClose, ...rest }) => {
 
   const isActive = (path) => location.pathname === path;
 
+  useEffect(() => {
+    const storedAppName = localStorage.getItem("app_name");
+    if (storedAppName) {
+      setAppName(storedAppName);
+    }
+  }, []);
+
   return (
     <Box
       bg={sidebarBg}
@@ -68,9 +76,7 @@ const SidebarContent = ({ onClose, ...rest }) => {
       {...rest}
     >
       <Flex h="20" alignItems="center" mx="8" justifyContent="space-between">
-        <Text fontSize="2xl" fontFamily="monospace" fontWeight="bold">
-          Logo
-        </Text>
+        <Text fontSize="2xl" fontFamily="monospace" fontWeight="bold">{appName ? appName : "Fruits"}</Text>
         <CloseButton
           size="sm"
           display={{ base: 'flex', md: 'none' }}
@@ -80,11 +86,11 @@ const SidebarContent = ({ onClose, ...rest }) => {
 
       {/* ----- Static links ----- */}
       <NavLink to="/super/admin/dashboard" icon={FcHome} activeBg={activeBg} activeColor={activeColor} hoverBg={hoverBg} active={isActive('/super/admin/dashboard')} label={t('dashboard')} />
-      <NavLink to="/super/admin/pos"      icon={FcSalesPerformance } activeBg={activeBg} activeColor={activeColor} hoverBg={hoverBg} active={isActive('/super/admin/pos')} label={t('subscription_plan')} />
-      <NavLink to="/super/admin/pos"      icon={FcShop} activeBg={activeBg} activeColor={activeColor} hoverBg={hoverBg} active={isActive('/super/admin/pos')} label={t('pos')} />
-      <NavLink to='/super/admin/save/order'  icon={FcList} activeBg={activeBg} activeColor={activeColor} hoverBg={hoverBg} active={isActive('/super/admin/save/order')} label={t('orders')} />
-      <NavLink to="/super/admin/order-status" icon={FcOk} activeBg={activeBg} activeColor={activeColor} hoverBg={hoverBg} active={isActive('/super/admin/order-status')} label={t('order_status')} />
-      <NavLink to="/super/admin/order-status" icon={FcConferenceCall } activeBg={activeBg} activeColor={activeColor} hoverBg={hoverBg} active={isActive('/super/admin/order-status')} label={t('customers')} />
+      <NavLink to="/super/admin/pos"      icon={FcPositiveDynamic  } activeBg={activeBg} activeColor={activeColor} hoverBg={hoverBg} active={isActive('/super/admin/pos')} label={t('juice_production')} />
+      <NavLink to="/super/admin/pos"      icon={FcShop} activeBg={activeBg} activeColor={activeColor} hoverBg={hoverBg} active={isActive('/super/admin/pos')} label={t('driver_allocation')} />
+      <NavLink to='/super/admin/save/order'  icon={FcList} activeBg={activeBg} activeColor={activeColor} hoverBg={hoverBg} active={isActive('/super/admin/save/order')} label={t('manage_route')} />
+      <NavLink to="/super/admin/order-status" icon={FcHeatMap } activeBg={activeBg} activeColor={activeColor} hoverBg={hoverBg} active={isActive('/super/admin/order-status')} label={t('manage_locations')} />
+      <NavLink to="/super/admin/order-status" icon={FcTimeline  } activeBg={activeBg} activeColor={activeColor} hoverBg={hoverBg} active={isActive('/super/admin/order-status')} label={t('manage_ingredients')} />
 
       {/* ----- Dropdown: user management ----- */}
       <DropdownHeader
@@ -118,35 +124,6 @@ const SidebarContent = ({ onClose, ...rest }) => {
         </Box>
       </Collapse>
 
-      {/* ----- Dropdown: Services ----- */}
-      <DropdownHeader
-        label={t('services')}
-        icon={FcServices}
-        isOpen={open.services || location.pathname.startsWith('/super/admin/services')}
-        onToggle={() => toggle('services')}
-        hoverBg={hoverBg}
-      />
-      <Collapse in={open.services || location.pathname.startsWith('/super/admin/services')} animateOpacity>
-        <Box ml="8" mt="1"  borderRadius="md">
-          <NavLink to="/super/admin/services"         icon={null} activeBg={activeBg} activeColor={activeColor} hoverBg={hoverBg} active={isActive('/super/admin/services')}         label={t('service_list')} small />
-          <NavLink to="/super/admin/services/create"  icon={null} activeBg={activeBg} activeColor={activeColor} hoverBg={hoverBg} active={isActive('/super/admin/services/create')}  label={t('add_service')}  small />
-        </Box>
-      </Collapse>
-
-      {/* ----- Dropdown: Payments ----- */}
-      <DropdownHeader
-        label={t('payments')}
-        icon={FcCurrencyExchange}
-        isOpen={open.payments || location.pathname.startsWith('/super/admin/payments')}
-        onToggle={() => toggle('payments')}
-        hoverBg={hoverBg}
-      />
-      <Collapse in={open.payments || location.pathname.startsWith('/super/admin/payments')} animateOpacity>
-        <Box ml="8" mt="1"  borderRadius="md">
-          <NavLink to="/super/admin/payments"         icon={null} activeBg={activeBg} activeColor={activeColor} hoverBg={hoverBg} active={isActive('/super/admin/payments')}         label={t('payment_list')} small />
-          <NavLink to="/super/admin/payments/create"  icon={null} activeBg={activeBg} activeColor={activeColor} hoverBg={hoverBg} active={isActive('/super/admin/payments/create')}  label={t('add_payment')}  small />
-        </Box>
-      </Collapse>
 
       {/* ----- Dropdown: Reports ----- */}
       <DropdownHeader
@@ -178,21 +155,6 @@ const SidebarContent = ({ onClose, ...rest }) => {
         </Box>
       </Collapse>
       
-      {/* ----- Dropdown: pickup order ----- */}
-      <DropdownHeader
-        label={t('pick_up')}
-        icon={FcReadingEbook }
-        isOpen={open.pickup || location.pathname.startsWith('/super/admin/pickup/request')}
-        onToggle={() => toggle('pickup')}
-        hoverBg={hoverBg}
-      />
-      <Collapse in={open.pickup || location.pathname.startsWith('/super/admin/pickup/request')} animateOpacity>
-        <Box ml="8" mt="1"  borderRadius="md">
-          <NavLink to="/super/admin/tools/import" icon={null} activeBg={activeBg} activeColor={activeColor} hoverBg={hoverBg} active={isActive('/super/admin/tools/import')} label={t('pickup_request')} small />
-          <NavLink to="/super/admin/tools/logs"   icon={null} activeBg={activeBg} activeColor={activeColor} hoverBg={hoverBg} active={isActive('/super/admin/tools/logs')}   label="System Logs"   small />
-        </Box>
-      </Collapse>
-
 
       <NavLink to="/super/admin/settings" icon={FcSettings} activeBg={activeBg} activeColor={activeColor} hoverBg={hoverBg} active={isActive('/super/admin/settings')} label="Settings" />
       <NavLink to="/super/admin/backup" icon={FcAddDatabase } activeBg={activeBg} activeColor={activeColor} hoverBg={hoverBg} active={isActive('/super/admin/backup')} label={t('backup')} />
