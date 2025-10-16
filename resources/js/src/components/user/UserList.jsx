@@ -1,44 +1,190 @@
-import React, { useEffect, useState } from 'react';
-import { db } from '../../db';
-import api from '../../axios';
-import { Link as ReactRouterLink } from 'react-router-dom'
-import { Link as ChakraLink } from '@chakra-ui/react'
-import { USER_ADD_PATH } from '../../router';
+import React, { useEffect, useState } from "react";
+import api from "../../axios";
+import TanStackTable from "../../TanStackTable";
+import { useNavigate } from "react-router-dom";
+import {
+    Card,
+    CardBody,
+    Breadcrumb,
+    BreadcrumbItem,
+    BreadcrumbLink,
+    SimpleGrid,
+    Td,
+    Box,
+    useToast,
+} from "@chakra-ui/react";
+import { Link as ChakraLink } from "@chakra-ui/react";
+import { useTranslation } from "react-i18next";
+import { DASHBOARD_PATH, USER_ADD_PATH, USER_EDIT_PATH } from "../../router";
+import { EditIcon, DeleteIcon } from "@chakra-ui/icons";
+import Swal from "sweetalert2";
+import { Link as ReactRouterLink } from "react-router-dom";
 
+export default function UserList() {
+    const [data, setData] = useState([]);
+    const [globalFilter, setGlobalFilter] = useState("");
+    const [pageIndex, setPageIndex] = useState(0);
+    const pageSize = 10;
+    const [pageCount, setPageCount] = useState(1);
+    const [isLoading, setIsLoading] = useState(true);
+    const { t } = useTranslation();
+    const navigate = useNavigate();
+    const toast = useToast();
 
-const UserList = () => {
-    const [users, setUsers] = useState([]);
+    // Fetch data whenever page or search changes
+    const fetchOwners = async () => {
+        try {
+            setIsLoading(true);
+            // Browser online: request server data with pagination & filter
+            const res = await api.get("/superadmin/users", {
+                params: {
+                    page: pageIndex + 1,
+                    per_page: pageSize,
+                    search: globalFilter || "",
+                },
+            });
 
-    const loadUsers = async () => {
-        if (!navigator.onLine) {
-            // offline: read from IndexedDB
-            const local = await db.users.toArray();
-            setUsers(local);
-        } else {
-            const { data } = await api.get('/superadmin/users');
-            const users = data.data.data;
-            setUsers(users);
-            await db.users.clear();
-            await db.users.bulkAdd(users.map(u => ({ ...u, isSynced: true })));
-            
+            const users = res.data?.data?.data || [];
+            const total = res.data?.data?.total || users.length;
+
+            // Update table
+            setData(users);
+            setPageCount(Math.ceil(total / pageSize));
+        } catch (err) {
+            console.error("fetchOwners error:", err);
+        } finally {
+            setIsLoading(false);
         }
     };
+    useEffect(() => {
+        const app_name = localStorage.getItem('app_name');
+        document.title = `${app_name} | User List`;
+        fetchOwners();
+    }, [pageIndex, globalFilter]);
 
-    useEffect(() => { loadUsers(); }, []);
+    const deleteOwner = async (id) => {
+        const result = await Swal.fire({
+            title: "Are you sure?",
+            text: "Data will be deleted.",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#3085d6",
+            cancelButtonColor: "#d33",
+            confirmButtonText: "Yes, Delete!",
+        });
 
-  return (
-    <div>
-        <h1>Users</h1>
-        <ChakraLink as={ReactRouterLink} to={USER_ADD_PATH}>
-        Add User
-        </ChakraLink>
-        <ul>
-            {users?.map(u => (
-            <li key={u.id}>{u.name} – {u.email}</li>
-            ))}
-        </ul>
-    </div>
-  )
+        if (result.isConfirmed) {
+            try {
+                await api.delete(`superadmin/users/${id}`);
+                toast({
+                    position: "bottom-right",
+                    title: "Data deleted successfully",
+                    status: "success",
+                    duration: 3000,
+                    isClosable: true,
+                });
+
+                fetchOwners();
+            } catch (error) {
+                console.log(error);
+                toast({
+                    position: "bottom-right",
+                    title: "Error deleting data",
+                    description:
+                        error.response?.data?.message ||
+                        "Something went wrong.",
+                    status: "error",
+                    duration: 3000,
+                    isClosable: true,
+                });
+            }
+        }
+    };
+    const columns = [
+        { header: "ID", accessorKey: "id"},
+        { header: "Name", accessorKey: "name"},
+        { header: "email", accessorKey: "email"},
+        {
+        header: "Username",
+        accessorFn: row => row.username || "", 
+        },
+        { header: "Role", accessorKey: "role" },
+        { header: "Status", accessorKey: "status" },
+        {
+            header: "Actions",
+            cell: ({ row }) => (
+                <>
+                    <Box display="flex" gap={2}>
+                        <ChakraLink
+                            border="1px solid black"
+                            padding={2}
+                            borderRadius="md"
+                            onClick={() =>
+                                navigate(USER_EDIT_PATH(row.original.id))
+                            }
+                        >
+                            <EditIcon />
+                        </ChakraLink>
+
+                        <ChakraLink
+                            border="1px solid black"
+                            padding={2}
+                            borderRadius="md"
+                            cursor="pointer"
+                            onClick={() => deleteOwner(row.original.id)}
+                        >
+                            <DeleteIcon color="red.500" />
+                        </ChakraLink>
+                    </Box>
+                </>
+            ), enableColumnFilter: false,
+        },
+    ];
+
+    return (
+        <>
+            {/* Breadcrumb */}
+            <Card mb={5}>
+                <CardBody>
+                    <Breadcrumb fontSize={{ base: "sm", md: "md" }}>
+                        <BreadcrumbItem>
+                            <BreadcrumbLink
+                                as={ReactRouterLink}
+                                to={DASHBOARD_PATH}
+                            >
+                                {t("dashboard")}
+                            </BreadcrumbLink>
+                        </BreadcrumbItem>
+                        <BreadcrumbItem isCurrentPage>
+                            <BreadcrumbLink
+                                as={ReactRouterLink}
+                                to={USER_ADD_PATH}
+                            >
+                                {t("add")}
+                            </BreadcrumbLink>
+                        </BreadcrumbItem>
+                    </Breadcrumb>
+                </CardBody>
+            </Card>
+
+            <SimpleGrid columns={{ base: 1, md: 1 }} mt={5}>
+                <Card>
+                    <CardBody>
+                        <TanStackTable
+                            columns={columns}
+                            data={data}
+                            globalFilter={globalFilter}
+                            setGlobalFilter={setGlobalFilter}
+                            pageIndex={pageIndex}
+                            pageSize={pageSize}
+                            setPageIndex={setPageIndex}
+                            pageCount={pageCount}
+                            isLoading={isLoading}
+                            addURL={USER_ADD_PATH}
+                        />
+                    </CardBody>
+                </Card>
+            </SimpleGrid>
+        </>
+    );
 }
-
-export default UserList

@@ -16,13 +16,7 @@ class UserController extends BaseController
     {
         try {
             $search = $request->input('search');
-            $query = User::query();
-
-            if ($search) {
-                $query->where('name', 'like', "%{$search}%")->orWhere('email', 'like', "%{$search}%");
-            }
-
-            $data = $query->paginate(10);
+            $data = User::whereNot('role', 'superadmin')->paginate(10);
             return $this->sendResponse($data, 'User retrived successfully.');
 
         } catch (\Exception $e) {
@@ -33,8 +27,8 @@ class UserController extends BaseController
     public function edit($id)
     {
         try {
-            $owner = User::find($id);
-            return $this->sendResponse($owner, 'User retrived successfully.');
+            $user = User::find($id);
+            return $this->sendResponse($user, 'User retrived successfully.');
         } catch (\Exception $e) {
             return $this->sendError('Server Error.'.$e->getMessage());
         }
@@ -45,29 +39,27 @@ class UserController extends BaseController
         $validator = Validator::make($request->all(), [
             'name'      => 'required',
             'email'     => 'required|email|unique:users,email',
+            'username'  => 'required|unique:users,username',
             'role'      => 'required',
             'password'  => 'required',
+            'status'    => 'required'
         ]);
 
         if ($validator->fails()) {
-            return $this->sendError('Validation Error.', 422, $validator->errors());
+            return $this->sendError('Validation Error.', $validator->errors(), 422);
         }
 
         DB::beginTransaction();
 
         try {
             // Check if user already exists
-            $existingUser = User::where('email', $request->email)->first();
+            $existingUser = User::where('email', $request->email)->orWhere('username', $request->username)->first();
             if ($existingUser) {
-                return $this->sendError('User with this email already exists.');
+                return $this->sendError('User already exists.');
             }
 
-            $userData = [
-                'name' => $request->name,
-                'email' => $request->email,
-                'password' => Hash::make($request->password),
-                'role' => $request->role
-            ];
+            $userData = $request->all();
+            $userData['password'] = Hash::make($request->password);
 
             // store new user
             $user = User::create($userData);
@@ -81,37 +73,50 @@ class UserController extends BaseController
         }
     }
     
-    public function update(Request $request)
+    public function update(Request $request, $id)
     {
+        // Validate request
         $validator = Validator::make($request->all(), [
-            'name'      => 'required',
-            'email'     => 'required|email|unique:users,email',
-            'role'      => 'required',
-            'password'  => 'required',
+            'name'      => 'required|string|max:255',
+            'email'     => 'required|email|unique:users,email,' . $id,
+            'username'  => 'required|string|unique:users,username,' . $id,
+            'role'      => 'required|string',
+            'password'  => 'nullable|string|min:6',
+            'status'    => 'required',
         ]);
 
         if ($validator->fails()) {
-            return $this->sendError('Validation Error.', 422, $validator->errors());
+            return $this->sendError('Validation Error.', $validator->errors(), 422);
         }
 
         DB::beginTransaction();
 
         try {
-            $user = User::find($request->id);
+            $user = User::findOrFail($id);
+
             $user->name = $request->name;
             $user->email = $request->email;
+            $user->username = $request->username;
             $user->role = $request->role;
+            $user->status = $request->status;
+
+            // Update password only if provided
+            if ($request->filled('password')) {
+                $user->password = Hash::make($request->password);
+            }
+
             $user->save();
             DB::commit();
-            return $this->sendResponse(['user' => $user], 'User saved successfully.');
+
+            return $this->sendResponse(['user' => $user], 'User updated successfully.');
 
         } catch (\Exception $e) {
             DB::rollBack();
-            return $this->sendError('Server Error: ' . $e->getMessage(), 500);
+            return $this->sendError('Server Error: ' . $e->getMessage(), null, 500);
         }
     }
 
-    public function delete($id)
+    public function destroy($id)
     {
         try {
             $user = User::find($id);

@@ -21,6 +21,8 @@
         "@emotion/react": "^11.14.0",
         "@emotion/styled": "^11.14.1",
         "@vitejs/plugin-react": "^5.0.3",
+        "@tanstack/match-sorter-utils": "^8.19.4",
+        "@tanstack/react-table": "^8.21.3",
         "chart.js": "^4.5.0",
         "dexie": "^4.2.0",
         "framer-motion": "^12.23.21",

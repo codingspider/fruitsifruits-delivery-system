@@ -100,11 +100,10 @@ const SidebarContent = ({ onClose, ...rest }) => {
         onToggle={() => toggle('user')}
         hoverBg={hoverBg}
       />
+      
       <Collapse in={open.user || location.pathname.startsWith('/super/admin/user/list')} animateOpacity>
         <Box ml="8" mt="1"  borderRadius="md">
           <NavLink to={USER_LIST_PATH}         icon={null} activeBg={activeBg} activeColor={activeColor} hoverBg={hoverBg} active={isActive(USER_LIST_PATH)}         label={t('user_list')} small />
-          <NavLink to="/super/admin/expense"         icon={null} activeBg={activeBg} activeColor={activeColor} hoverBg={hoverBg} active={isActive('/super/admin/expense')}         label={t('staff_list')} small />
-          <NavLink to="/super/admin/expense/create"  icon={null} activeBg={activeBg} activeColor={activeColor} hoverBg={hoverBg} active={isActive('/super/admin/expense/create')}  label={t('add_staff')}  small />
         </Box>
       </Collapse>
 

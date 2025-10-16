@@ -39,6 +39,10 @@ export const DASHBOARD_PATH = `${SUPER_ADMIN_BASE}/dashboard`;
 export const SAVE_ORDER = `${SUPER_ADMIN_BASE}/save/order`;
 
 
+export const USER_LIST = "user/list";
+export const USER_ADD = "user/create";
+export const USER_EDIT = "user/edit/:id";
+
 export const USER_LIST_PATH = `${SUPER_ADMIN_BASE}/user/list`;
 export const USER_ADD_PATH = `${SUPER_ADMIN_BASE}/user/create`;
 export const USER_EDIT_PATH = (id) => `${SUPER_ADMIN_BASE}/user/edit/${id}`;
@@ -77,6 +81,7 @@ const router = createBrowserRouter([
       { path: SAVE_ORDER, element: <ProtectedRoute role="superadmin"><SaveOrder /></ProtectedRoute> },
       { path: USER_LIST_PATH, element: <ProtectedRoute role="superadmin"><UserList /></ProtectedRoute> },
       { path: USER_ADD_PATH, element: <ProtectedRoute role="superadmin"><UserCreate /></ProtectedRoute> },
+      { path: USER_EDIT, element: <ProtectedRoute role="superadmin"><UserEdit /></ProtectedRoute> },
     ],
   },
 ]);

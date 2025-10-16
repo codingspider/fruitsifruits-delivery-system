@@ -100,4 +100,10 @@ return [
     'view_report' => 'View Report',
     'user_management' => 'User Management',
     'manage_route' => 'Manage Route',
+    'username' => 'Username',
+    'role' => 'Role',
+    'add_user' => 'Add User',
+    'edit_user' => 'Edit User',
+    'add' => 'Add',
+    'cancel' => 'Cancel',
 ];

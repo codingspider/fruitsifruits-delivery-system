@@ -110,8 +110,8 @@ export default function Login() {
           p={8}>
           <Stack spacing={4}>
             <FormControl id="email">
-              <FormLabel>Email address</FormLabel>
-              <Input type="email" {...register("email", { required: true })} />
+              <FormLabel>Email Or Username </FormLabel>
+              <Input type="text" {...register("login", { required: true })} />
             </FormControl>
             <FormControl id="password">
               <FormLabel>Password</FormLabel>

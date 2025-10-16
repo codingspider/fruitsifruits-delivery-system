@@ -15,7 +15,8 @@ import { useEffect } from 'react';
 const Dashboard = () => {
   const { t } = useTranslation();
   useEffect(() => {
-    document.title = 'Home | My Laravel React App';
+    const app_name = localStorage.getItem('app_name');
+    document.title = `${app_name} | Dashboard`;
   }, []);
   return (
     <>

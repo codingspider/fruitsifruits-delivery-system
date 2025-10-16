@@ -17,9 +17,8 @@ Route::controller(RegisterController::class)->group(function(){
 
 Route::middleware(['auth:sanctum'])->prefix('superadmin')->group(function () {
     // Add more super admin routes here
-    Route::get('users', [UserController::class, 'index']);
-    Route::post('user/store', [UserController::class, 'store']);
     Route::resource('plans', PLanController::class);
+    Route::resource('users', UserController::class);
 });
 
 
