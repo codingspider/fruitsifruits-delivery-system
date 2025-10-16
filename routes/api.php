@@ -6,6 +6,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\API\PLanController;
 use App\Http\Controllers\API\UserController;
 use App\Http\Controllers\API\RegisterController;
+use App\Http\Controllers\API\IngredientController;
 
 
 Route::controller(RegisterController::class)->group(function(){
@@ -19,6 +20,7 @@ Route::middleware(['auth:sanctum'])->prefix('superadmin')->group(function () {
     // Add more super admin routes here
     Route::resource('plans', PLanController::class);
     Route::resource('users', UserController::class);
+    Route::resource('ingredients', IngredientController::class);
 });
 
 

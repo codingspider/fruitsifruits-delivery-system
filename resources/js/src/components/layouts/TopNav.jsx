@@ -57,17 +57,6 @@ const TopNav = ({ onOpen, ...rest }) => {
       <Text fontSize="lg" fontWeight="bold">Dashboard</Text>
 
       <HStack spacing="4">
-        <Button
-          colorScheme="teal"
-          as={ReactRouterLink}
-          to="/home"
-          display={{ base: 'none', md: 'inline-flex' }}
-          px={4}
-          py={2}
-          textAlign="center"
-        >
-          POS
-        </Button>
         <Select value={lang} mr={3} display={{ base: 'none', md: 'block' }}  onChange={(e) => changeLanguage(e.target.value)}>
           <option value="en">English</option>
           <option value="bn">বাংলা</option>

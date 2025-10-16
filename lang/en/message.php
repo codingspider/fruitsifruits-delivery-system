@@ -106,4 +106,6 @@ return [
     'edit_user' => 'Edit User',
     'add' => 'Add',
     'cancel' => 'Cancel',
+    'list' => 'List',
+    'cost_per_unit' => 'Cost Per Unit',
 ];

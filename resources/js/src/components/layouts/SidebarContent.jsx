@@ -90,7 +90,7 @@ const SidebarContent = ({ onClose, ...rest }) => {
       <NavLink to="/super/admin/pos"      icon={FcShop} activeBg={activeBg} activeColor={activeColor} hoverBg={hoverBg} active={isActive('/super/admin/pos')} label={t('driver_allocation')} />
       <NavLink to='/super/admin/save/order'  icon={FcList} activeBg={activeBg} activeColor={activeColor} hoverBg={hoverBg} active={isActive('/super/admin/save/order')} label={t('manage_route')} />
       <NavLink to="/super/admin/order-status" icon={FcHeatMap } activeBg={activeBg} activeColor={activeColor} hoverBg={hoverBg} active={isActive('/super/admin/order-status')} label={t('manage_locations')} />
-      <NavLink to="/super/admin/order-status" icon={FcTimeline  } activeBg={activeBg} activeColor={activeColor} hoverBg={hoverBg} active={isActive('/super/admin/order-status')} label={t('manage_ingredients')} />
+      <NavLink to="/super/admin/ingredient/list" icon={FcTimeline  } activeBg={activeBg} activeColor={activeColor} hoverBg={hoverBg} active={isActive('/super/admin/ingredient/list')} label={t('manage_ingredients')} />
 
       {/* ----- Dropdown: user management ----- */}
       <DropdownHeader
@@ -100,7 +100,7 @@ const SidebarContent = ({ onClose, ...rest }) => {
         onToggle={() => toggle('user')}
         hoverBg={hoverBg}
       />
-      
+
       <Collapse in={open.user || location.pathname.startsWith('/super/admin/user/list')} animateOpacity>
         <Box ml="8" mt="1"  borderRadius="md">
           <NavLink to={USER_LIST_PATH}         icon={null} activeBg={activeBg} activeColor={activeColor} hoverBg={hoverBg} active={isActive(USER_LIST_PATH)}         label={t('user_list')} small />

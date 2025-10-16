@@ -17,7 +17,9 @@ import SaveOrder from "./components/order/SaveOrder";
 import UserList from "./components/user/UserList";
 import UserCreate from "./components/user/UserCreate";
 import UserEdit from "./components/user/UserEdit";
-
+import IngredientList from "./components/ingredient/IngredientList";
+import IngredientCreate from "./components/ingredient/IngredientCreate";
+import IngredientEdit from "./components/ingredient/IngredientEdit";
 
 // ✅ Public Routes
 export const ROOT = '/';
@@ -46,6 +48,15 @@ export const USER_EDIT = "user/edit/:id";
 export const USER_LIST_PATH = `${SUPER_ADMIN_BASE}/user/list`;
 export const USER_ADD_PATH = `${SUPER_ADMIN_BASE}/user/create`;
 export const USER_EDIT_PATH = (id) => `${SUPER_ADMIN_BASE}/user/edit/${id}`;
+
+
+export const INGREDIENT_LIST = "ingredient/list";
+export const INGREDIENT_ADD = "ingredient/create";
+export const INGREDIENT_EDIT = "ingredient/edit/:id";
+
+export const INGREDIENT_LIST_PATH = `${SUPER_ADMIN_BASE}/ingredient/list`;
+export const INGREDIENT_ADD_PATH = `${SUPER_ADMIN_BASE}/ingredient/create`;
+export const INGREDIENT_EDIT_PATH = (id) => `${SUPER_ADMIN_BASE}/ingredient/edit/${id}`;
 
 const router = createBrowserRouter([
   {
@@ -79,9 +90,14 @@ const router = createBrowserRouter([
       { path: DASHBOARD, element: <ProtectedRoute role="superadmin"><Dashboard /></ProtectedRoute> },
       { path: MASTER_SETTING, element: <ProtectedRoute role="superadmin"><MasterSetting /></ProtectedRoute> },
       { path: SAVE_ORDER, element: <ProtectedRoute role="superadmin"><SaveOrder /></ProtectedRoute> },
+
       { path: USER_LIST_PATH, element: <ProtectedRoute role="superadmin"><UserList /></ProtectedRoute> },
       { path: USER_ADD_PATH, element: <ProtectedRoute role="superadmin"><UserCreate /></ProtectedRoute> },
       { path: USER_EDIT, element: <ProtectedRoute role="superadmin"><UserEdit /></ProtectedRoute> },
+      
+      { path: INGREDIENT_LIST_PATH, element: <ProtectedRoute role="superadmin"><IngredientList /></ProtectedRoute> },
+      { path: INGREDIENT_ADD_PATH, element: <ProtectedRoute role="superadmin"><IngredientCreate /></ProtectedRoute> },
+      { path: INGREDIENT_EDIT, element: <ProtectedRoute role="superadmin"><IngredientEdit /></ProtectedRoute> },
     ],
   },
 ]);
