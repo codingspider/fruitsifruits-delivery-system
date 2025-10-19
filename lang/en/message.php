@@ -108,4 +108,11 @@ return [
     'cancel' => 'Cancel',
     'list' => 'List',
     'cost_per_unit' => 'Cost Per Unit',
+    'manage_bottle' => 'Bottle Management',
+    'size' => 'Size',
+    'bottle_price' => 'Bottle Price',
+    'cap_price' => 'Cap Price',
+    'driver_manage' => 'Driver Management',
+    'driver_list' => 'Driver List',
+    'add_driver' => 'Add Driver',
 ];

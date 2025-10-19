@@ -5,7 +5,7 @@ import TopNav from './TopNav';
 import { Outlet } from "react-router-dom";
 
 const MainLayout = ({ children }) => {
-    const { isOpen, onOpen, onClose } = useDisclosure()
+    const { isOpen, onOpen, onClose } = useDisclosure();
   return (
     <>
         <Box minH="100vh" bg={useColorModeValue('gray.100', 'gray.900')}>

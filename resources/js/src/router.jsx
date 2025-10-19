@@ -20,6 +20,13 @@ import UserEdit from "./components/user/UserEdit";
 import IngredientList from "./components/ingredient/IngredientList";
 import IngredientCreate from "./components/ingredient/IngredientCreate";
 import IngredientEdit from "./components/ingredient/IngredientEdit";
+import BottleCostCreate from "./components/bootle_cost/BottleCostCreate";
+import BottleCostEdit from "./components/bootle_cost/BottleCostEdit";
+import BottleCostList from "./components/bootle_cost/BottleCostList";
+import DriverCreate from "./components/driver/DriverCreate";
+import DriverEdit from "./components/driver/DriverEdit";
+import DriverList from "./components/driver/DriverList";
+
 
 // ✅ Public Routes
 export const ROOT = '/';
@@ -49,14 +56,30 @@ export const USER_LIST_PATH = `${SUPER_ADMIN_BASE}/user/list`;
 export const USER_ADD_PATH = `${SUPER_ADMIN_BASE}/user/create`;
 export const USER_EDIT_PATH = (id) => `${SUPER_ADMIN_BASE}/user/edit/${id}`;
 
+export const DRIVER_LIST = "driver/list";
+export const DRIVER_ADD = "driver/create";
+export const DRIVER_EDIT = "driver/edit/:id";
+
+export const DRIVER_LIST_PATH = `${SUPER_ADMIN_BASE}/driver/list`;
+export const DRIVER_ADD_PATH = `${SUPER_ADMIN_BASE}/driver/create`;
+export const DRIVER_EDIT_PATH = (id) => `${SUPER_ADMIN_BASE}/driver/edit/${id}`;
+
 
 export const INGREDIENT_LIST = "ingredient/list";
 export const INGREDIENT_ADD = "ingredient/create";
 export const INGREDIENT_EDIT = "ingredient/edit/:id";
 
+export const BOTTLE_LIST = "bottle/cost/list";
+export const BOTTLE_ADD = "bottle/cost/create";
+export const BOTTLE_EDIT = "bottle/cost/edit/:id";
+
 export const INGREDIENT_LIST_PATH = `${SUPER_ADMIN_BASE}/ingredient/list`;
 export const INGREDIENT_ADD_PATH = `${SUPER_ADMIN_BASE}/ingredient/create`;
 export const INGREDIENT_EDIT_PATH = (id) => `${SUPER_ADMIN_BASE}/ingredient/edit/${id}`;
+
+export const BOTTLE_LIST_PATH = `${SUPER_ADMIN_BASE}/bottle/cost/list`;
+export const BOTTLE_ADD_PATH = `${SUPER_ADMIN_BASE}/bottle/cost/create`;
+export const BOTTLE_EDIT_PATH = (id) => `${SUPER_ADMIN_BASE}/bottle/cost/edit/${id}`;
 
 const router = createBrowserRouter([
   {
@@ -98,6 +121,14 @@ const router = createBrowserRouter([
       { path: INGREDIENT_LIST_PATH, element: <ProtectedRoute role="superadmin"><IngredientList /></ProtectedRoute> },
       { path: INGREDIENT_ADD_PATH, element: <ProtectedRoute role="superadmin"><IngredientCreate /></ProtectedRoute> },
       { path: INGREDIENT_EDIT, element: <ProtectedRoute role="superadmin"><IngredientEdit /></ProtectedRoute> },
+      
+      { path: BOTTLE_LIST_PATH, element: <ProtectedRoute role="superadmin"><BottleCostList /></ProtectedRoute> },
+      { path: BOTTLE_ADD_PATH, element: <ProtectedRoute role="superadmin"><BottleCostCreate /></ProtectedRoute> },
+      { path: BOTTLE_EDIT, element: <ProtectedRoute role="superadmin"><BottleCostEdit /></ProtectedRoute> },
+
+      { path: DRIVER_LIST_PATH, element: <ProtectedRoute role="superadmin"><DriverList /></ProtectedRoute> },
+      { path: DRIVER_ADD_PATH, element: <ProtectedRoute role="superadmin"><DriverCreate /></ProtectedRoute> },
+      { path: DRIVER_EDIT, element: <ProtectedRoute role="superadmin"><DriverEdit /></ProtectedRoute> },
     ],
   },
 ]);

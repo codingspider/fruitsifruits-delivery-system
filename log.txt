@@ -1,0 +1,26 @@
+How Stock Works
+
+Purchase → transaction → lines → stock_moves (+ quantity)
+Production → consume raw + packaging (- quantity) + add finished product (+ quantity)
+Delivery → stock_moves (- finished goods)
+Return → stock_moves (+ returned goods)
+Damage → stock_moves (- damaged items)
+Expense → transaction only (no stock impact)
+
+
+a) After creating a transaction
+$transaction = Transaction::with('lines')->find($transaction_id);
+TransactionService::processTransaction($transaction);
+
+
+b) Profit/Loss report
+$report = TransactionService::getProfitLoss('2025-10-01','2025-10-20');
+
+echo "Revenue: {$report['total_revenue']}";
+echo "Cost: {$report['total_cost']}";
+echo "Profit: {$report['profit']}";
+
+
+c) Cost per finished product
+$cost = TransactionService::getCostPerProduct($finishedProductId);
+echo "Cost per bottle: $cost";

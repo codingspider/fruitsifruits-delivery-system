@@ -22,12 +22,12 @@ import {
 import { useTranslation } from "react-i18next";
 import { useForm } from "react-hook-form";
 import React, { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import api from "../../axios";
-import { DASHBOARD_PATH, USER_LIST_PATH } from "../../router";
+import { DASHBOARD_PATH, DRIVER_LIST_PATH } from "../../router";
 import { Link as ReactRouterLink } from "react-router-dom";
 
-const UserCreate = () => {
+const DriverEdit = () => {
     const { register, handleSubmit, reset } = useForm();
     const { t } = useTranslation();
     const [isSubmitting, setIsSubmitting] = useState(false);
@@ -35,18 +35,13 @@ const UserCreate = () => {
     const navigate = useNavigate();
     const [show, setShow] = useState(false);
     const handleClick = () => setShow(!show);
+    const { id } = useParams();
 
     const onSubmit = async (data) => {
+      console.log(data);
         setIsSubmitting(true);
         try {
-            const res = await api.post("superadmin/users", data, {
-                headers: {
-                    "Content-Type": "multipart/form-data",
-                },
-            });
-
-            reset();
-
+            const res = await api.put(`superadmin/drivers/${id}`, data);
             toast({
                 position: "bottom-right",
                 title: res.data.message,
@@ -54,11 +49,13 @@ const UserCreate = () => {
                 duration: 3000,
                 isClosable: true,
             });
-            navigate(`${USER_LIST_PATH}`);
+            navigate(`${DRIVER_LIST_PATH}`);
         } catch (err) {
             const errorResponse = err?.response?.data;
             if (errorResponse?.errors) {
-                const errorMessage = Object.values(errorResponse.errors).flat().join(" ");
+                const errorMessage = Object.values(errorResponse.errors)
+                    .flat()
+                    .join(" ");
                 toast({
                     position: "bottom-right",
                     title: "Error",
@@ -67,7 +64,6 @@ const UserCreate = () => {
                     duration: 3000,
                     isClosable: true,
                 });
-
             } else if (errorResponse?.message) {
                 toast({
                     position: "bottom-right",
@@ -78,15 +74,26 @@ const UserCreate = () => {
                     isClosable: true,
                 });
             }
-
         } finally {
             setIsSubmitting(false);
         }
     };
 
+    const getOwner = async () => {
+        const res = await api.get(`superadmin/drivers/${id}/edit`);
+        const user = res.data.data;
+        reset({
+            name: user.name,
+            email: user.email,
+            username: user.username,
+            status: user.status
+        });
+    };
+
     useEffect(() => {
         const app_name = localStorage.getItem("app_name");
-        document.title = `${app_name} | User Create`;
+        document.title = `${app_name} | Driver Edit`;
+        getOwner();
     }, []);
 
     return (
@@ -106,7 +113,7 @@ const UserCreate = () => {
                         <BreadcrumbItem isCurrentPage>
                             <BreadcrumbLink
                                 as={ReactRouterLink}
-                                to={USER_LIST_PATH}
+                                to={DRIVER_LIST_PATH}
                             >
                                 {t("user_list")}
                             </BreadcrumbLink>
@@ -119,11 +126,11 @@ const UserCreate = () => {
                 <Card shadow="md" borderRadius="2xl">
                     <CardHeader>
                         <Flex mb={4} justifyContent="space-between">
-                            <Heading size="md">{t("add_user")}</Heading>
+                            <Heading size="md">{t("edit_user")}</Heading>
                             <Button
                                 colorScheme="teal"
                                 as={ReactRouterLink}
-                                to={USER_LIST_PATH}
+                                to={DRIVER_LIST_PATH}
                                 display={{ base: "none", md: "inline-flex" }}
                                 px={4}
                                 py={2}
@@ -178,7 +185,7 @@ const UserCreate = () => {
                                     <InputGroup size="md">
                                         <Input
                                             {...register("password", {
-                                                required: true,
+                                                required: false,
                                             })}
                                             pr="4.5rem"
                                             type={show ? "text" : "password"}
@@ -195,23 +202,6 @@ const UserCreate = () => {
                                         </InputRightElement>
                                     </InputGroup>
                                 </FormControl>
-                            </SimpleGrid>
-
-                            <SimpleGrid
-                                columns={{ base: 1, md: 2 }}
-                                spacing={6}
-                                mt={4}
-                            >
-                                <FormControl mt={4} isRequired>
-                                    <FormLabel>{t("role")}</FormLabel>
-                                    <Select
-                                        {...register("role")}
-                                        defaultValue="staff"
-                                    >
-                                        <option value="jps">JPS</option>
-                                    </Select>
-                                </FormControl>
-
                                 <FormControl mt={4} isRequired>
                                     <FormLabel>{t("status")}</FormLabel>
                                     <Select
@@ -226,11 +216,12 @@ const UserCreate = () => {
                                 </FormControl>
                             </SimpleGrid>
 
+
                             <HStack spacing={4} mt={6}>
                                 <Button
                                     type="button"
                                     as={ReactRouterLink}
-                                    to={USER_LIST_PATH}
+                                    to={DRIVER_LIST_PATH}
                                     colorScheme="orange"
                                     flex={1}
                                 >
@@ -255,4 +246,4 @@ const UserCreate = () => {
     );
 };
 
-export default UserCreate;
+export default DriverEdit;

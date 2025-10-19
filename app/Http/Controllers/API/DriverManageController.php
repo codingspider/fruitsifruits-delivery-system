@@ -10,13 +10,13 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use App\Http\Controllers\API\BaseController;
 
-class UserController extends BaseController
+class DriverManageController extends BaseController
 {
     public function index(Request $request)
     {
         try {
-            $data = User::where('role', 'jps')->paginate(10);
-            return $this->sendResponse($data, 'User retrived successfully.');
+            $data = User::where('role', 'driver')->paginate(10);
+            return $this->sendResponse($data, 'Driver retrived successfully.');
 
         } catch (\Exception $e) {
             return $this->sendError('Server Error.'.$e->getMessage());
@@ -27,7 +27,7 @@ class UserController extends BaseController
     {
         try {
             $user = User::find($id);
-            return $this->sendResponse($user, 'User retrived successfully.');
+            return $this->sendResponse($user, 'Driver retrived successfully.');
         } catch (\Exception $e) {
             return $this->sendError('Server Error.'.$e->getMessage());
         }
@@ -39,7 +39,6 @@ class UserController extends BaseController
             'name'      => 'required',
             'email'     => 'required|email|unique:users,email',
             'username'  => 'required|unique:users,username',
-            'role'      => 'required',
             'password'  => 'required',
             'status'    => 'required'
         ]);
@@ -54,17 +53,20 @@ class UserController extends BaseController
             // Check if user already exists
             $existingUser = User::where('email', $request->email)->orWhere('username', $request->username)->first();
             if ($existingUser) {
-                return $this->sendError('User already exists.');
+                return $this->sendError('Driver already exists.');
             }
 
             $userData = $request->all();
-            $userData['password'] = Hash::make($request->password);
+            if($request->password){
+                $userData['password'] = Hash::make($request->password);
+            }
+            $userData['role'] = 'driver';
 
             // store new user
             $user = User::create($userData);
             DB::commit();
 
-            return $this->sendResponse(['user' => $user], 'User saved successfully.');
+            return $this->sendResponse(['user' => $user], 'Data saved successfully.');
 
         } catch (\Exception $e) {
             DB::rollBack();
@@ -79,7 +81,6 @@ class UserController extends BaseController
             'name'      => 'required|string|max:255',
             'email'     => 'required|email|unique:users,email,' . $id,
             'username'  => 'required|string|unique:users,username,' . $id,
-            'role'      => 'required|string',
             'password'  => 'nullable|string|min:6',
             'status'    => 'required',
         ]);
@@ -96,7 +97,6 @@ class UserController extends BaseController
             $user->name = $request->name;
             $user->email = $request->email;
             $user->username = $request->username;
-            $user->role = $request->role;
             $user->status = $request->status;
 
             // Update password only if provided
@@ -107,7 +107,7 @@ class UserController extends BaseController
             $user->save();
             DB::commit();
 
-            return $this->sendResponse(['user' => $user], 'User updated successfully.');
+            return $this->sendResponse(['user' => $user], 'Data updated successfully.');
 
         } catch (\Exception $e) {
             DB::rollBack();
@@ -120,10 +120,10 @@ class UserController extends BaseController
         try {
             $user = User::find($id);
             if (!$user) {
-                return $this->sendError('User not found.', 404);
+                return $this->sendError('Driver not found.', 404);
             }
             $user->delete();
-            return $this->sendResponse([], 'User deleted successfully.');
+            return $this->sendResponse([], 'Data deleted successfully.');
         } catch (\Exception $e) {
             return $this->sendError('Server Error: ' . $e->getMessage(), 500);
         }

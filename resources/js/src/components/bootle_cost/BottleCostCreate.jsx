@@ -24,27 +24,20 @@ import { useForm } from "react-hook-form";
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import api from "../../axios";
-import { DASHBOARD_PATH, USER_LIST_PATH } from "../../router";
+import { DASHBOARD_PATH, BOTTLE_LIST_PATH } from "../../router";
 import { Link as ReactRouterLink } from "react-router-dom";
 
-const UserCreate = () => {
+const BottleCostCreate = () => {
     const { register, handleSubmit, reset } = useForm();
     const { t } = useTranslation();
     const [isSubmitting, setIsSubmitting] = useState(false);
     const toast = useToast();
     const navigate = useNavigate();
-    const [show, setShow] = useState(false);
-    const handleClick = () => setShow(!show);
 
     const onSubmit = async (data) => {
         setIsSubmitting(true);
         try {
-            const res = await api.post("superadmin/users", data, {
-                headers: {
-                    "Content-Type": "multipart/form-data",
-                },
-            });
-
+            const res = await api.post("superadmin/bottles", data);
             reset();
 
             toast({
@@ -54,7 +47,7 @@ const UserCreate = () => {
                 duration: 3000,
                 isClosable: true,
             });
-            navigate(`${USER_LIST_PATH}`);
+            navigate(`${BOTTLE_LIST_PATH}`);
         } catch (err) {
             const errorResponse = err?.response?.data;
             if (errorResponse?.errors) {
@@ -86,7 +79,7 @@ const UserCreate = () => {
 
     useEffect(() => {
         const app_name = localStorage.getItem("app_name");
-        document.title = `${app_name} | User Create`;
+        document.title = `${app_name} | Bottle Cost Management`;
     }, []);
 
     return (
@@ -106,9 +99,9 @@ const UserCreate = () => {
                         <BreadcrumbItem isCurrentPage>
                             <BreadcrumbLink
                                 as={ReactRouterLink}
-                                to={USER_LIST_PATH}
+                                to={BOTTLE_LIST_PATH}
                             >
-                                {t("user_list")}
+                                {t("list")}
                             </BreadcrumbLink>
                         </BreadcrumbItem>
                     </Breadcrumb>
@@ -119,18 +112,18 @@ const UserCreate = () => {
                 <Card shadow="md" borderRadius="2xl">
                     <CardHeader>
                         <Flex mb={4} justifyContent="space-between">
-                            <Heading size="md">{t("add_user")}</Heading>
+                            <Heading size="md">{t("add")}</Heading>
                             <Button
                                 colorScheme="teal"
                                 as={ReactRouterLink}
-                                to={USER_LIST_PATH}
+                                to={BOTTLE_LIST_PATH}
                                 display={{ base: "none", md: "inline-flex" }}
                                 px={4}
                                 py={2}
                                 whiteSpace="normal"
                                 textAlign="center"
                             >
-                                {t("user_list")}
+                                {t("list")}
                             </Button>
                         </Flex>
                     </CardHeader>
@@ -142,95 +135,45 @@ const UserCreate = () => {
                                 spacing={6}
                             >
                                 <FormControl isRequired>
-                                    <FormLabel>{t("name")}</FormLabel>
+                                    <FormLabel>{t("size")}</FormLabel>
                                     <Input
-                                        {...register("name", {
+                                        {...register("size", {
                                             required: true,
                                         })}
-                                        placeholder={t("name")}
+                                        type="number"
+                                        placeholder={t("size")}
                                     />
                                 </FormControl>
 
                                 <FormControl isRequired>
-                                    <FormLabel>{t("email")}</FormLabel>
+                                    <FormLabel>{t("bottle_price")}</FormLabel>
                                     <Input
-                                        {...register("email", {
+                                        {...register("bottle_price", {
                                             required: true,
                                         })}
-                                        type="email"
-                                        placeholder={t("email")}
+                                        type="number"
+                                        placeholder={t("bottle_price")}
                                     />
                                 </FormControl>
-
+                                
                                 <FormControl isRequired>
-                                    <FormLabel>{t("username")}</FormLabel>
+                                    <FormLabel>{t("cap_price")}</FormLabel>
                                     <Input
-                                        {...register("username", {
+                                        {...register("cap_price", {
                                             required: true,
                                         })}
-                                        type="text"
-                                        placeholder={t("username")}
+                                        type="number"
+                                        placeholder={t("cap_price")}
                                     />
                                 </FormControl>
 
-                                <FormControl id="password">
-                                    <FormLabel>Password</FormLabel>
-                                    <InputGroup size="md">
-                                        <Input
-                                            {...register("password", {
-                                                required: true,
-                                            })}
-                                            pr="4.5rem"
-                                            type={show ? "text" : "password"}
-                                            placeholder="Enter password"
-                                        />
-                                        <InputRightElement width="4.5rem">
-                                            <Button
-                                                h="1.75rem"
-                                                size="sm"
-                                                onClick={handleClick}
-                                            >
-                                                {show ? "Hide" : "Show"}
-                                            </Button>
-                                        </InputRightElement>
-                                    </InputGroup>
-                                </FormControl>
-                            </SimpleGrid>
-
-                            <SimpleGrid
-                                columns={{ base: 1, md: 2 }}
-                                spacing={6}
-                                mt={4}
-                            >
-                                <FormControl mt={4} isRequired>
-                                    <FormLabel>{t("role")}</FormLabel>
-                                    <Select
-                                        {...register("role")}
-                                        defaultValue="staff"
-                                    >
-                                        <option value="jps">JPS</option>
-                                    </Select>
-                                </FormControl>
-
-                                <FormControl mt={4} isRequired>
-                                    <FormLabel>{t("status")}</FormLabel>
-                                    <Select
-                                        {...register("status")}
-                                        defaultValue="active"
-                                    >
-                                        <option value="active">Active</option>
-                                        <option value="inactive">
-                                            Inactive
-                                        </option>
-                                    </Select>
-                                </FormControl>
                             </SimpleGrid>
 
                             <HStack spacing={4} mt={6}>
                                 <Button
                                     type="button"
                                     as={ReactRouterLink}
-                                    to={USER_LIST_PATH}
+                                    to={BOTTLE_LIST_PATH}
                                     colorScheme="orange"
                                     flex={1}
                                 >
@@ -255,4 +198,4 @@ const UserCreate = () => {
     );
 };
 
-export default UserCreate;
+export default BottleCostCreate;

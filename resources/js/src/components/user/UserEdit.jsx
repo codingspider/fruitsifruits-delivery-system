@@ -203,24 +203,6 @@ const UserEdit = () => {
                                         </InputRightElement>
                                     </InputGroup>
                                 </FormControl>
-                            </SimpleGrid>
-
-                            <SimpleGrid
-                                columns={{ base: 1, md: 2 }}
-                                spacing={6}
-                                mt={4}
-                            >
-                                <FormControl mt={4} isRequired>
-                                    <FormLabel>{t("role")}</FormLabel>
-                                    <Select
-                                        {...register("role")}
-                                        defaultValue="staff"
-                                    >
-                                        <option value="staff">Staff</option>
-                                        <option value="admin">Admin</option>
-                                    </Select>
-                                </FormControl>
-
                                 <FormControl mt={4} isRequired>
                                     <FormLabel>{t("status")}</FormLabel>
                                     <Select
@@ -234,6 +216,7 @@ const UserEdit = () => {
                                     </Select>
                                 </FormControl>
                             </SimpleGrid>
+
 
                             <HStack spacing={4} mt={6}>
                                 <Button

@@ -16,7 +16,7 @@ import {
   FcAddDatabase,
   FcMindMap,
   FcManager,
-  FcConferenceCall,
+  FcBiomass ,
   FcHeatMap,
   FcTimeline
 } from 'react-icons/fc';
@@ -90,7 +90,8 @@ const SidebarContent = ({ onClose, ...rest }) => {
       <NavLink to="/super/admin/pos"      icon={FcShop} activeBg={activeBg} activeColor={activeColor} hoverBg={hoverBg} active={isActive('/super/admin/pos')} label={t('driver_allocation')} />
       <NavLink to='/super/admin/save/order'  icon={FcList} activeBg={activeBg} activeColor={activeColor} hoverBg={hoverBg} active={isActive('/super/admin/save/order')} label={t('manage_route')} />
       <NavLink to="/super/admin/order-status" icon={FcHeatMap } activeBg={activeBg} activeColor={activeColor} hoverBg={hoverBg} active={isActive('/super/admin/order-status')} label={t('manage_locations')} />
-      <NavLink to="/super/admin/ingredient/list" icon={FcTimeline  } activeBg={activeBg} activeColor={activeColor} hoverBg={hoverBg} active={isActive('/super/admin/ingredient/list')} label={t('manage_ingredients')} />
+      <NavLink to="/super/admin/ingredient/list" icon={FcTimeline } activeBg={activeBg} activeColor={activeColor} hoverBg={hoverBg} active={isActive('/super/admin/ingredient/list')} label={t('manage_ingredients')} />
+      <NavLink to="/super/admin/bottle/cost/list" icon={FcBiomass } activeBg={activeBg} activeColor={activeColor} hoverBg={hoverBg} active={isActive('/super/admin/bottle/cost/list')} label={t('manage_bottle')} />
 
       {/* ----- Dropdown: user management ----- */}
       <DropdownHeader
@@ -104,6 +105,20 @@ const SidebarContent = ({ onClose, ...rest }) => {
       <Collapse in={open.user || location.pathname.startsWith('/super/admin/user/list')} animateOpacity>
         <Box ml="8" mt="1"  borderRadius="md">
           <NavLink to={USER_LIST_PATH}         icon={null} activeBg={activeBg} activeColor={activeColor} hoverBg={hoverBg} active={isActive(USER_LIST_PATH)}         label={t('user_list')} small />
+        </Box>
+      </Collapse>
+
+      {/* ----- Dropdown: delivery boy ----- */}
+      <DropdownHeader
+        label={t('driver_manage')}
+        icon={FcShipped}
+        isOpen={open.delivery || location.pathname.startsWith('/super/admin/driver/list')}
+        onToggle={() => toggle('delivery')}
+        hoverBg={hoverBg}
+      />
+      <Collapse in={open.delivery || location.pathname.startsWith('/super/admin/driver/list')} animateOpacity>
+        <Box ml="8" mt="1"  borderRadius="md">
+          <NavLink to="/super/admin/driver/list" icon={null} activeBg={activeBg} activeColor={activeColor} hoverBg={hoverBg} active={isActive('/super/admin/driver/list')} label={t('driver_list')} small />
         </Box>
       </Collapse>
 
@@ -139,22 +154,6 @@ const SidebarContent = ({ onClose, ...rest }) => {
         </Box>
       </Collapse>
       
-      {/* ----- Dropdown: delivery boy ----- */}
-      <DropdownHeader
-        label={t('delivery_boy')}
-        icon={FcShipped}
-        isOpen={open.delivery || location.pathname.startsWith('/super/admin/delivery/boy')}
-        onToggle={() => toggle('delivery')}
-        hoverBg={hoverBg}
-      />
-      <Collapse in={open.delivery || location.pathname.startsWith('/super/admin/delivery/boy')} animateOpacity>
-        <Box ml="8" mt="1"  borderRadius="md">
-          <NavLink to="/super/admin/tools/import" icon={null} activeBg={activeBg} activeColor={activeColor} hoverBg={hoverBg} active={isActive('/super/admin/tools/import')} label="Import/Export" small />
-          <NavLink to="/super/admin/tools/logs"   icon={null} activeBg={activeBg} activeColor={activeColor} hoverBg={hoverBg} active={isActive('/super/admin/tools/logs')}   label="System Logs"   small />
-        </Box>
-      </Collapse>
-      
-
       <NavLink to="/super/admin/settings" icon={FcSettings} activeBg={activeBg} activeColor={activeColor} hoverBg={hoverBg} active={isActive('/super/admin/settings')} label="Settings" />
       <NavLink to="/super/admin/backup" icon={FcAddDatabase } activeBg={activeBg} activeColor={activeColor} hoverBg={hoverBg} active={isActive('/super/admin/backup')} label={t('backup')} />
       <NavLink to="/super/admin/login/history" icon={FcMindMap } activeBg={activeBg} activeColor={activeColor} hoverBg={hoverBg} active={isActive('/super/admin/login/history')} label={ t('login_history') } />

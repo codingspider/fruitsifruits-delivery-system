@@ -24,10 +24,11 @@ import { useForm } from "react-hook-form";
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import api from "../../axios";
-import { DASHBOARD_PATH, USER_LIST_PATH } from "../../router";
+import { DASHBOARD_PATH } from "../../router";
 import { Link as ReactRouterLink } from "react-router-dom";
+import { DRIVER_LIST_PATH } from './../../router';
 
-const UserCreate = () => {
+const DriverCreate = () => {
     const { register, handleSubmit, reset } = useForm();
     const { t } = useTranslation();
     const [isSubmitting, setIsSubmitting] = useState(false);
@@ -39,12 +40,7 @@ const UserCreate = () => {
     const onSubmit = async (data) => {
         setIsSubmitting(true);
         try {
-            const res = await api.post("superadmin/users", data, {
-                headers: {
-                    "Content-Type": "multipart/form-data",
-                },
-            });
-
+            const res = await api.post("superadmin/drivers", data);
             reset();
 
             toast({
@@ -54,7 +50,7 @@ const UserCreate = () => {
                 duration: 3000,
                 isClosable: true,
             });
-            navigate(`${USER_LIST_PATH}`);
+            navigate(`${DRIVER_LIST_PATH}`);
         } catch (err) {
             const errorResponse = err?.response?.data;
             if (errorResponse?.errors) {
@@ -86,7 +82,7 @@ const UserCreate = () => {
 
     useEffect(() => {
         const app_name = localStorage.getItem("app_name");
-        document.title = `${app_name} | User Create`;
+        document.title = `${app_name} | Driver Create`;
     }, []);
 
     return (
@@ -106,7 +102,7 @@ const UserCreate = () => {
                         <BreadcrumbItem isCurrentPage>
                             <BreadcrumbLink
                                 as={ReactRouterLink}
-                                to={USER_LIST_PATH}
+                                to={DRIVER_LIST_PATH}
                             >
                                 {t("user_list")}
                             </BreadcrumbLink>
@@ -119,18 +115,18 @@ const UserCreate = () => {
                 <Card shadow="md" borderRadius="2xl">
                     <CardHeader>
                         <Flex mb={4} justifyContent="space-between">
-                            <Heading size="md">{t("add_user")}</Heading>
+                            <Heading size="md">{t("add_driver")}</Heading>
                             <Button
                                 colorScheme="teal"
                                 as={ReactRouterLink}
-                                to={USER_LIST_PATH}
+                                to={DRIVER_LIST_PATH}
                                 display={{ base: "none", md: "inline-flex" }}
                                 px={4}
                                 py={2}
                                 whiteSpace="normal"
                                 textAlign="center"
                             >
-                                {t("user_list")}
+                                {t("driver_list")}
                             </Button>
                         </Flex>
                     </CardHeader>
@@ -195,23 +191,6 @@ const UserCreate = () => {
                                         </InputRightElement>
                                     </InputGroup>
                                 </FormControl>
-                            </SimpleGrid>
-
-                            <SimpleGrid
-                                columns={{ base: 1, md: 2 }}
-                                spacing={6}
-                                mt={4}
-                            >
-                                <FormControl mt={4} isRequired>
-                                    <FormLabel>{t("role")}</FormLabel>
-                                    <Select
-                                        {...register("role")}
-                                        defaultValue="staff"
-                                    >
-                                        <option value="jps">JPS</option>
-                                    </Select>
-                                </FormControl>
-
                                 <FormControl mt={4} isRequired>
                                     <FormLabel>{t("status")}</FormLabel>
                                     <Select
@@ -230,7 +209,7 @@ const UserCreate = () => {
                                 <Button
                                     type="button"
                                     as={ReactRouterLink}
-                                    to={USER_LIST_PATH}
+                                    to={DRIVER_LIST_PATH}
                                     colorScheme="orange"
                                     flex={1}
                                 >
@@ -255,4 +234,4 @@ const UserCreate = () => {
     );
 };
 
-export default UserCreate;
+export default DriverCreate;
