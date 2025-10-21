@@ -103,9 +103,10 @@ export default function BottleCostList() {
     };
     const columns = [
         { header: "ID", accessorKey: "id"},
-        { header: "Size", accessorKey: "size"},
-        { header: "Bottle Price", accessorKey: "bottle_price"},
-        { header: "Cap Price", accessorKey: "cap_price"},
+        { header: "Name", accessorKey: "name"},
+        { header: "Type", accessorKey: "product_type"},
+        { header: "Unit", accessorKey: "unit"},
+        { header: "Cost", accessorKey: "cost_price"},
         {
             header: "Actions",
             cell: ({ row }) => (

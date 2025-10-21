@@ -1,7 +1,8 @@
 How Stock Works
 
 Purchase → transaction → lines → stock_moves (+ quantity)
-Production → consume raw + packaging (- quantity) + add finished product (+ quantity)
+Production → consume raw + packaging (- quantity)
+Add finished product (+ quantity)
 Delivery → stock_moves (- finished goods)
 Return → stock_moves (+ returned goods)
 Damage → stock_moves (- damaged items)

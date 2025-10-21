@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\API;
 
+use App\Models\Product;
 use App\Models\Ingredient;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -17,18 +18,17 @@ class IngredientController extends BaseController
     public function index(Request $request)
     {
         try {
-            $data = Ingredient::paginate(10);
+            $data = Product::whereIn('product_type', ['raw', 'packaging'])->paginate(10);
             return $this->sendResponse($data, 'Ingredient retrived successfully.');
         } catch (\Exception $e) {
             return $this->sendError('Server Error.'.$e->getMessage());
         }
     }
     
-    public function edit($id)
+    public function edit(Product $product)
     {
         try {
-            $user = Ingredient::find($id);
-            return $this->sendResponse($user, 'Ingredient retrived successfully.');
+            return $this->sendResponse($product, 'Ingredient retrived successfully.');
         } catch (\Exception $e) {
             return $this->sendError('Server Error.'.$e->getMessage());
         }
@@ -48,11 +48,17 @@ class IngredientController extends BaseController
         DB::beginTransaction();
 
         try {
-            $data = $request->only('name', 'cost_per_unit');
-            $ingredient = Ingredient::create($data);
+            $data = $request->all();
+            $product = new Product();
+            $product->name = $data['name'];
+            $product->product_type = 'raw';
+            $product->unit = 'Pices';
+            $product->opening_stock = 0;
+            $product->cost_price = $data['cost_per_unit'];
+            $product->save();
             DB::commit();
 
-            return $this->sendResponse(['data' => $ingredient], 'Ingredient saved successfully.');
+            return $this->sendResponse(['data' => $product], 'Ingredient saved successfully.');
 
         } catch (\Exception $e) {
             DB::rollBack();
@@ -75,7 +81,7 @@ class IngredientController extends BaseController
         DB::beginTransaction();
 
         try {
-            $ingredient = Ingredient::findOrFail($id);
+            $ingredient = Product::findOrFail($id);
             $ingredient->name = $request->name;
             $ingredient->cost_per_unit = $request->cost_per_unit;
             $ingredient->save();
@@ -92,7 +98,7 @@ class IngredientController extends BaseController
     public function destroy($id)
     {
         try {
-            $ingredient = Ingredient::find($id);
+            $ingredient = Product::find($id);
             if (!$ingredient) {
                 return $this->sendError('ingredient not found.', 404);
             }

@@ -85,7 +85,7 @@ const BottleCostEdit = () => {
         const res = await api.get(`superadmin/bottles/${id}/edit`);
         const bottle = res.data.data;
         reset({
-            size: bottle.size,
+            size: bottle.name,
             bottle_price: bottle.bottle_price,
             cap_price: bottle.cap_price,
         });
@@ -155,7 +155,7 @@ const BottleCostEdit = () => {
                                         {...register("size", {
                                             required: true,
                                         })}
-                                        type="number"
+                                        type="text"
                                         placeholder={t("size")}
                                     />
                                 </FormControl>

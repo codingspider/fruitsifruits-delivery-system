@@ -26,6 +26,9 @@ import BottleCostList from "./components/bootle_cost/BottleCostList";
 import DriverCreate from "./components/driver/DriverCreate";
 import DriverEdit from "./components/driver/DriverEdit";
 import DriverList from "./components/driver/DriverList";
+import PurchaseList from "./components/purchase/PurchaseList";
+import PurchaseCreate from "./components/purchase/PurchaseCreate";
+import PurchaseEdit from "./components/purchase/PurchaseEdit";
 
 
 // ✅ Public Routes
@@ -63,6 +66,15 @@ export const DRIVER_EDIT = "driver/edit/:id";
 export const DRIVER_LIST_PATH = `${SUPER_ADMIN_BASE}/driver/list`;
 export const DRIVER_ADD_PATH = `${SUPER_ADMIN_BASE}/driver/create`;
 export const DRIVER_EDIT_PATH = (id) => `${SUPER_ADMIN_BASE}/driver/edit/${id}`;
+
+
+export const PURCHASE_LIST = "purchase/list";
+export const PURCHASE_ADD = "purchase/create";
+export const PURCHASE_EDIT = "purchase/edit/:id";
+
+export const PURCHASE_LIST_PATH = `${SUPER_ADMIN_BASE}/purchase/list`;
+export const PURCHASE_ADD_PATH = `${SUPER_ADMIN_BASE}/purchase/create`;
+export const PURCHASE_EDIT_PATH = (id) => `${SUPER_ADMIN_BASE}/purchase/edit/${id}`;
 
 
 export const INGREDIENT_LIST = "ingredient/list";
@@ -129,6 +141,10 @@ const router = createBrowserRouter([
       { path: DRIVER_LIST_PATH, element: <ProtectedRoute role="superadmin"><DriverList /></ProtectedRoute> },
       { path: DRIVER_ADD_PATH, element: <ProtectedRoute role="superadmin"><DriverCreate /></ProtectedRoute> },
       { path: DRIVER_EDIT, element: <ProtectedRoute role="superadmin"><DriverEdit /></ProtectedRoute> },
+      
+      { path: PURCHASE_LIST_PATH, element: <ProtectedRoute role="superadmin"><PurchaseList /></ProtectedRoute> },
+      { path: PURCHASE_ADD_PATH, element: <ProtectedRoute role="superadmin"><PurchaseCreate /></ProtectedRoute> },
+      { path: PURCHASE_EDIT, element: <ProtectedRoute role="superadmin"><PurchaseEdit /></ProtectedRoute> },
     ],
   },
 ]);

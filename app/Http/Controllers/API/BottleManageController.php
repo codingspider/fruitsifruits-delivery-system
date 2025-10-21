@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\API;
 
 use App\Models\Bottle;
+use App\Models\Product;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
@@ -17,7 +18,7 @@ class BottleManageController extends BaseController
     public function index(Request $request)
     {
         try {
-            $data = Bottle::paginate(10);
+            $data = Product::where('product_type', 'packaging')->paginate(10);
             return $this->sendResponse($data, 'Bottle Cost retrived successfully.');
         } catch (\Exception $e) {
             return $this->sendError('Server Error.'.$e->getMessage());
@@ -27,7 +28,7 @@ class BottleManageController extends BaseController
     public function edit($id)
     {
         try {
-            $user = Bottle::find($id);
+            $user = Product::find($id);
             return $this->sendResponse($user, 'Bottle Cost retrived successfully.');
         } catch (\Exception $e) {
             return $this->sendError('Server Error.'.$e->getMessage());
@@ -50,8 +51,15 @@ class BottleManageController extends BaseController
 
         try {
             $data = $request->all();
-            $data['total_cost'] = $data['bottle_price'] + $data['cap_price'];
-            $bottle = Bottle::create($data);
+            $price = $data['bottle_price'] + $data['cap_price'];
+
+            $bottle = new Product();
+            $bottle->name = $data['size'];
+            $bottle->product_type = 'packaging';
+            $bottle->unit = 'Pices';
+            $bottle->opening_stock = 0;
+            $bottle->cost_price = $price;
+            $bottle->save();
             DB::commit();
 
             return $this->sendResponse(['data' => $bottle], 'Ingredient saved successfully.');
@@ -78,11 +86,14 @@ class BottleManageController extends BaseController
         DB::beginTransaction();
 
         try {
-            $bottle = Bottle::findOrFail($id);
-            $bottle->size = $request->size;
-            $bottle->bottle_price = $request->bottle_price;
-            $bottle->cap_price = $request->cap_price;
-            $bottle->total_cost = $request->cap_price + $request->bottle_price;
+            $data = $request->all();
+            $price = $data['bottle_price'] + $data['cap_price'];
+            $bottle = Product::findOrFail($id);
+            $bottle->name = $data['size'];
+            $bottle->product_type = 'packaging';
+            $bottle->unit = 'Pices';
+            $bottle->opening_stock = 0;
+            $bottle->cost_price = $price;
             $bottle->save();
             DB::commit();
 
@@ -97,7 +108,7 @@ class BottleManageController extends BaseController
     public function destroy($id)
     {
         try {
-            $bottle = Bottle::find($id);
+            $bottle = Product::find($id);
             if (!$bottle) {
                 return $this->sendError('Data not found.', 404);
             }

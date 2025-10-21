@@ -15,12 +15,12 @@ import {
 } from "@chakra-ui/react";
 import { Link as ChakraLink } from "@chakra-ui/react";
 import { useTranslation } from "react-i18next";
-import { DASHBOARD_PATH, INGREDIENT_ADD_PATH, INGREDIENT_EDIT_PATH } from "../../router";
+import { DASHBOARD_PATH, PURCHASE_ADD_PATH, PURCHASE_EDIT_PATH} from "../../router";
 import { EditIcon, DeleteIcon } from "@chakra-ui/icons";
 import Swal from "sweetalert2";
 import { Link as ReactRouterLink } from "react-router-dom";
 
-export default function IngredientList() {
+export default function PurchaseList() {
     const [data, setData] = useState([]);
     const [globalFilter, setGlobalFilter] = useState("");
     const [pageIndex, setPageIndex] = useState(0);
@@ -36,7 +36,7 @@ export default function IngredientList() {
         try {
             setIsLoading(true);
             // Browser online: request server data with pagination & filter
-            const res = await api.get("/superadmin/products", {
+            const res = await api.get("/superadmin/purchases", {
                 params: {
                     page: pageIndex + 1,
                     per_page: pageSize,
@@ -58,11 +58,11 @@ export default function IngredientList() {
     };
     useEffect(() => {
         const app_name = localStorage.getItem('app_name');
-        document.title = `${app_name} | Ingredient List`;
+        document.title = `${app_name} | Purchase List`;
         fetchIngredients();
     }, [pageIndex, globalFilter]);
 
-    const deleteIngredient = async (id) => {
+    const deletePurchase = async (id) => {
         const result = await Swal.fire({
             title: "Are you sure?",
             text: "Data will be deleted.",
@@ -75,7 +75,7 @@ export default function IngredientList() {
 
         if (result.isConfirmed) {
             try {
-                await api.delete(`superadmin/products/${id}`);
+                await api.delete(`superadmin/purchases/${id}`);
                 toast({
                     position: "bottom-right",
                     title: "Data deleted successfully",
@@ -102,10 +102,11 @@ export default function IngredientList() {
     };
     const columns = [
         { header: "ID", accessorKey: "id"},
-        { header: "Name", accessorKey: "name"},
-        { header: "Type", accessorKey: "product_type"},
-        { header: "Unit", accessorKey: "unit"},
-        { header: "Cost", accessorKey: "cost_price"},
+        { header: "Type", accessorKey: "transaction_type"},
+        { header: "Ref.No", accessorKey: "reference_no"},
+        { header: "Total", accessorKey: "total_amount"},
+        { header: "Date", accessorKey: "date"},
+        { header: "Note", accessorKey: "notes"},
         {
             header: "Actions",
             cell: ({ row }) => (
@@ -116,7 +117,7 @@ export default function IngredientList() {
                             padding={2}
                             borderRadius="md"
                             onClick={() =>
-                                navigate(INGREDIENT_EDIT_PATH(row.original.id))
+                                navigate(PURCHASE_EDIT_PATH(row.original.id))
                             }
                         >
                             <EditIcon />
@@ -127,7 +128,7 @@ export default function IngredientList() {
                             padding={2}
                             borderRadius="md"
                             cursor="pointer"
-                            onClick={() => deleteIngredient(row.original.id)}
+                            onClick={() => deletePurchase(row.original.id)}
                         >
                             <DeleteIcon color="red.500" />
                         </ChakraLink>
@@ -154,7 +155,7 @@ export default function IngredientList() {
                         <BreadcrumbItem isCurrentPage>
                             <BreadcrumbLink
                                 as={ReactRouterLink}
-                                to={INGREDIENT_ADD_PATH}
+                                to={PURCHASE_ADD_PATH}
                             >
                                 {t("add")}
                             </BreadcrumbLink>
@@ -176,7 +177,7 @@ export default function IngredientList() {
                             setPageIndex={setPageIndex}
                             pageCount={pageCount}
                             isLoading={isLoading}
-                            addURL={INGREDIENT_ADD_PATH}
+                            addURL={PURCHASE_ADD_PATH}
                         />
                     </CardBody>
                 </Card>

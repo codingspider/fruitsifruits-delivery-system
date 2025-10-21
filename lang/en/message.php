@@ -115,4 +115,11 @@ return [
     'driver_manage' => 'Driver Management',
     'driver_list' => 'Driver List',
     'add_driver' => 'Add Driver',
+    'type' => 'Type',
+    'purchase' => 'Purchase',
+    'add_purchase' => 'Add Purchase',
+    'add_row' => 'Add New Row',
+    'reference_no' => 'Reference No',
+    'date' => 'Date',
+    'notes' => 'Note',
 ];

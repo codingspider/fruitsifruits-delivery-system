@@ -45,7 +45,7 @@ const IngredientEdit = () => {
         console.log(data);
         setIsSubmitting(true);
         try {
-            const res = await api.put(`superadmin/ingredients/${id}`, data);
+            const res = await api.put(`superadmin/products/${id}`, data);
             toast({
                 position: "bottom-right",
                 title: res.data.message,
@@ -83,19 +83,20 @@ const IngredientEdit = () => {
         }
     };
 
-    const getOwner = async () => {
-        const res = await api.get(`superadmin/ingredients/${id}/edit`);
-        const user = res.data.data;
+    const getProduct = async () => {
+        const res = await api.get(`superadmin/products/${id}/edit`);
+        const product = res.data.data;
         reset({
-            name: user.name,
-            cost_per_unit: user.cost_per_unit,
+            name: product.name,
+            cost_per_unit: product.cost_price,
+            product_type: product.product_type,
         });
     };
 
     useEffect(() => {
         const app_name = localStorage.getItem("app_name");
         document.title = `${app_name} | Ingredient Edit`;
-        getOwner();
+        getProduct();
     }, []);
 
     return (
@@ -169,6 +170,20 @@ const IngredientEdit = () => {
                                         type="text"
                                         placeholder={t("cost_per_unit")}
                                     />
+                                </FormControl>
+                                <FormControl isRequired>
+                                    <FormLabel>{t("type")}</FormLabel>
+                                    <Select
+                                        {...register("product_type")}
+                                        defaultValue="raw"
+                                    >
+                                        <option value="raw">
+                                            Raw Material{" "}
+                                        </option>
+                                        <option value="packaging">
+                                            Packaging
+                                        </option>
+                                    </Select>
                                 </FormControl>
                             </SimpleGrid>
 

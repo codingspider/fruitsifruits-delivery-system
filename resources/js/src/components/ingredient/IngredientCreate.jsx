@@ -39,7 +39,7 @@ const IngredientCreate = () => {
     const onSubmit = async (data) => {
         setIsSubmitting(true);
         try {
-            const res = await api.post("superadmin/ingredients", data);
+            const res = await api.post("superadmin/products", data);
             reset();
 
             toast({
@@ -53,7 +53,9 @@ const IngredientCreate = () => {
         } catch (err) {
             const errorResponse = err?.response?.data;
             if (errorResponse?.errors) {
-                const errorMessage = Object.values(errorResponse.errors).flat().join(" ");
+                const errorMessage = Object.values(errorResponse.errors)
+                    .flat()
+                    .join(" ");
                 toast({
                     position: "bottom-right",
                     title: "Error",
@@ -62,7 +64,6 @@ const IngredientCreate = () => {
                     duration: 3000,
                     isClosable: true,
                 });
-
             } else if (errorResponse?.message) {
                 toast({
                     position: "bottom-right",
@@ -73,7 +74,6 @@ const IngredientCreate = () => {
                     isClosable: true,
                 });
             }
-
         } finally {
             setIsSubmitting(false);
         }
@@ -157,6 +157,18 @@ const IngredientCreate = () => {
                                     />
                                 </FormControl>
 
+                                <FormControl isRequired>
+                                    <FormLabel>{t("type")}</FormLabel>
+                                    <Select
+                                        {...register("product_type")}
+                                        defaultValue="raw"
+                                    >
+                                        <option value="raw">Raw Material </option>
+                                        <option value="packaging">
+                                            Packaging
+                                        </option>
+                                    </Select>
+                                </FormControl>
                             </SimpleGrid>
 
                             <HStack spacing={4} mt={6}>

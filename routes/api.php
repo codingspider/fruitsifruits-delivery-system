@@ -5,6 +5,8 @@ use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\API\PLanController;
 use App\Http\Controllers\API\UserController;
+use App\Http\Controllers\API\ProductController;
+use App\Http\Controllers\API\PurchaseController;
 use App\Http\Controllers\API\RegisterController;
 use App\Http\Controllers\API\IngredientController;
 use App\Http\Controllers\API\BottleManageController;
@@ -20,11 +22,14 @@ Route::controller(RegisterController::class)->group(function(){
 
 Route::middleware(['auth:sanctum'])->prefix('superadmin')->group(function () {
     // Add more super admin routes here
-    Route::resource('plans', PLanController::class);
-    Route::resource('users', UserController::class);
-    Route::resource('ingredients', IngredientController::class);
-    Route::resource('bottles', BottleManageController::class);
-    Route::resource('drivers', DriverManageController::class);
+    Route::apiResource('plans', PLanController::class);
+    Route::apiResource('users', UserController::class);
+    Route::apiResource('products', ProductController::class);
+    Route::apiResource('bottles', BottleManageController::class);
+    Route::apiResource('drivers', DriverManageController::class);
+    Route::apiResource('purchases', PurchaseController::class);
+    Route::get('products/{product}/edit', [ProductController::class, 'edit']);
+    Route::get('get/products', [ProductController::class, 'getProducts']);
 });
 
 
