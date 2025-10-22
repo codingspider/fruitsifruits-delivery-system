@@ -31,7 +31,7 @@ import {
   
 } from '@chakra-ui/react';
 import { useTranslation } from 'react-i18next';
-import { USER_LIST_PATH } from '../../router';
+import { DRIVER_ROUTE_LIST_PATH, FLAVOUR_LIST_PATH, INGREDIENT_LIST_PATH, JUICE_ALLOCATION_LIST_PATH, LOCATION_LIST_PATH, PURCHASE_LIST_PATH, USER_LIST_PATH } from '../../router';
 
 const SidebarContent = ({ onClose, ...rest }) => {
   const { t } = useTranslation();
@@ -86,23 +86,23 @@ const SidebarContent = ({ onClose, ...rest }) => {
       {/* ----- Static links ----- */}
       <NavLink to="/super/admin/dashboard" icon={FcHome} activeBg={activeBg} activeColor={activeColor} hoverBg={hoverBg} active={isActive('/super/admin/dashboard')} label={t('dashboard')} />
       <NavLink to="/super/admin/pos"      icon={FcPositiveDynamic  } activeBg={activeBg} activeColor={activeColor} hoverBg={hoverBg} active={isActive('/super/admin/pos')} label={t('juice_production')} />
-      <NavLink to="/super/admin/pos"      icon={FcShop} activeBg={activeBg} activeColor={activeColor} hoverBg={hoverBg} active={isActive('/super/admin/pos')} label={t('driver_allocation')} />
-      <NavLink to='/super/admin/save/order'  icon={FcList} activeBg={activeBg} activeColor={activeColor} hoverBg={hoverBg} active={isActive('/super/admin/save/order')} label={t('manage_route')} />
-      <NavLink to="/super/admin/location/list" icon={FcHeatMap } activeBg={activeBg} activeColor={activeColor} hoverBg={hoverBg} active={isActive('/super/admin/location/list')} label={t('manage_locations')} />
-      <NavLink to="/super/admin/ingredient/list" icon={FcTimeline } activeBg={activeBg} activeColor={activeColor} hoverBg={hoverBg} active={isActive('/super/admin/ingredient/list')} label={t('manage_ingredients')} />
-      <NavLink to="/super/admin/flavour/list" icon={FcFilledFilter } activeBg={activeBg} activeColor={activeColor} hoverBg={hoverBg} active={isActive('/super/admin/flavour/list')} label={t('manage_flavour')} />
-      <NavLink to="/super/admin/purchase/list" icon={FcMoneyTransfer } activeBg={activeBg} activeColor={activeColor} hoverBg={hoverBg} active={isActive('/super/admin/purchase/list')} label={t('purchase')} />
+      <NavLink to={JUICE_ALLOCATION_LIST_PATH}      icon={FcShop} activeBg={activeBg} activeColor={activeColor} hoverBg={hoverBg} active={isActive(JUICE_ALLOCATION_LIST_PATH)} label={t('driver_allocation')} />
+      <NavLink to={DRIVER_ROUTE_LIST_PATH}  icon={FcList} activeBg={activeBg} activeColor={activeColor} hoverBg={hoverBg} active={isActive(DRIVER_ROUTE_LIST_PATH)} label={t('manage_route')} />
+      <NavLink to={LOCATION_LIST_PATH} icon={FcHeatMap } activeBg={activeBg} activeColor={activeColor} hoverBg={hoverBg} active={isActive(LOCATION_LIST_PATH)} label={t('manage_locations')} />
+      <NavLink to={INGREDIENT_LIST_PATH} icon={FcTimeline } activeBg={activeBg} activeColor={activeColor} hoverBg={hoverBg} active={isActive(INGREDIENT_LIST_PATH)} label={t('manage_ingredients')} />
+      <NavLink to={FLAVOUR_LIST_PATH} icon={FcFilledFilter } activeBg={activeBg} activeColor={activeColor} hoverBg={hoverBg} active={isActive(FLAVOUR_LIST_PATH)} label={t('manage_flavour')} />
+      <NavLink to={PURCHASE_LIST_PATH} icon={FcMoneyTransfer } activeBg={activeBg} activeColor={activeColor} hoverBg={hoverBg} active={isActive(PURCHASE_LIST_PATH)} label={t('purchase')} />
 
       {/* ----- Dropdown: user management ----- */}
       <DropdownHeader
         label={t('user_management')}
         icon={FcManager}
-        isOpen={open.user || location.pathname.startsWith('/super/admin/user/list')}
+        isOpen={open.user || location.pathname.startsWith(USER_LIST_PATH)}
         onToggle={() => toggle('user')}
         hoverBg={hoverBg}
       />
 
-      <Collapse in={open.user || location.pathname.startsWith('/super/admin/user/list')} animateOpacity>
+      <Collapse in={open.user || location.pathname.startsWith(USER_LIST_PATH)} animateOpacity>
         <Box ml="8" mt="1"  borderRadius="md">
           <NavLink to={USER_LIST_PATH}         icon={null} activeBg={activeBg} activeColor={activeColor} hoverBg={hoverBg} active={isActive(USER_LIST_PATH)}         label={t('user_list')} small />
         </Box>

@@ -5,14 +5,16 @@ use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\API\PLanController;
 use App\Http\Controllers\API\UserController;
-use App\Http\Controllers\API\LocationController;
 use App\Http\Controllers\API\FlavourController;
 use App\Http\Controllers\API\ProductController;
+use App\Http\Controllers\API\LocationController;
 use App\Http\Controllers\API\PurchaseController;
 use App\Http\Controllers\API\RegisterController;
 use App\Http\Controllers\API\IngredientController;
+use App\Http\Controllers\API\DriverRouteController;
 use App\Http\Controllers\API\BottleManageController;
 use App\Http\Controllers\API\DriverManageController;
+use App\Http\Controllers\API\DriverJuiceAllocationController;
 
 
 Route::controller(RegisterController::class)->group(function(){
@@ -32,6 +34,8 @@ Route::middleware(['auth:sanctum'])->prefix('superadmin')->group(function () {
     Route::apiResource('flavours', FlavourController ::class);
     Route::apiResource('purchases', PurchaseController::class);
     Route::apiResource('locations', LocationController::class);
+    Route::apiResource('driver/routes', DriverRouteController::class);
+    Route::apiResource('driver/juice/allocations', DriverJuiceAllocationController::class);
 
     Route::get('products/{product}/edit', [ProductController::class, 'edit']);
     Route::get('flavours/{flavour}/edit', [FlavourController::class, 'edit']);

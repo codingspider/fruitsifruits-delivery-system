@@ -131,4 +131,6 @@ return [
     'discount' => 'Discount',
     'add_location' => 'Add Locaton',
     'tax' => 'Tax',
+    'driver' => 'Driver',
+    'add_route' => 'Add Driver Route',
 ];

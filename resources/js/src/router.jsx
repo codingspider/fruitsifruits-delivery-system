@@ -38,6 +38,13 @@ import FlavourList from "./components/flavour/FlavourList";
 import FlavourCreate from "./components/flavour/FlavourCreate";
 import FlavourEdit from "./components/flavour/FlavourEdit";
 
+import RouteCreate from "./components/routes/RouteCreate";
+import RouteList from "./components/routes/RouteList";
+import RouteEdit from "./components/routes/RouteEdit";
+
+import JuiceAllocationCreate from "./components/allocations/JuiceAllocationCreate";
+import JuiceAllocationEdit from "./components/allocations/JuiceAllocationEdit";
+import JuiceAllocationList from "./components/allocations/JuiceAllocationList";
 
 // ✅ Public Routes
 export const ROOT = '/';
@@ -101,6 +108,24 @@ export const LOCATION_EDIT = "location/edit/:id";
 export const LOCATION_LIST_PATH = `${SUPER_ADMIN_BASE}/location/list`;
 export const LOCATION_ADD_PATH = `${SUPER_ADMIN_BASE}/location/create`;
 export const LOCATION_EDIT_PATH = (id) => `${SUPER_ADMIN_BASE}/location/edit/${id}`;
+
+
+export const JUICE_ALLOCATION_LIST = "juice/allocation/list";
+export const JUICE_ALLOCATION_ADD = "juice/allocation/create";
+export const JUICE_ALLOCATION_EDIT = "juice/allocation/edit/:id";
+
+export const JUICE_ALLOCATION_LIST_PATH = `${SUPER_ADMIN_BASE}/juice/allocation/list`;
+export const JUICE_ALLOCATION_ADD_PATH = `${SUPER_ADMIN_BASE}/juice/allocation/create`;
+export const JUICE_ALLOCATION_EDIT_PATH = (id) => `${SUPER_ADMIN_BASE}/juice/allocation/edit/${id}`;
+
+
+export const DRIVER_ROUTE_LIST = "driver/route/list";
+export const DRIVER_ROUTE_ADD = "driver/route/create";
+export const DRIVER_ROUTE_EDIT = "driver/route/edit/:id";
+
+export const DRIVER_ROUTE_LIST_PATH = `${SUPER_ADMIN_BASE}/driver/route/list`;
+export const DRIVER_ROUTE_ADD_PATH = `${SUPER_ADMIN_BASE}/driver/route/create`;
+export const DRIVER_ROUTE_EDIT_PATH = (id) => `${SUPER_ADMIN_BASE}/driver/route/edit/${id}`;
 
 
 export const INGREDIENT_LIST = "ingredient/list";
@@ -179,6 +204,14 @@ const router = createBrowserRouter([
       { path: LOCATION_LIST_PATH, element: <ProtectedRoute role="superadmin"><LocationList /></ProtectedRoute> },
       { path: LOCATION_ADD_PATH, element: <ProtectedRoute role="superadmin"><LocationCreate /></ProtectedRoute> },
       { path: LOCATION_EDIT, element: <ProtectedRoute role="superadmin"><LocationEdit /></ProtectedRoute> },
+      
+      { path: DRIVER_ROUTE_LIST_PATH, element: <ProtectedRoute role="superadmin"><RouteList /></ProtectedRoute> },
+      { path: DRIVER_ROUTE_ADD_PATH, element: <ProtectedRoute role="superadmin"><RouteCreate /></ProtectedRoute> },
+      { path: DRIVER_ROUTE_EDIT, element: <ProtectedRoute role="superadmin"><RouteEdit /></ProtectedRoute> },
+      
+      { path: JUICE_ALLOCATION_LIST_PATH, element: <ProtectedRoute role="superadmin"><JuiceAllocationList /></ProtectedRoute> },
+      { path: JUICE_ALLOCATION_ADD_PATH, element: <ProtectedRoute role="superadmin"><JuiceAllocationCreate /></ProtectedRoute> },
+      { path: JUICE_ALLOCATION_EDIT, element: <ProtectedRoute role="superadmin"><JuiceAllocationEdit /></ProtectedRoute> },
     ],
   },
 ]);
