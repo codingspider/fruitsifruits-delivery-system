@@ -4,6 +4,7 @@ namespace App\Http\Controllers\API;
 
 use App\Models\Location;
 use Illuminate\Http\Request;
+use App\Models\LocationFlavour;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 use App\Http\Controllers\API\BaseController;
@@ -28,7 +29,7 @@ class LocationController extends BaseController
      */
     public function show($id)
     {
-        $product = Location::with('lines')->find($id);
+        $product = Location::with('location_flavours')->find($id);
         return $this->sendResponse($product, 'Product retrieved successfully.');
     }
 
@@ -47,9 +48,9 @@ class LocationController extends BaseController
     public function store(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'total'     => 'required',
-            'date'      => 'required',
-            'ref_no' => 'nullable|string|max:255|unique:transactions,reference_no',
+            'name'      => 'required',
+            'lat'       => 'required',
+            'lon'       => 'required',
         ]);
 
         if ($validator->fails()) {
@@ -58,35 +59,33 @@ class LocationController extends BaseController
 
         DB::beginTransaction();
         try {
-            if($request->ref_no){
-                $ref = $request->ref_no;
-            }else{
-                $ref = time();
-            }
-            $tran = new Transaction();
-            $tran->date = $request->date;
-            $tran->total_amount = $request->total;
-            $tran->reference_no = $ref;
-            $tran->notes = $request->notes;
-            $tran->transaction_type = 'purchase';
-            $tran->created_by = auth()->user()->id;
-            $tran->save();
+
+            $location = new Location();
+            $location->name = $request->name;
+            $location->lat = $request->lat ?? "";
+            $location->lon = $request->lon ?? "";
+            $location->tax_type = 'percentage';
+            $location->tax_amount = $request->tax_amount ?? 0;
+            $location->save();
 
             foreach($request->products as $product){
-                $line = new TransactionLine();
-                $line->transaction_id = $tran->id;
+                $line = new LocationFlavour();
+                $line->location_id = $location->id;
                 $line->product_id = $product['product_id'];
-                $line->quantity = $product['quantity'];
-                $line->unit_cost = $product['price'];
-                $line->sub_total = $product['price'] * $product['quantity'];
+                $line->flavour_id = $product['flavour_id'];
+                $line->deal_quantity = $product['deal_amount'];
+                $line->specific_quantity = $product['quantity'];
+                $line->price = $product['price'];
+                $line->sub_total = $product['price'];
+                $line->is_discount = $product['discount_enabled'];
+                $line->discount_type = $product['discount_type'];
+                $line->discount_amount = $product['discount_value'];
                 $line->save();
             }
-
-            TransactionService::processTransaction($tran);
             
 
             DB::commit();
-            return $this->sendResponse($product, 'Product saved successfully.');
+            return $this->sendResponse($product, 'Location saved successfully.');
         } catch (\Exception $e) {
             DB::rollBack();
             return $this->sendError('Server Error: '.$e->getMessage(), 500);
@@ -99,10 +98,9 @@ class LocationController extends BaseController
     public function update(Request $request, $id)
     {
         $validator = Validator::make($request->all(), [
-            'total'     => 'required',
-            'date'      => 'required',
-            'ref_no' => 'nullable|string|max:255|unique:transactions,reference_no,' . $id . ',id',
-
+            'name'      => 'required',
+            'lat'       => 'required',
+            'lon'       => 'required',
         ]);
 
         if ($validator->fails()) {
@@ -112,42 +110,44 @@ class LocationController extends BaseController
         DB::beginTransaction();
         try {
 
-            // If no ref number submitted, keep old one or set time
-            $ref = $request->ref_no ?: $transaction->reference_no ?? time();
+            $location = Location::findOrFail($id);
+            $location->name = $request->name;
+            $location->lat = $request->lat ?? "";
+            $location->lon = $request->lon ?? "";
+            $location->tax_type = 'percentage';
+            $location->tax_amount = $request->tax_amount ?? 0;
+            $location->save();
 
-            // ✅ Update transaction instead of creating new
-            $transaction = Location::find($id);
-            $transaction->date = $request->date;
-            $transaction->total_amount = $request->total;
-            $transaction->reference_no = $ref;
-            $transaction->notes = $request->notes;
-            $transaction->save();
+            // remove previous relations
+            LocationFlavour::where('location_id', $location->id)->delete();
 
-            // ✅ Delete old lines before inserting new ones
-            $transaction->lines()->delete();
-
-            // ✅ Insert new lines
-            foreach ($request->products as $product) {
-                $line = new TransactionLine();
-                $line->transaction_id = $transaction->id;
+            // insert fresh lines
+            foreach($request->products as $product){
+                $line = new LocationFlavour();
+                $line->location_id = $location->id;
                 $line->product_id = $product['product_id'];
-                $line->quantity = $product['quantity'];
-                $line->unit_cost = $product['price'];
-                $line->sub_total = $product['price'] * $product['quantity'];
+                $line->flavour_id = $product['flavour_id'];
+                $line->deal_quantity = $product['deal_amount'] ?? 0;
+                $line->specific_quantity = $product['quantity'] ?? 0;
+                $line->price = $product['price'] ?? 0;
+                $line->sub_total = $product['price'] ?? 0;
+
+                // ✅ boolean-safe (backend expects 0/1)
+                $line->is_discount = !empty($product['discount_enabled']) ? 1 : 0;
+                $line->discount_type = $product['discount_type'] ?? null;
+                $line->discount_amount = $product['discount_value'] ?? null;
+
                 $line->save();
             }
 
-            // ✅ Recalculate stock etc.
-            TransactionService::processTransaction($transaction);
-
             DB::commit();
-            return $this->sendResponse($transaction, 'Transaction updated successfully.');
-
+            return $this->sendResponse($location, 'Location updated successfully.');
         } catch (\Exception $e) {
             DB::rollBack();
             return $this->sendError('Server Error: '.$e->getMessage(), 500);
         }
     }
+
 
 
     /**
@@ -158,7 +158,7 @@ class LocationController extends BaseController
         try {
             $tran = Location::find($id);
             $tran->delete();
-            return $this->sendResponse([], 'Product deleted successfully.');
+            return $this->sendResponse([], 'Location deleted successfully.');
         } catch (\Exception $e) {
             return $this->sendError('Server Error: '.$e->getMessage(), 500);
         }

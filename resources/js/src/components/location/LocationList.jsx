@@ -62,7 +62,7 @@ export default function LocationList() {
         fetchIngredients();
     }, [pageIndex, globalFilter]);
 
-    const deleteLocationi = async (id) => {
+    const deleteLocation = async (id) => {
         const result = await Swal.fire({
             title: "Are you sure?",
             text: "Data will be deleted.",
@@ -128,7 +128,7 @@ export default function LocationList() {
                             padding={2}
                             borderRadius="md"
                             cursor="pointer"
-                            onClick={() => deleteLocationi(row.original.id)}
+                            onClick={() => deleteLocation(row.original.id)}
                         >
                             <DeleteIcon color="red.500" />
                         </ChakraLink>

@@ -123,4 +123,12 @@ return [
     'date' => 'Date',
     'notes' => 'Note',
     'manage_flavour' => 'Manage Flavour',
+    'lat' => 'Latitude',
+    'lon' => 'Longitude',
+    'product' => 'Product',
+    'flavour' => 'Flavour',
+    'deal' => 'Deal',
+    'discount' => 'Discount',
+    'add_location' => 'Add Locaton',
+    'tax' => 'Tax',
 ];

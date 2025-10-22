@@ -61,8 +61,7 @@ const PurchaseCreate = () => {
     // Handle input change
     const handleChange = (index, field, value) => {
         const updated = [...items];
-        updated[index][field] =
-            field === "quantity" || field === "price" ? Number(value) : value;
+        updated[index][field] = field === "quantity" || field === "price" ? Number(value) : value;
 
         // Auto-update price when product selected
         if (field === "productId") {

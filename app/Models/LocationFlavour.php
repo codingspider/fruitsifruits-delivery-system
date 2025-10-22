@@ -6,6 +6,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class LocationFlavour extends Model
 {
+    protected $guarded = ['id'];
+    
     public function location()
     {
         return $this->belongsTo(Location::class);
