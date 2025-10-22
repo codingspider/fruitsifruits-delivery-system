@@ -12,7 +12,7 @@ import {
   FcPositiveDynamic,
   FcAdvance,
   FcShipped,
-  FcReadingEbook,
+  FcFilledFilter,
   FcAddDatabase,
   FcMindMap,
   FcManager,
@@ -88,8 +88,9 @@ const SidebarContent = ({ onClose, ...rest }) => {
       <NavLink to="/super/admin/pos"      icon={FcPositiveDynamic  } activeBg={activeBg} activeColor={activeColor} hoverBg={hoverBg} active={isActive('/super/admin/pos')} label={t('juice_production')} />
       <NavLink to="/super/admin/pos"      icon={FcShop} activeBg={activeBg} activeColor={activeColor} hoverBg={hoverBg} active={isActive('/super/admin/pos')} label={t('driver_allocation')} />
       <NavLink to='/super/admin/save/order'  icon={FcList} activeBg={activeBg} activeColor={activeColor} hoverBg={hoverBg} active={isActive('/super/admin/save/order')} label={t('manage_route')} />
-      <NavLink to="/super/admin/order-status" icon={FcHeatMap } activeBg={activeBg} activeColor={activeColor} hoverBg={hoverBg} active={isActive('/super/admin/order-status')} label={t('manage_locations')} />
+      <NavLink to="/super/admin/location/list" icon={FcHeatMap } activeBg={activeBg} activeColor={activeColor} hoverBg={hoverBg} active={isActive('/super/admin/location/list')} label={t('manage_locations')} />
       <NavLink to="/super/admin/ingredient/list" icon={FcTimeline } activeBg={activeBg} activeColor={activeColor} hoverBg={hoverBg} active={isActive('/super/admin/ingredient/list')} label={t('manage_ingredients')} />
+      <NavLink to="/super/admin/flavour/list" icon={FcFilledFilter } activeBg={activeBg} activeColor={activeColor} hoverBg={hoverBg} active={isActive('/super/admin/flavour/list')} label={t('manage_flavour')} />
       <NavLink to="/super/admin/purchase/list" icon={FcMoneyTransfer } activeBg={activeBg} activeColor={activeColor} hoverBg={hoverBg} active={isActive('/super/admin/purchase/list')} label={t('purchase')} />
 
       {/* ----- Dropdown: user management ----- */}

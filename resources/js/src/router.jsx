@@ -30,6 +30,14 @@ import PurchaseList from "./components/purchase/PurchaseList";
 import PurchaseCreate from "./components/purchase/PurchaseCreate";
 import PurchaseEdit from "./components/purchase/PurchaseEdit";
 
+import LocationList from "./components/location/LocationList";
+import LocationCreate from "./components/location/LocationCreate";
+import LocationEdit from "./components/location/LocationEdit";
+
+import FlavourList from "./components/flavour/FlavourList";
+import FlavourCreate from "./components/flavour/FlavourCreate";
+import FlavourEdit from "./components/flavour/FlavourEdit";
+
 
 // ✅ Public Routes
 export const ROOT = '/';
@@ -68,6 +76,15 @@ export const DRIVER_ADD_PATH = `${SUPER_ADMIN_BASE}/driver/create`;
 export const DRIVER_EDIT_PATH = (id) => `${SUPER_ADMIN_BASE}/driver/edit/${id}`;
 
 
+export const FLAVOUR_LIST = "flavour/list";
+export const FLAVOUR_ADD = "flavour/create";
+export const FLAVOUR_EDIT = "flavour/edit/:id";
+
+export const FLAVOUR_LIST_PATH = `${SUPER_ADMIN_BASE}/flavour/list`;
+export const FLAVOUR_ADD_PATH = `${SUPER_ADMIN_BASE}/flavour/create`;
+export const FLAVOUR_EDIT_PATH = (id) => `${SUPER_ADMIN_BASE}/flavour/edit/${id}`;
+
+
 export const PURCHASE_LIST = "purchase/list";
 export const PURCHASE_ADD = "purchase/create";
 export const PURCHASE_EDIT = "purchase/edit/:id";
@@ -75,6 +92,15 @@ export const PURCHASE_EDIT = "purchase/edit/:id";
 export const PURCHASE_LIST_PATH = `${SUPER_ADMIN_BASE}/purchase/list`;
 export const PURCHASE_ADD_PATH = `${SUPER_ADMIN_BASE}/purchase/create`;
 export const PURCHASE_EDIT_PATH = (id) => `${SUPER_ADMIN_BASE}/purchase/edit/${id}`;
+
+
+export const LOCATION_LIST = "location/list";
+export const LOCATION_ADD = "location/create";
+export const LOCATION_EDIT = "location/edit/:id";
+
+export const LOCATION_LIST_PATH = `${SUPER_ADMIN_BASE}/location/list`;
+export const LOCATION_ADD_PATH = `${SUPER_ADMIN_BASE}/location/create`;
+export const LOCATION_EDIT_PATH = (id) => `${SUPER_ADMIN_BASE}/location/edit/${id}`;
 
 
 export const INGREDIENT_LIST = "ingredient/list";
@@ -145,6 +171,14 @@ const router = createBrowserRouter([
       { path: PURCHASE_LIST_PATH, element: <ProtectedRoute role="superadmin"><PurchaseList /></ProtectedRoute> },
       { path: PURCHASE_ADD_PATH, element: <ProtectedRoute role="superadmin"><PurchaseCreate /></ProtectedRoute> },
       { path: PURCHASE_EDIT, element: <ProtectedRoute role="superadmin"><PurchaseEdit /></ProtectedRoute> },
+      
+      { path: FLAVOUR_LIST_PATH, element: <ProtectedRoute role="superadmin"><FlavourList /></ProtectedRoute> },
+      { path: FLAVOUR_ADD_PATH, element: <ProtectedRoute role="superadmin"><FlavourCreate /></ProtectedRoute> },
+      { path: FLAVOUR_EDIT, element: <ProtectedRoute role="superadmin"><FlavourEdit /></ProtectedRoute> },
+
+      { path: LOCATION_LIST_PATH, element: <ProtectedRoute role="superadmin"><LocationList /></ProtectedRoute> },
+      { path: LOCATION_ADD_PATH, element: <ProtectedRoute role="superadmin"><LocationCreate /></ProtectedRoute> },
+      { path: LOCATION_EDIT, element: <ProtectedRoute role="superadmin"><LocationEdit /></ProtectedRoute> },
     ],
   },
 ]);

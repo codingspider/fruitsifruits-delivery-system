@@ -122,4 +122,5 @@ return [
     'reference_no' => 'Reference No',
     'date' => 'Date',
     'notes' => 'Note',
+    'manage_flavour' => 'Manage Flavour',
 ];

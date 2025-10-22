@@ -11,7 +11,13 @@ class Product extends Model
     public function transactionLines() { 
         return $this->hasMany(TransactionLine::class); 
     }
+    
     public function stockMoves() { 
         return $this->hasMany(StockMove::class); 
+    }
+
+    public function location_flavours()
+    {
+        return $this->hasMany(LocationFlavour::class);
     }
 }

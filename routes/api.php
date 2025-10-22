@@ -5,6 +5,8 @@ use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\API\PLanController;
 use App\Http\Controllers\API\UserController;
+use App\Http\Controllers\API\LocationController;
+use App\Http\Controllers\API\FlavourController;
 use App\Http\Controllers\API\ProductController;
 use App\Http\Controllers\API\PurchaseController;
 use App\Http\Controllers\API\RegisterController;
@@ -27,8 +29,12 @@ Route::middleware(['auth:sanctum'])->prefix('superadmin')->group(function () {
     Route::apiResource('products', ProductController::class);
     Route::apiResource('bottles', BottleManageController::class);
     Route::apiResource('drivers', DriverManageController::class);
+    Route::apiResource('flavours', FlavourController ::class);
     Route::apiResource('purchases', PurchaseController::class);
+    Route::apiResource('locations', LocationController::class);
+
     Route::get('products/{product}/edit', [ProductController::class, 'edit']);
+    Route::get('flavours/{flavour}/edit', [FlavourController::class, 'edit']);
     Route::get('get/products', [ProductController::class, 'getProducts']);
 });
 
