@@ -22,12 +22,15 @@ import {
 import { useTranslation } from "react-i18next";
 import { useForm } from "react-hook-form";
 import React, { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import api from "../../axios";
-import { DASHBOARD_PATH, INGREDIENT_LIST_PATH } from "../../router";
+import {
+    DASHBOARD_PATH,
+    FINISH_GOOD_LIST_PATH,
+} from "../../router";
 import { Link as ReactRouterLink } from "react-router-dom";
 
-const IngredientCreate = () => {
+const FinishGoodEdit = () => {
     const { register, handleSubmit, reset } = useForm();
     const { t } = useTranslation();
     const [isSubmitting, setIsSubmitting] = useState(false);
@@ -35,13 +38,13 @@ const IngredientCreate = () => {
     const navigate = useNavigate();
     const [show, setShow] = useState(false);
     const handleClick = () => setShow(!show);
+    const { id } = useParams();
 
     const onSubmit = async (data) => {
+        console.log(data);
         setIsSubmitting(true);
         try {
-            const res = await api.post("superadmin/products", data);
-            reset();
-
+            const res = await api.put(`superadmin/products/${id}`, data);
             toast({
                 position: "bottom-right",
                 title: res.data.message,
@@ -49,7 +52,7 @@ const IngredientCreate = () => {
                 duration: 3000,
                 isClosable: true,
             });
-            navigate(`${INGREDIENT_LIST_PATH}`);
+            navigate(`${FINISH_GOOD_LIST_PATH}`);
         } catch (err) {
             const errorResponse = err?.response?.data;
             if (errorResponse?.errors) {
@@ -79,9 +82,21 @@ const IngredientCreate = () => {
         }
     };
 
+    const getProduct = async () => {
+        const res = await api.get(`superadmin/products/${id}/edit`);
+        const product = res.data.data;
+        reset({
+            name: product.name,
+            cost_per_unit: product.cost_price,
+            product_type: product.product_type,
+            unit: product.unit,
+        });
+    };
+
     useEffect(() => {
         const app_name = localStorage.getItem("app_name");
-        document.title = `${app_name} | Ingredients Create`;
+        document.title = `${app_name} | Ingredient Edit`;
+        getProduct();
     }, []);
 
     return (
@@ -101,7 +116,7 @@ const IngredientCreate = () => {
                         <BreadcrumbItem isCurrentPage>
                             <BreadcrumbLink
                                 as={ReactRouterLink}
-                                to={INGREDIENT_LIST_PATH}
+                                to={FINISH_GOOD_LIST_PATH}
                             >
                                 {t("list")}
                             </BreadcrumbLink>
@@ -114,11 +129,11 @@ const IngredientCreate = () => {
                 <Card shadow="md" borderRadius="2xl">
                     <CardHeader>
                         <Flex mb={4} justifyContent="space-between">
-                            <Heading size="md">{t("add")}</Heading>
+                            <Heading size="md">{t("edit")}</Heading>
                             <Button
                                 colorScheme="teal"
                                 as={ReactRouterLink}
-                                to={INGREDIENT_LIST_PATH}
+                                to={FINISH_GOOD_LIST_PATH}
                                 display={{ base: "none", md: "inline-flex" }}
                                 px={4}
                                 py={2}
@@ -156,53 +171,50 @@ const IngredientCreate = () => {
                                         placeholder={t("cost_per_unit")}
                                     />
                                 </FormControl>
-
                                 <FormControl isRequired>
                                     <FormLabel>{t("type")}</FormLabel>
                                     <Select
                                         {...register("product_type")}
                                         defaultValue="raw"
                                     >
-                                        <option value="raw">Raw Material </option>
-                                        <option value="packaging">
-                                            Packaging
+                                        <option value="finished">
+                                            Finish Goods
                                         </option>
                                     </Select>
                                 </FormControl>
                                 <FormControl isRequired>
-                                    <FormLabel>{t("unit")}</FormLabel>
-                                    <Select {...register("unit")} placeholder="Select unit">
-                                        {/* Weight */}
-                                        <option value="kg">Kilogram (kg)</option>
-                                        <option value="g">Gram (g)</option>
-                                        <option value="mg">Milligram (mg)</option>
-                                        <option value="lb">Pound (lb)</option>
+                                <FormLabel>{t("unit")}</FormLabel>
+                                <Select {...register("unit")} placeholder="Select unit">
+                                    {/* Weight */}
+                                    <option value="kg">Kilogram (kg)</option>
+                                    <option value="g">Gram (g)</option>
+                                    <option value="mg">Milligram (mg)</option>
+                                    <option value="lb">Pound (lb)</option>
 
-                                        {/* Volume */}
-                                        <option value="liter">Liter (L)</option>
-                                        <option value="ml">Milliliter (mL)</option>
-                                        <option value="gal">Gallon (gal)</option>
+                                    {/* Volume */}
+                                    <option value="liter">Liter (L)</option>
+                                    <option value="ml">Milliliter (mL)</option>
+                                    <option value="gal">Gallon (gal)</option>
 
-                                        {/* Units / Count */}
-                                        <option value="pcs">Pieces (pcs)</option>
-                                        <option value="pack">Pack</option>
-                                        <option value="box">Box</option>
-                                        <option value="carton">Carton</option>
-                                        <option value="bottle">Bottle</option>
-                                        <option value="bag">Bag</option>
-                                        {/* Other */}
-                                        <option value="dozen">Dozen</option>
-                                        <option value="set">Set</option>
-                                    </Select>
-                                </FormControl>
-
+                                    {/* Units / Count */}
+                                    <option value="pcs">Pieces (pcs)</option>
+                                    <option value="pack">Pack</option>
+                                    <option value="box">Box</option>
+                                    <option value="carton">Carton</option>
+                                    <option value="bottle">Bottle</option>
+                                    <option value="bag">Bag</option>
+                                    {/* Other */}
+                                    <option value="dozen">Dozen</option>
+                                    <option value="set">Set</option>
+                                </Select>
+                            </FormControl> 
                             </SimpleGrid>
 
                             <HStack spacing={4} mt={6}>
                                 <Button
                                     type="button"
                                     as={ReactRouterLink}
-                                    to={INGREDIENT_LIST_PATH}
+                                    to={FINISH_GOOD_LIST_PATH}
                                     colorScheme="orange"
                                     flex={1}
                                 >
@@ -227,4 +239,4 @@ const IngredientCreate = () => {
     );
 };
 
-export default IngredientCreate;
+export default FinishGoodEdit;

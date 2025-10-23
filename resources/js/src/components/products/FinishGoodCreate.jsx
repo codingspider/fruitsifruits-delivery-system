@@ -24,10 +24,10 @@ import { useForm } from "react-hook-form";
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import api from "../../axios";
-import { DASHBOARD_PATH, INGREDIENT_LIST_PATH } from "../../router";
+import { DASHBOARD_PATH, FINISH_GOOD_LIST_PATH } from "../../router";
 import { Link as ReactRouterLink } from "react-router-dom";
 
-const IngredientCreate = () => {
+const FinishGoodCreate = () => {
     const { register, handleSubmit, reset } = useForm();
     const { t } = useTranslation();
     const [isSubmitting, setIsSubmitting] = useState(false);
@@ -49,7 +49,7 @@ const IngredientCreate = () => {
                 duration: 3000,
                 isClosable: true,
             });
-            navigate(`${INGREDIENT_LIST_PATH}`);
+            navigate(`${FINISH_GOOD_LIST_PATH}`);
         } catch (err) {
             const errorResponse = err?.response?.data;
             if (errorResponse?.errors) {
@@ -101,7 +101,7 @@ const IngredientCreate = () => {
                         <BreadcrumbItem isCurrentPage>
                             <BreadcrumbLink
                                 as={ReactRouterLink}
-                                to={INGREDIENT_LIST_PATH}
+                                to={FINISH_GOOD_LIST_PATH}
                             >
                                 {t("list")}
                             </BreadcrumbLink>
@@ -118,7 +118,7 @@ const IngredientCreate = () => {
                             <Button
                                 colorScheme="teal"
                                 as={ReactRouterLink}
-                                to={INGREDIENT_LIST_PATH}
+                                to={FINISH_GOOD_LIST_PATH}
                                 display={{ base: "none", md: "inline-flex" }}
                                 px={4}
                                 py={2}
@@ -163,9 +163,8 @@ const IngredientCreate = () => {
                                         {...register("product_type")}
                                         defaultValue="raw"
                                     >
-                                        <option value="raw">Raw Material </option>
-                                        <option value="packaging">
-                                            Packaging
+                                        <option value="finished">
+                                            Finish Goods
                                         </option>
                                     </Select>
                                 </FormControl>
@@ -202,7 +201,7 @@ const IngredientCreate = () => {
                                 <Button
                                     type="button"
                                     as={ReactRouterLink}
-                                    to={INGREDIENT_LIST_PATH}
+                                    to={FINISH_GOOD_LIST_PATH}
                                     colorScheme="orange"
                                     flex={1}
                                 >
@@ -227,4 +226,4 @@ const IngredientCreate = () => {
     );
 };
 
-export default IngredientCreate;
+export default FinishGoodCreate;

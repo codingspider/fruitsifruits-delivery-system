@@ -90,6 +90,7 @@ const IngredientEdit = () => {
             name: product.name,
             cost_per_unit: product.cost_price,
             product_type: product.product_type,
+            unit: product.unit,
         });
     };
 
@@ -185,6 +186,32 @@ const IngredientEdit = () => {
                                         </option>
                                     </Select>
                                 </FormControl>
+                                <FormControl isRequired>
+                                <FormLabel>{t("unit")}</FormLabel>
+                                <Select {...register("unit")} placeholder="Select unit">
+                                    {/* Weight */}
+                                    <option value="kg">Kilogram (kg)</option>
+                                    <option value="g">Gram (g)</option>
+                                    <option value="mg">Milligram (mg)</option>
+                                    <option value="lb">Pound (lb)</option>
+
+                                    {/* Volume */}
+                                    <option value="liter">Liter (L)</option>
+                                    <option value="ml">Milliliter (mL)</option>
+                                    <option value="gal">Gallon (gal)</option>
+
+                                    {/* Units / Count */}
+                                    <option value="pcs">Pieces (pcs)</option>
+                                    <option value="pack">Pack</option>
+                                    <option value="box">Box</option>
+                                    <option value="carton">Carton</option>
+                                    <option value="bottle">Bottle</option>
+                                    <option value="bag">Bag</option>
+                                    {/* Other */}
+                                    <option value="dozen">Dozen</option>
+                                    <option value="set">Set</option>
+                                </Select>
+                            </FormControl> 
                             </SimpleGrid>
 
                             <HStack spacing={4} mt={6}>

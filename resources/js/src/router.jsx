@@ -46,6 +46,20 @@ import JuiceAllocationCreate from "./components/allocations/JuiceAllocationCreat
 import JuiceAllocationEdit from "./components/allocations/JuiceAllocationEdit";
 import JuiceAllocationList from "./components/allocations/JuiceAllocationList";
 
+import FinishGood from "./components/products/FinishGood";
+import FinishGoodCreate from "./components/products/FinishGoodCreate";
+import FinishGoodEdit from "./components/products/FinishGoodEdit";
+
+import RecipeCreate from "./components/recipe/RecipeCreate";
+import RecipeEdit from "./components/recipe/RecipeEdit";
+import RecipeList from "./components/recipe/RecipeList";
+
+import ProductionList from "./components/production/ProductionList";
+import ProductionCreate from "./components/production/ProductionCreate";
+import ProductionEdit from "./components/production/ProductionEdit";
+import ProductionView from "./components/production/ProductionView";
+
+
 // ✅ Public Routes
 export const ROOT = '/';
 export const LOGIN = '/login';
@@ -127,6 +141,32 @@ export const DRIVER_ROUTE_LIST_PATH = `${SUPER_ADMIN_BASE}/driver/route/list`;
 export const DRIVER_ROUTE_ADD_PATH = `${SUPER_ADMIN_BASE}/driver/route/create`;
 export const DRIVER_ROUTE_EDIT_PATH = (id) => `${SUPER_ADMIN_BASE}/driver/route/edit/${id}`;
 
+export const FINISH_GOOD_LIST = "product/list";
+export const FINISH_GOOD_ADD = "product/create";
+export const FINISH_GOOD_EDIT = "product/edit/:id";
+
+export const FINISH_GOOD_LIST_PATH = `${SUPER_ADMIN_BASE}/product/list`;
+export const FINISH_GOOD_ADD_PATH = `${SUPER_ADMIN_BASE}/product/create`;
+export const FINISH_GOOD_EDIT_PATH = (id) => `${SUPER_ADMIN_BASE}/product/edit/${id}`;
+
+export const RECIPE_LIST = "recipe/list";
+export const RECIPE_ADD = "recipe/create";
+export const RECIPE_EDIT = "recipe/edit/:id";
+
+export const RECIPE_LIST_PATH = `${SUPER_ADMIN_BASE}/recipe/list`;
+export const RECIPE_ADD_PATH = `${SUPER_ADMIN_BASE}/recipe/create`;
+export const RECIPE_EDIT_PATH = (id) => `${SUPER_ADMIN_BASE}/recipe/edit/${id}`;
+
+export const PRODUCTION_LIST = "production/list";
+export const PRODUCTION_ADD = "production/create";
+export const PRODUCTION_EDIT = "production/edit/:id";
+export const PRODUCTION_VIEW = "production/view/:id";
+
+export const PRODUCTION_LIST_PATH = `${SUPER_ADMIN_BASE}/production/list`;
+export const PRODUCTION_ADD_PATH = `${SUPER_ADMIN_BASE}/production/create`;
+export const PRODUCTION_VIEW_PATH = (id) => `${SUPER_ADMIN_BASE}/production/view/${id}`;
+export const PRODUCTION_EDIT_PATH = (id) => `${SUPER_ADMIN_BASE}/production/edit/${id}`;
+
 
 export const INGREDIENT_LIST = "ingredient/list";
 export const INGREDIENT_ADD = "ingredient/create";
@@ -181,6 +221,11 @@ const router = createBrowserRouter([
       { path: USER_ADD_PATH, element: <ProtectedRoute role="superadmin"><UserCreate /></ProtectedRoute> },
       { path: USER_EDIT, element: <ProtectedRoute role="superadmin"><UserEdit /></ProtectedRoute> },
       
+      { path: FINISH_GOOD_LIST_PATH, element: <ProtectedRoute role="superadmin"><FinishGood /></ProtectedRoute> },
+      { path: FINISH_GOOD_ADD_PATH, element: <ProtectedRoute role="superadmin"><FinishGoodCreate /></ProtectedRoute> },
+      { path: FINISH_GOOD_EDIT, element: <ProtectedRoute role="superadmin"><FinishGoodEdit /></ProtectedRoute> },
+
+
       { path: INGREDIENT_LIST_PATH, element: <ProtectedRoute role="superadmin"><IngredientList /></ProtectedRoute> },
       { path: INGREDIENT_ADD_PATH, element: <ProtectedRoute role="superadmin"><IngredientCreate /></ProtectedRoute> },
       { path: INGREDIENT_EDIT, element: <ProtectedRoute role="superadmin"><IngredientEdit /></ProtectedRoute> },
@@ -212,6 +257,15 @@ const router = createBrowserRouter([
       { path: JUICE_ALLOCATION_LIST_PATH, element: <ProtectedRoute role="superadmin"><JuiceAllocationList /></ProtectedRoute> },
       { path: JUICE_ALLOCATION_ADD_PATH, element: <ProtectedRoute role="superadmin"><JuiceAllocationCreate /></ProtectedRoute> },
       { path: JUICE_ALLOCATION_EDIT, element: <ProtectedRoute role="superadmin"><JuiceAllocationEdit /></ProtectedRoute> },
+      
+      { path: RECIPE_LIST_PATH, element: <ProtectedRoute role="superadmin"><RecipeList /></ProtectedRoute> },
+      { path: RECIPE_ADD_PATH, element: <ProtectedRoute role="superadmin"><RecipeCreate /></ProtectedRoute> },
+      { path: RECIPE_EDIT, element: <ProtectedRoute role="superadmin"><RecipeEdit /></ProtectedRoute> },
+      
+      { path: PRODUCTION_LIST_PATH, element: <ProtectedRoute role="superadmin"><ProductionList /></ProtectedRoute> },
+      { path: PRODUCTION_ADD_PATH, element: <ProtectedRoute role="superadmin"><ProductionCreate /></ProtectedRoute> },
+      { path: PRODUCTION_EDIT, element: <ProtectedRoute role="superadmin"><ProductionEdit /></ProtectedRoute> },
+      { path: PRODUCTION_VIEW, element: <ProtectedRoute role="superadmin"><ProductionView /></ProtectedRoute> },
     ],
   },
 ]);

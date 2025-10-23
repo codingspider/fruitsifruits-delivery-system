@@ -17,7 +17,9 @@ import {
   FcMindMap,
   FcManager,
   FcHeatMap,
-  FcTimeline
+  FcTimeline,
+  FcMultipleInputs,
+  FcFactory
 } from 'react-icons/fc';
 import { Link as RouterLink, useLocation } from 'react-router-dom';
 import {
@@ -31,7 +33,7 @@ import {
   
 } from '@chakra-ui/react';
 import { useTranslation } from 'react-i18next';
-import { DRIVER_ROUTE_LIST_PATH, FLAVOUR_LIST_PATH, INGREDIENT_LIST_PATH, JUICE_ALLOCATION_LIST_PATH, LOCATION_LIST_PATH, PURCHASE_LIST_PATH, USER_LIST_PATH } from '../../router';
+import { DRIVER_ROUTE_LIST_PATH, FINISH_GOOD_LIST_PATH, FLAVOUR_LIST_PATH, INGREDIENT_LIST_PATH, JUICE_ALLOCATION_LIST_PATH, LOCATION_LIST_PATH, PRODUCTION_LIST_PATH, PURCHASE_LIST_PATH, RECIPE_LIST_PATH, USER_LIST_PATH } from '../../router';
 
 const SidebarContent = ({ onClose, ...rest }) => {
   const { t } = useTranslation();
@@ -85,11 +87,15 @@ const SidebarContent = ({ onClose, ...rest }) => {
 
       {/* ----- Static links ----- */}
       <NavLink to="/super/admin/dashboard" icon={FcHome} activeBg={activeBg} activeColor={activeColor} hoverBg={hoverBg} active={isActive('/super/admin/dashboard')} label={t('dashboard')} />
-      <NavLink to="/super/admin/pos"      icon={FcPositiveDynamic  } activeBg={activeBg} activeColor={activeColor} hoverBg={hoverBg} active={isActive('/super/admin/pos')} label={t('juice_production')} />
       <NavLink to={JUICE_ALLOCATION_LIST_PATH}      icon={FcShop} activeBg={activeBg} activeColor={activeColor} hoverBg={hoverBg} active={isActive(JUICE_ALLOCATION_LIST_PATH)} label={t('driver_allocation')} />
       <NavLink to={DRIVER_ROUTE_LIST_PATH}  icon={FcList} activeBg={activeBg} activeColor={activeColor} hoverBg={hoverBg} active={isActive(DRIVER_ROUTE_LIST_PATH)} label={t('manage_route')} />
       <NavLink to={LOCATION_LIST_PATH} icon={FcHeatMap } activeBg={activeBg} activeColor={activeColor} hoverBg={hoverBg} active={isActive(LOCATION_LIST_PATH)} label={t('manage_locations')} />
       <NavLink to={INGREDIENT_LIST_PATH} icon={FcTimeline } activeBg={activeBg} activeColor={activeColor} hoverBg={hoverBg} active={isActive(INGREDIENT_LIST_PATH)} label={t('manage_ingredients')} />
+      
+      <NavLink to={FINISH_GOOD_LIST_PATH} icon={FcOk } activeBg={activeBg} activeColor={activeColor} hoverBg={hoverBg} active={isActive(FINISH_GOOD_LIST_PATH)} label={t('products')} />
+      {/* <NavLink to={RECIPE_LIST_PATH} icon={FcMultipleInputs } activeBg={activeBg} activeColor={activeColor} hoverBg={hoverBg} active={isActive(RECIPE_LIST_PATH)} label={t('recipe')} /> */}
+      <NavLink to={PRODUCTION_LIST_PATH} icon={FcFactory } activeBg={activeBg} activeColor={activeColor} hoverBg={hoverBg} active={isActive(PRODUCTION_LIST_PATH)} label={t('juice_production')} />
+      
       <NavLink to={FLAVOUR_LIST_PATH} icon={FcFilledFilter } activeBg={activeBg} activeColor={activeColor} hoverBg={hoverBg} active={isActive(FLAVOUR_LIST_PATH)} label={t('manage_flavour')} />
       <NavLink to={PURCHASE_LIST_PATH} icon={FcMoneyTransfer } activeBg={activeBg} activeColor={activeColor} hoverBg={hoverBg} active={isActive(PURCHASE_LIST_PATH)} label={t('purchase')} />
 
@@ -123,7 +129,7 @@ const SidebarContent = ({ onClose, ...rest }) => {
       </Collapse>
 
       {/* ----- Dropdown: Expense ----- */}
-      <DropdownHeader
+      {/* <DropdownHeader
         label={t('expense')}
         icon={FcMoneyTransfer}
         isOpen={open.expense || location.pathname.startsWith('/super/admin/expense')}
@@ -137,7 +143,7 @@ const SidebarContent = ({ onClose, ...rest }) => {
           <NavLink to="/super/admin/expense/create"  icon={null} activeBg={activeBg} activeColor={activeColor} hoverBg={hoverBg} active={isActive('/super/admin/expense/create')}  label={t('add_expense')}  small />
         </Box>
       </Collapse>
-
+ */}
 
       {/* ----- Dropdown: Reports ----- */}
       <DropdownHeader

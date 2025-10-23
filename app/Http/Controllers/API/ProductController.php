@@ -26,6 +26,19 @@ class ProductController extends BaseController
         }
     }
     
+    public function finishGoods(Request $request)
+    {
+        try {
+            $products = Product::whereIn('product_type', ['finished'])
+                ->latest()
+                ->paginate(10);
+
+            return $this->sendResponse($products, 'Products retrieved successfully.');
+        } catch (\Exception $e) {
+            return $this->sendError('Server Error: '.$e->getMessage());
+        }
+    }
+    
     public function getProducts(Request $request)
     {
         try {
@@ -64,7 +77,7 @@ class ProductController extends BaseController
         $validator = Validator::make($request->all(), [
             'name'           => 'required|string|max:255',
             'cost_per_unit'  => 'required|numeric',
-            'product_type'   => 'nullable|in:raw,packaging'
+            'product_type'   => 'nullable|in:raw,packaging,finished'
         ]);
 
         if ($validator->fails()) {
@@ -79,6 +92,7 @@ class ProductController extends BaseController
             $product->unit = 'Pieces';
             $product->opening_stock = 0;
             $product->cost_price = $request->cost_per_unit;
+            $product->unit = $request->unit;
             $product->save();
 
             DB::commit();
@@ -97,6 +111,8 @@ class ProductController extends BaseController
         $validator = Validator::make($request->all(), [
             'name'           => 'required|string|max:255',
             'cost_per_unit'  => 'required|numeric',
+            'unit'  => 'required',
+            'product_type'   => 'nullable|in:raw,packaging,finished'
         ]);
 
         if ($validator->fails()) {
@@ -107,6 +123,7 @@ class ProductController extends BaseController
         try {
             $product->name = $request->name;
             $product->cost_price = $request->cost_per_unit;
+            $product->unit = $request->unit;
             $product->save();
 
             DB::commit();
