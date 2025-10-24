@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('driver_juice_allocations', function (Blueprint $table) {
             $table->id();
             $table->foreignId('driver_id')->constrained('users')->cascadeOnDelete();
+            $table->foreignId('product_id')->constrained('products')->cascadeOnDelete();
             $table->date('allocation_date');
             $table->timestamps();
         });

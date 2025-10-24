@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('driver_juice_allocation_lines', function (Blueprint $table) {
             $table->id();
             $table->foreignId('allocation_id')->constrained('driver_juice_allocations')->cascadeOnDelete();
-            $table->foreignId('product_id')->constrained('products')->cascadeOnDelete();
+            $table->foreignId('bottle_id')->constrained('products')->cascadeOnDelete();
             $table->foreignId('flavour_id')->nullable()->constrained('flavours')->cascadeOnDelete();
             $table->integer('quantity')->default(0);
             $table->timestamps();

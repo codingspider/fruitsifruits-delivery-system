@@ -6,16 +6,16 @@ use Illuminate\Database\Eloquent\Model;
 
 class DriverJuiceAllocationLine extends Model
 {
-    protected $fillable = ['allocation_id', 'product_id', 'flavour_id', 'quantity'];
+    protected $guarded = ['id'];
 
     public function allocation()
     {
         return $this->belongsTo(DriverJuiceAllocation::class, 'allocation_id');
     }
 
-    public function product()
+    public function bottle()
     {
-        return $this->belongsTo(Product::class);
+        return $this->belongsTo(Product::class, 'bottle_id', 'id');
     }
 
     public function flavour()

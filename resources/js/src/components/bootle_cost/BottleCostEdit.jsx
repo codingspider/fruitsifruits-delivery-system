@@ -82,12 +82,12 @@ const BottleCostEdit = () => {
     };
 
     const getOwner = async () => {
-        const res = await api.get(`superadmin/bottles/${id}/edit`);
+        const res = await api.get(`superadmin/bottles/${id}`);
         const bottle = res.data.data;
         reset({
             size: bottle.name,
-            bottle_price: bottle.bottle_price,
-            cap_price: bottle.cap_price,
+            bottle_price: bottle.bottle_cost,
+            cap_price: bottle.cap_cost,
         });
     };
 

@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId('mfg_production_id')->constrained('mfg_productions')->cascadeOnDelete();
             $table->foreignId('flavour_id')->constrained('flavours')->cascadeOnDelete();
-            $table->foreignId('bottle_id')->nullable()->constrained('bottles')->cascadeOnDelete();
+            $table->foreignId('bottle_id')->nullable()->constrained('products')->cascadeOnDelete();
             $table->string('size')->nullable();
             $table->string('quantity')->nullable();
             $table->timestamps();

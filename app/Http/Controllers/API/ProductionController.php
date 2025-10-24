@@ -27,7 +27,7 @@ class ProductionController extends BaseController
      */
     public function show($id)
     {
-        $product = MfgProduction::with(['user', 'product', 'location', 'items', 'items.flavour'])->find($id);
+        $product = MfgProduction::with(['user', 'product', 'location', 'items', 'items.flavour', 'items.bottle'])->find($id);
         return $this->sendResponse($product, 'Recipe retrieved successfully.');
     }
 
@@ -61,7 +61,7 @@ class ProductionController extends BaseController
                 $item = new MfgProductionItem();
                 $item->mfg_production_id = $mfg->id;
                 $item->flavour_id = $lineData['flavour_id'] ?? null;
-                $item->size = $lineData['size'] ?? null;
+                $item->bottle_id = $lineData['bottle_id'] ?? null;
                 $item->quantity = $lineData['quantity'] ?? 0;
                 $item->save();
             }

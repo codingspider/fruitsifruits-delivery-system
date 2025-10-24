@@ -15,8 +15,8 @@ import {
 } from "@chakra-ui/react";
 import { Link as ChakraLink } from "@chakra-ui/react";
 import { useTranslation } from "react-i18next";
-import { DASHBOARD_PATH, JUICE_ALLOCATION_ADD_PATH, JUICE_ALLOCATION_EDIT_PATH} from "../../router";
-import { EditIcon, DeleteIcon } from "@chakra-ui/icons";
+import { DASHBOARD_PATH, JUICE_ALLOCATION_ADD_PATH, JUICE_ALLOCATION_EDIT_PATH, JUICE_ALLOCATION_VIEW_PATH} from "../../router";
+import { EditIcon, DeleteIcon, ViewIcon } from "@chakra-ui/icons";
 import Swal from "sweetalert2";
 import { Link as ReactRouterLink } from "react-router-dom";
 
@@ -32,7 +32,7 @@ export default function JuiceAllocationList() {
     const toast = useToast();
 
     // Fetch data whenever page or search changes
-    const fetchIngredients = async () => {
+    const fetchJuiceAllocation = async () => {
         try {
             setIsLoading(true);
             // Browser online: request server data with pagination & filter
@@ -51,7 +51,7 @@ export default function JuiceAllocationList() {
             setData(ingredients);
             setPageCount(Math.ceil(total / pageSize));
         } catch (err) {
-            console.error("fetchIngredients error:", err);
+            console.error("fetchJuiceAllocation error:", err);
         } finally {
             setIsLoading(false);
         }
@@ -59,7 +59,7 @@ export default function JuiceAllocationList() {
     useEffect(() => {
         const app_name = localStorage.getItem('app_name');
         document.title = `${app_name} | Driver Juice Allocation`;
-        fetchIngredients();
+        fetchJuiceAllocation();
     }, [pageIndex, globalFilter]);
 
     const deleteAllocation = async (id) => {
@@ -84,7 +84,7 @@ export default function JuiceAllocationList() {
                     isClosable: true,
                 });
 
-                fetchIngredients();
+                fetchJuiceAllocation();
             } catch (error) {
                 console.log(error);
                 toast({
@@ -102,16 +102,30 @@ export default function JuiceAllocationList() {
     };
     const columns = [
         { header: "ID", accessorKey: "id"},
-        { header: "Name", accessorKey: "name"},
-        { header: "Latitude", accessorKey: "lat"},
-        { header: "Longitude", accessorKey: "lon"},
-        { header: "Tax Type", accessorKey: "tax_type"},
-        { header: "Tax Amount", accessorKey: "tax_amount"},
+        { header: "Driver",
+            accessorFn: row => row.driver.name || "", 
+        },
+        { header: "Product",
+            accessorFn: row => row.product.name || "", 
+        },
+        { header: "Date", accessorKey: "allocation_date"},
         {
             header: "Actions",
             cell: ({ row }) => (
                 <>
                     <Box display="flex" gap={2}>
+                        <ChakraLink
+                            border="1px solid black"
+                            padding={2}
+                            borderRadius="md"
+                            onClick={() =>
+                                navigate(JUICE_ALLOCATION_VIEW_PATH(row.original.id))
+                            }
+                        >
+                            <ViewIcon />
+                        </ChakraLink>
+
+
                         <ChakraLink
                             border="1px solid black"
                             padding={2}

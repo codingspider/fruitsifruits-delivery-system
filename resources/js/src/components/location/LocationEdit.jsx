@@ -116,7 +116,7 @@ const LocationEdit = () => {
 
   const getProducts = async () => {
     try {
-      const res = await api.get("superadmin/get/products");
+      const res = await api.get("superadmin/get/finished/goods");
       setProducts(res.data?.data?.data || []);
     } catch (err) {
       console.error("Failed to fetch products", err);

@@ -30,9 +30,9 @@ import { useTranslation } from "react-i18next";
 import React, { useState, useEffect } from "react";
 import { useNavigate, useParams, Link as ReactRouterLink } from "react-router-dom";
 import api from "../../axios";
-import { DASHBOARD_PATH, PRODUCTION_LIST_PATH } from "../../router";
+import { DASHBOARD_PATH, JUICE_ALLOCATION_LIST_PATH, PRODUCTION_LIST_PATH } from "../../router";
 
-const ProductionView = () => {
+const JuiceAllocationView = () => {
     const { t } = useTranslation();
     const toast = useToast();
     const navigate = useNavigate();
@@ -45,11 +45,11 @@ const ProductionView = () => {
     // ✅ Fetch production details
     const getProduction = async () => {
         try {
-            const res = await api.get(`superadmin/productions/${id}`);
+            const res = await api.get(`superadmin/driver/juice/allocations/${id}`);
             const data = res.data.data;
 
             setProduction(data);
-            setItems(data.items || []);
+            setItems(data.lines || []);
         } catch (err) {
             toast({
                 title: t("error"),
@@ -65,7 +65,7 @@ const ProductionView = () => {
 
     useEffect(() => {
         const app_name = localStorage.getItem("app_name");
-        document.title = `${app_name} | Production Details`;
+        document.title = `${app_name} | Allocation Details`;
         getProduction();
     }, []);
 
@@ -97,8 +97,8 @@ const ProductionView = () => {
                             </BreadcrumbLink>
                         </BreadcrumbItem>
                         <BreadcrumbItem>
-                            <BreadcrumbLink as={ReactRouterLink} to={PRODUCTION_LIST_PATH}>
-                                {t("productions")}
+                            <BreadcrumbLink as={ReactRouterLink} to={JUICE_ALLOCATION_LIST_PATH}>
+                                {t("allocations")}
                             </BreadcrumbLink>
                         </BreadcrumbItem>
                         <BreadcrumbItem isCurrentPage>
@@ -112,7 +112,7 @@ const ProductionView = () => {
                 <Card shadow="md" borderRadius="2xl">
                     <CardHeader>
                         <Flex mb={4} justifyContent="space-between" alignItems="center">
-                            <Heading size="md">{t("production_details")}</Heading>
+                            <Heading size="md">{t("allocation_details")}</Heading>
                             <Button
                                 colorScheme="teal"
                                 as={ReactRouterLink}
@@ -132,36 +132,22 @@ const ProductionView = () => {
                             </FormControl>
 
                             <FormControl>
-                                <FormLabel>{t("reference_no")}</FormLabel>
-                                <Input value={production.ref_no || "-"} isReadOnly />
+                                <FormLabel>{t("driver")}</FormLabel>
+                                <Input value={production.driver.name || "-"} isReadOnly />
                             </FormControl>
 
                             <FormControl>
                                 <FormLabel>{t("date")}</FormLabel>
-                                <Input value={production.mfg_date || "-"} isReadOnly />
+                                <Input value={production.allocation_date || "-"} isReadOnly />
                             </FormControl>
 
-                            <FormControl>
-                                <FormLabel>{t("location")}</FormLabel>
-                                <Input value={production.location?.name || "-"} isReadOnly />
-                            </FormControl>
-
-                            {/* <FormControl>
-                                <FormLabel>{t("created_by")}</FormLabel>
-                                <Input value={production.created_by_user?.name || "-"} isReadOnly />
-                            </FormControl>
-
-                            <FormControl>
-                                <FormLabel>{t("total_quantity")}</FormLabel>
-                                <Input value={production.total_quantity || 0} isReadOnly />
-                            </FormControl> */}
                         </SimpleGrid>
 
                         <Divider my={4} />
 
                         {/* 🔹 Items Table */}
                         <Heading size="sm" mb={3}>
-                            {t("production_items")}
+                            {t("items")}
                         </Heading>
 
                         {items.length > 0 ? (
@@ -180,7 +166,7 @@ const ProductionView = () => {
                                             <Tr key={item.id}>
                                                 <Td>{index + 1}</Td>
                                                 <Td>{item.flavour?.name || "-"}</Td>
-                                                <Td>{item.bottle.name || "-"}</Td>
+                                                <Td>{item.bottle?.name || "-"}</Td>
                                                 <Td isNumeric>{item.quantity}</Td>
                                             </Tr>
                                         ))}
@@ -200,4 +186,4 @@ const ProductionView = () => {
     );
 };
 
-export default ProductionView;
+export default JuiceAllocationView;

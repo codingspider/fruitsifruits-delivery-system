@@ -146,5 +146,11 @@ return [
     'view' => 'View',
     'production_items' => 'Production Items',
     'production_details' => 'Production Details',
+    'allocation_details' => 'Allocation Details',
     'location' => 'Location',
+    'bottle' => 'Bottle',
+    'add_driver_allocation' => 'Add Driver Allocation',
+    'edit_driver_allocation' => 'Edit Driver Allocation',
+    'allocations' => 'Allocation',
+    'items' => 'Items',
 ];

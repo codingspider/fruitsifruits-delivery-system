@@ -140,7 +140,7 @@ const BottleCostCreate = () => {
                                         {...register("size", {
                                             required: true,
                                         })}
-                                        type="number"
+                                        type="text"
                                         placeholder={t("size")}
                                     />
                                 </FormControl>

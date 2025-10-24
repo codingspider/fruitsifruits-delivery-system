@@ -6,11 +6,16 @@ use Illuminate\Database\Eloquent\Model;
 
 class DriverJuiceAllocation extends Model
 {
-    protected $fillable = ['driver_id', 'allocation_date'];
+    protected $guarded = ['id'];
 
     public function driver()
     {
-        return $this->belongsTo(User::class, 'driver_id');
+        return $this->belongsTo(User::class, 'driver_id', 'id');
+    }
+    
+    public function product()
+    {
+        return $this->belongsTo(Product::class, 'product_id', 'id');
     }
 
     public function lines()

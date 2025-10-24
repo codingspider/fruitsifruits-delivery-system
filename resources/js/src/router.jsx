@@ -60,6 +60,7 @@ import ProductionEdit from "./components/production/ProductionEdit";
 import ProductionView from "./components/production/ProductionView";
 import BackupProcessing from "./components/backup/BackupProcessing";
 import LoginHistory from "./components/backup/LoginHistory";
+import JuiceAllocationView from "./components/allocations/JuiceAllocationView";
 
 // ✅ Public Routes
 export const ROOT = '/';
@@ -128,10 +129,12 @@ export const LOCATION_EDIT_PATH = (id) => `${SUPER_ADMIN_BASE}/location/edit/${i
 export const JUICE_ALLOCATION_LIST = "juice/allocation/list";
 export const JUICE_ALLOCATION_ADD = "juice/allocation/create";
 export const JUICE_ALLOCATION_EDIT = "juice/allocation/edit/:id";
+export const JUICE_ALLOCATION_VIEW = "juice/allocation/view/:id";
 
 export const JUICE_ALLOCATION_LIST_PATH = `${SUPER_ADMIN_BASE}/juice/allocation/list`;
 export const JUICE_ALLOCATION_ADD_PATH = `${SUPER_ADMIN_BASE}/juice/allocation/create`;
 export const JUICE_ALLOCATION_EDIT_PATH = (id) => `${SUPER_ADMIN_BASE}/juice/allocation/edit/${id}`;
+export const JUICE_ALLOCATION_VIEW_PATH = (id) => `${SUPER_ADMIN_BASE}/juice/allocation/view/${id}`;
 
 
 export const DRIVER_ROUTE_LIST = "driver/route/list";
@@ -261,6 +264,7 @@ const router = createBrowserRouter([
       { path: JUICE_ALLOCATION_LIST_PATH, element: <ProtectedRoute role="superadmin"><JuiceAllocationList /></ProtectedRoute> },
       { path: JUICE_ALLOCATION_ADD_PATH, element: <ProtectedRoute role="superadmin"><JuiceAllocationCreate /></ProtectedRoute> },
       { path: JUICE_ALLOCATION_EDIT, element: <ProtectedRoute role="superadmin"><JuiceAllocationEdit /></ProtectedRoute> },
+      { path: JUICE_ALLOCATION_VIEW, element: <ProtectedRoute role="superadmin"><JuiceAllocationView /></ProtectedRoute> },
       
       { path: RECIPE_LIST_PATH, element: <ProtectedRoute role="superadmin"><RecipeList /></ProtectedRoute> },
       { path: RECIPE_ADD_PATH, element: <ProtectedRoute role="superadmin"><RecipeCreate /></ProtectedRoute> },

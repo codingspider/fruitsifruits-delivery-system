@@ -3,10 +3,14 @@
 namespace App\Http\Controllers\API;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use App\Models\DriverJuiceAllocation;
+use App\Models\DriverJuiceAllocationLine;
+use Illuminate\Support\Facades\Validator;
+use App\Http\Controllers\API\BaseController;
 
-class DriverJuiceAllocationController extends Controller
+class DriverJuiceAllocationController extends BaseController
 {
     /**
      * List all products (or ingredients if product_type = raw/packaging)
@@ -14,7 +18,7 @@ class DriverJuiceAllocationController extends Controller
     public function index(Request $request)
     {
         try {
-            $data = DriverJuiceAllocation::latest()->paginate(10);
+            $data = DriverJuiceAllocation::with(['driver', 'product'])->latest()->paginate(10);
             return $this->sendResponse($data, 'Data retrieved successfully.');
         } catch (\Exception $e) {
             return $this->sendError('Server Error: '.$e->getMessage());
@@ -26,7 +30,7 @@ class DriverJuiceAllocationController extends Controller
      */
     public function show($id)
     {
-        $product = DriverJuiceAllocation::with('location_flavours')->find($id);
+        $product = DriverJuiceAllocation::with(['driver', 'product', 'lines', 'lines.bottle', 'lines.flavour'])->find($id);
         return $this->sendResponse($product, 'Product retrieved successfully.');
     }
 
@@ -35,7 +39,7 @@ class DriverJuiceAllocationController extends Controller
      */
     public function edit($id)
     {
-        $product = DriverJuiceAllocation::with('lines')->find($id);
+        $product = DriverJuiceAllocation::with(['lines', 'lines.bottle', 'lines.flavour'])->find($id);
         return $this->sendResponse($product, 'Product retrieved successfully.');
     }
 
@@ -45,9 +49,9 @@ class DriverJuiceAllocationController extends Controller
     public function store(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'name'      => 'required',
-            'lat'       => 'required',
-            'lon'       => 'required',
+            'driver_id'      => 'required',
+            'product_id'       => 'required',
+            'allocation_date'       => 'required',
         ]);
 
         if ($validator->fails()) {
@@ -57,32 +61,24 @@ class DriverJuiceAllocationController extends Controller
         DB::beginTransaction();
         try {
 
-            $location = new Location();
-            $location->name = $request->name;
-            $location->lat = $request->lat ?? "";
-            $location->lon = $request->lon ?? "";
-            $location->tax_type = 'percentage';
-            $location->tax_amount = $request->tax_amount ?? 0;
-            $location->save();
+            $allocation = new DriverJuiceAllocation();
+            $allocation->driver_id = $request->driver_id;
+            $allocation->product_id = $request->product_id;
+            $allocation->allocation_date = $request->allocation_date;
+            $allocation->save();
 
-            foreach($request->products as $product){
-                $line = new LocationFlavour();
-                $line->location_id = $location->id;
-                $line->product_id = $product['product_id'];
+            foreach($request->lines as $product){
+                $line = new DriverJuiceAllocationLine();
+                $line->allocation_id = $allocation->id;
+                $line->bottle_id = $product['bottle_id'];
                 $line->flavour_id = $product['flavour_id'];
-                $line->deal_quantity = $product['deal_amount'];
-                $line->specific_quantity = $product['quantity'];
-                $line->price = $product['price'];
-                $line->sub_total = $product['price'];
-                $line->is_discount = $product['discount_enabled'];
-                $line->discount_type = $product['discount_type'];
-                $line->discount_amount = $product['discount_value'];
+                $line->quantity = $product['quantity'];
                 $line->save();
             }
             
 
             DB::commit();
-            return $this->sendResponse($product, 'Location saved successfully.');
+            return $this->sendResponse($product, 'Data saved successfully.');
         } catch (\Exception $e) {
             DB::rollBack();
             return $this->sendError('Server Error: '.$e->getMessage(), 500);
@@ -95,9 +91,9 @@ class DriverJuiceAllocationController extends Controller
     public function update(Request $request, $id)
     {
         $validator = Validator::make($request->all(), [
-            'name'      => 'required',
-            'lat'       => 'required',
-            'lon'       => 'required',
+            'driver_id'      => 'required',
+            'product_id'       => 'required',
+            'allocation_date'       => 'required',
         ]);
 
         if ($validator->fails()) {
@@ -107,38 +103,26 @@ class DriverJuiceAllocationController extends Controller
         DB::beginTransaction();
         try {
 
-            $location = DriverJuiceAllocation::findOrFail($id);
-            $location->name = $request->name;
-            $location->lat = $request->lat ?? "";
-            $location->lon = $request->lon ?? "";
-            $location->tax_type = 'percentage';
-            $location->tax_amount = $request->tax_amount ?? 0;
-            $location->save();
+            $allocation = DriverJuiceAllocation::find($id);
+            $allocation->driver_id = $request->driver_id;
+            $allocation->product_id = $request->product_id;
+            $allocation->allocation_date = $request->allocation_date;
+            $allocation->save();
 
-            // remove previous relations
-            LocationFlavour::where('location_id', $location->id)->delete();
+            $allocation->lines()->delete();
 
-            // insert fresh lines
-            foreach($request->products as $product){
-                $line = new LocationFlavour();
-                $line->location_id = $location->id;
-                $line->product_id = $product['product_id'];
+            foreach($request->lines as $product){
+                $line = new DriverJuiceAllocationLine();
+                $line->allocation_id = $allocation->id;
+                $line->bottle_id = $product['bottle_id'];
                 $line->flavour_id = $product['flavour_id'];
-                $line->deal_quantity = $product['deal_amount'] ?? 0;
-                $line->specific_quantity = $product['quantity'] ?? 0;
-                $line->price = $product['price'] ?? 0;
-                $line->sub_total = $product['price'] ?? 0;
-
-                // ✅ boolean-safe (backend expects 0/1)
-                $line->is_discount = !empty($product['discount_enabled']) ? 1 : 0;
-                $line->discount_type = $product['discount_type'] ?? null;
-                $line->discount_amount = $product['discount_value'] ?? null;
-
+                $line->quantity = $product['quantity'];
                 $line->save();
             }
+            
 
             DB::commit();
-            return $this->sendResponse($location, 'Location updated successfully.');
+            return $this->sendResponse($product, 'Data saved successfully.');
         } catch (\Exception $e) {
             DB::rollBack();
             return $this->sendError('Server Error: '.$e->getMessage(), 500);

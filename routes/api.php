@@ -48,6 +48,8 @@ Route::middleware(['auth:sanctum'])->prefix('superadmin')->group(function () {
     Route::get('flavours/{flavour}/edit', [FlavourController::class, 'edit']);
 
     Route::get('get/products', [ProductController::class, 'getProducts']);
+    Route::get('get/bottles', [ProductController::class, 'getBottles']);
+
     Route::get('get/finished/goods', [ProductController::class, 'finishGoods']);
 
 

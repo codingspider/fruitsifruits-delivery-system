@@ -51,6 +51,20 @@ class ProductController extends BaseController
             return $this->sendError('Server Error: '.$e->getMessage());
         }
     }
+    
+    public function getBottles(Request $request)
+    {
+        try {
+            $products = Product::whereIn('product_type', ['raw', 'packaging'])
+                ->where('sub_type', 'bottle')
+                ->latest()
+                ->paginate(10);
+
+            return $this->sendResponse($products, 'Products retrieved successfully.');
+        } catch (\Exception $e) {
+            return $this->sendError('Server Error: '.$e->getMessage());
+        }
+    }
 
     /**
      * Show single product (ingredient)

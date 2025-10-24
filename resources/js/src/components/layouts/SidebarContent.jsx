@@ -32,8 +32,9 @@ import {
   useColorModeValue,
   
 } from '@chakra-ui/react';
+import { BiBox } from "react-icons/bi";
 import { useTranslation } from 'react-i18next';
-import { BACKUP_PROCESSING_PATH, DRIVER_ROUTE_LIST_PATH, FINISH_GOOD_LIST_PATH, FLAVOUR_LIST_PATH, INGREDIENT_LIST_PATH, JUICE_ALLOCATION_LIST_PATH, LOCATION_LIST_PATH, LOGIN_HISTORY_PATH, PRODUCTION_LIST_PATH, PURCHASE_LIST_PATH, RECIPE_LIST_PATH, USER_LIST_PATH } from '../../router';
+import { BACKUP_PROCESSING_PATH, DRIVER_ROUTE_LIST_PATH, FINISH_GOOD_LIST_PATH, FLAVOUR_LIST_PATH, INGREDIENT_LIST_PATH, JUICE_ALLOCATION_LIST_PATH, LOCATION_LIST_PATH, LOGIN_HISTORY_PATH, PRODUCTION_LIST_PATH, PURCHASE_LIST_PATH, RECIPE_LIST_PATH, USER_LIST_PATH, BOTTLE_LIST_PATH } from '../../router';
 import api from '../../axios';
 
 const SidebarContent = ({ onClose, ...rest }) => {
@@ -92,6 +93,7 @@ const SidebarContent = ({ onClose, ...rest }) => {
       <NavLink to={DRIVER_ROUTE_LIST_PATH}  icon={FcList} activeBg={activeBg} activeColor={activeColor} hoverBg={hoverBg} active={isActive(DRIVER_ROUTE_LIST_PATH)} label={t('manage_route')} />
       <NavLink to={LOCATION_LIST_PATH} icon={FcHeatMap } activeBg={activeBg} activeColor={activeColor} hoverBg={hoverBg} active={isActive(LOCATION_LIST_PATH)} label={t('manage_locations')} />
       <NavLink to={INGREDIENT_LIST_PATH} icon={FcTimeline } activeBg={activeBg} activeColor={activeColor} hoverBg={hoverBg} active={isActive(INGREDIENT_LIST_PATH)} label={t('manage_ingredients')} />
+      <NavLink to={BOTTLE_LIST_PATH} icon={BiBox } activeBg={activeBg} activeColor={activeColor} hoverBg={hoverBg} active={isActive(BOTTLE_LIST_PATH)} label={t('manage_bottle')} />
       
       <NavLink to={FINISH_GOOD_LIST_PATH} icon={FcOk } activeBg={activeBg} activeColor={activeColor} hoverBg={hoverBg} active={isActive(FINISH_GOOD_LIST_PATH)} label={t('products')} />
       {/* <NavLink to={RECIPE_LIST_PATH} icon={FcMultipleInputs } activeBg={activeBg} activeColor={activeColor} hoverBg={hoverBg} active={isActive(RECIPE_LIST_PATH)} label={t('recipe')} /> */}

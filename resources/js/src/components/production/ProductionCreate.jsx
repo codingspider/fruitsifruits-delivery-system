@@ -34,12 +34,13 @@ const ProductionCreate = () => {
     const [flavours, setFlavours] = useState([]);
     const [products, setProducts] = useState([]);
     const [locations, setLocations] = useState([]);
+    const [bottles, setBottles] = useState([]);
     const toast = useToast();
     const navigate = useNavigate();
 
     // ✅ Each production item
     const [items, setItems] = useState([
-        { flavour_id: "", size: "", quantity: 1 },
+        { flavour_id: "", bottle_id: "", quantity: 1 },
     ]);
 
     // ✅ Form data
@@ -52,7 +53,7 @@ const ProductionCreate = () => {
 
     // ➕ Add new product row
     const addItem = () => {
-        setItems([...items, { flavour_id: "", size: "", quantity: 1 }]);
+        setItems([...items, { flavour_id: "", bottle_id: "", quantity: 1 }]);
     };
 
     // ❌ Remove product row
@@ -79,7 +80,7 @@ const ProductionCreate = () => {
                 mfg_date: form.mfg_date,
                 lines: items.map((item) => ({
                     flavour_id: item.flavour_id,
-                    size: item.size,
+                    bottle_id: item.bottle_id,
                     quantity: item.quantity,
                 })),
             };
@@ -123,6 +124,11 @@ const ProductionCreate = () => {
         const res = await api.get("superadmin/get/finished/goods");
         setProducts(res.data.data.data);
     };
+    
+    const getBottles = async () => {
+        const res = await api.get("superadmin/get/bottles");
+        setBottles(res.data.data.data);
+    };
 
     const getLocations = async () => {
         const res = await api.get("superadmin/locations");
@@ -136,6 +142,7 @@ const ProductionCreate = () => {
         getFlavours();
         getProducts();
         getLocations();
+        getBottles();
     }, []);
 
     return (
@@ -275,14 +282,20 @@ const ProductionCreate = () => {
                                             </FormControl>
 
                                             <FormControl>
-                                                <FormLabel>{t("bottle_size")}</FormLabel>
-                                                <Input
-                                                    type="text"
-                                                    value={item.size}
+                                                <FormLabel>{t("bottle")}</FormLabel>
+                                                <Select
+                                                    placeholder="Select"
+                                                    value={item.bottle_id}
                                                     onChange={(e) =>
-                                                        handleChange(index, "size", e.target.value)
+                                                        handleChange(index, "bottle_id", e.target.value)
                                                     }
-                                                />
+                                                >
+                                                    {bottles.map((bottle) => (
+                                                        <option key={bottle.id} value={bottle.id}>
+                                                            {bottle.name}
+                                                        </option>
+                                                    ))}
+                                                </Select>
                                             </FormControl>
 
                                             <FormControl>

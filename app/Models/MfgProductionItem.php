@@ -11,4 +11,9 @@ class MfgProductionItem extends Model
     public function flavour() { 
         return $this->belongsTo(Flavour::class); 
     }
+
+    public function bottle() { 
+        return $this->belongsTo(Product::class, 'bottle_id', 'id'); 
+    }
+    
 }

@@ -18,14 +18,14 @@ class BottleManageController extends BaseController
     public function index(Request $request)
     {
         try {
-            $data = Product::where('product_type', 'packaging')->paginate(10);
+            $data = Product::where('product_type', 'packaging')->where('sub_type', 'bottle')->paginate(10);
             return $this->sendResponse($data, 'Bottle Cost retrived successfully.');
         } catch (\Exception $e) {
             return $this->sendError('Server Error.'.$e->getMessage());
         }
     }
     
-    public function edit($id)
+    public function show($id)
     {
         try {
             $user = Product::find($id);
@@ -57,8 +57,11 @@ class BottleManageController extends BaseController
             $bottle->name = $data['size'];
             $bottle->product_type = 'packaging';
             $bottle->unit = 'Pices';
+            $bottle->sub_type = 'bottle';
             $bottle->opening_stock = 0;
             $bottle->cost_price = $price;
+            $bottle->bottle_cost = $data['bottle_price'];
+            $bottle->cap_cost = $data['cap_price'];
             $bottle->save();
             DB::commit();
 
@@ -94,6 +97,9 @@ class BottleManageController extends BaseController
             $bottle->unit = 'Pices';
             $bottle->opening_stock = 0;
             $bottle->cost_price = $price;
+            $bottle->sub_type = 'bottle';
+            $bottle->bottle_cost = $data['bottle_price'];
+            $bottle->cap_cost = $data['cap_price'];
             $bottle->save();
             DB::commit();
 
