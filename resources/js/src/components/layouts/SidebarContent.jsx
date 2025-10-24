@@ -30,14 +30,17 @@ import {
   CloseButton,
   Collapse,
   useColorModeValue,
-  
+  Button
 } from '@chakra-ui/react';
 import { BiBox } from "react-icons/bi";
 import { useTranslation } from 'react-i18next';
 import { BACKUP_PROCESSING_PATH, DRIVER_ROUTE_LIST_PATH, FINISH_GOOD_LIST_PATH, FLAVOUR_LIST_PATH, INGREDIENT_LIST_PATH, JUICE_ALLOCATION_LIST_PATH, LOCATION_LIST_PATH, LOGIN_HISTORY_PATH, PRODUCTION_LIST_PATH, PURCHASE_LIST_PATH, RECIPE_LIST_PATH, USER_LIST_PATH, BOTTLE_LIST_PATH } from '../../router';
 import api from '../../axios';
+import { logoutUser } from '../../services/authService';
+import { useNavigate } from "react-router-dom";
 
 const SidebarContent = ({ onClose, ...rest }) => {
+  const navigate = useNavigate();
   const { t } = useTranslation();
   const [appName, setAppName] = useState("");
   const [open, setOpen] = useState({
@@ -57,6 +60,7 @@ const SidebarContent = ({ onClose, ...rest }) => {
   const activeColor = 'white';
   const hoverBg     = useColorModeValue('teal.400', 'teal.600');
   const subBg       = useColorModeValue('gray.50', 'gray.800');
+  const role = localStorage.getItem('role');
 
   const isActive = (path) => location.pathname === path;
 
@@ -66,6 +70,10 @@ const SidebarContent = ({ onClose, ...rest }) => {
       setAppName(storedAppName);
     }
   }, []);
+
+  const handleLogout = async () => {
+      await logoutUser(navigate);
+  };
 
   return (
     <Box
@@ -87,6 +95,10 @@ const SidebarContent = ({ onClose, ...rest }) => {
         />
       </Flex>
 
+      {role === 'superadmin' && (
+
+      <>
+      
       {/* ----- Static links ----- */}
       <NavLink to="/super/admin/dashboard" icon={FcHome} activeBg={activeBg} activeColor={activeColor} hoverBg={hoverBg} active={isActive('/super/admin/dashboard')} label={t('dashboard')} />
       <NavLink to={JUICE_ALLOCATION_LIST_PATH}      icon={FcShop} activeBg={activeBg} activeColor={activeColor} hoverBg={hoverBg} active={isActive(JUICE_ALLOCATION_LIST_PATH)} label={t('driver_allocation')} />
@@ -131,23 +143,6 @@ const SidebarContent = ({ onClose, ...rest }) => {
         </Box>
       </Collapse>
 
-      {/* ----- Dropdown: Expense ----- */}
-      {/* <DropdownHeader
-        label={t('expense')}
-        icon={FcMoneyTransfer}
-        isOpen={open.expense || location.pathname.startsWith('/super/admin/expense')}
-        onToggle={() => toggle('expense')}
-        hoverBg={hoverBg}
-      />
-      <Collapse in={open.expense || location.pathname.startsWith('/super/admin/expense')} animateOpacity>
-        <Box ml="8" mt="1"  borderRadius="md">
-          <NavLink to="/super/admin/expense"         icon={null} activeBg={activeBg} activeColor={activeColor} hoverBg={hoverBg} active={isActive('/super/admin/expense')}         label={t('expense_head')} small />
-          <NavLink to="/super/admin/expense"         icon={null} activeBg={activeBg} activeColor={activeColor} hoverBg={hoverBg} active={isActive('/super/admin/expense')}         label={t('all_expense')} small />
-          <NavLink to="/super/admin/expense/create"  icon={null} activeBg={activeBg} activeColor={activeColor} hoverBg={hoverBg} active={isActive('/super/admin/expense/create')}  label={t('add_expense')}  small />
-        </Box>
-      </Collapse>
- */}
-
       {/* ----- Dropdown: Reports ----- */}
       <DropdownHeader
         label={t('reports')}
@@ -166,7 +161,19 @@ const SidebarContent = ({ onClose, ...rest }) => {
       <NavLink to="/super/admin/settings" icon={FcSettings} activeBg={activeBg} activeColor={activeColor} hoverBg={hoverBg} active={isActive('/super/admin/settings')} label="Settings" />
       <NavLink to={BACKUP_PROCESSING_PATH} icon={FcAddDatabase } activeBg={activeBg} activeColor={activeColor} hoverBg={hoverBg} active={isActive(BACKUP_PROCESSING_PATH)} label={t('backup')} />
       <NavLink to={LOGIN_HISTORY_PATH} icon={FcMindMap } activeBg={activeBg} activeColor={activeColor} hoverBg={hoverBg} active={isActive(LOGIN_HISTORY_PATH)} label={ t('login_history') } />
-      <NavLink to="/super/admin/logout" icon={FcAdvance} activeBg={activeBg} activeColor={activeColor} hoverBg={hoverBg} active={isActive('/super/admin/logout')} label="Logout" />
+      </>
+      )}
+      <Flex
+        align="center"
+        px={6}
+        py={2}
+        cursor="pointer"
+        onClick={handleLogout}
+      >
+        <FcAdvance style={{ marginRight: "20px" }} />
+        Logout
+      </Flex>
+
     </Box>
   );
 };

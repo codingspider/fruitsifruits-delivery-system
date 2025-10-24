@@ -29,6 +29,10 @@ Route::controller(RegisterController::class)->group(function(){
     Route::post('reset-password', 'resetPassword');
 });
 
+Route::middleware(['auth:sanctum'])->group(function () {
+    Route::post('logout', [RegisterController::class, 'logout']);
+});
+
 Route::middleware(['auth:sanctum'])->prefix('superadmin')->group(function () {
     // Add more super admin routes here
     Route::apiResource('plans', PLanController::class);

@@ -55,27 +55,30 @@ class RegisterController extends BaseController
             'password' => $request->password,
         ];
 
-        if(Auth::attempt($credentials, $request->filled('remember'))){ 
-            $user = Auth::user(); 
-            $success['token'] =  $user->createToken('MyApp')->plainTextToken; 
-            $success['name'] =  $user->name;
-            $success['role'] =  $user->role;
-            $business = Setting::first();
-            
-            $success['favicon'] = asset(Storage::url($business->favicon));
-            $success['logo'] = asset(Storage::url($business->logo));
+        if (Auth::attempt($credentials, $request->filled('remember'))) {
+            $user = Auth::user();
+            $role = $user->role ?? 'driver';
 
-            $success['app_name'] =  $business->name ?? "Fruit Production";
+            $business = Setting::first();
+
+            $success = [
+                'token'      => $user->createToken('MyApp')->plainTextToken,
+                'name'       => $user->name,
+                'role'       => $role,
+                'favicon'    => asset(Storage::url($business->favicon ?? '')),
+                'logo'       => asset(Storage::url($business->logo ?? '')),
+                'app_name'   => $business->name ?? 'Fruit Production',
+            ];
 
             $user->last_login_at = now();
             $user->save();
-   
+
             return $this->sendResponse($success, 'User login successfully.');
-        } 
-        else{ 
-            return $this->sendError('Unauthorised.', ['error'=>'Unauthorised']);
-        } 
+        } else {
+            return $this->sendError('Unauthorised.', ['error' => 'Unauthorised']);
+        }
     }
+
     
     public function forgotPassword(Request $request)
     {
@@ -147,5 +150,15 @@ class RegisterController extends BaseController
         } catch (\Exception $e) {
             return $this->sendError('Something went wrong.', ['error' => $e->getMessage()], 500);
         }
+    }
+
+    public function logout(Request $request)
+    {
+        $user = $request->user();
+        if ($user) {
+            $user->currentAccessToken()->delete();
+            $user->tokens()->delete();
+        }
+        return $this->sendResponse([], 'Logged out successfully.');
     }
 }

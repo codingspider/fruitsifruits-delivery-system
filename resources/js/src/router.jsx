@@ -61,6 +61,8 @@ import ProductionView from "./components/production/ProductionView";
 import BackupProcessing from "./components/backup/BackupProcessing";
 import LoginHistory from "./components/backup/LoginHistory";
 import JuiceAllocationView from "./components/allocations/JuiceAllocationView";
+import DriverDashboard from "./components/dashboard/DriverDashboard";
+import JpsDashboard from "./components/dashboard/JpsDashboard";
 
 // ✅ Public Routes
 export const ROOT = '/';
@@ -72,12 +74,14 @@ export const UNAUTHORIZED = '/unauthorized';
 // ✅ Role-based base paths
 export const SUPER_ADMIN_BASE = '/super/admin';
 export const ADMIN_BASE = '/admin';
-export const USER_BASE = '/user';
-export const STAFF_BASE = '/staff';
+export const DRIVER_BASE = '/driver';
+export const STAFF_BASE = '/jps';
 export const DASHBOARD = 'dashboard';
 
 export const MASTER_SETTING = `${SUPER_ADMIN_BASE}/settings`;
 export const DASHBOARD_PATH = `${SUPER_ADMIN_BASE}/dashboard`;
+export const DRIVER_DASHBOARD_PATH = `${DRIVER_BASE}/dashboard`;
+export const JPS_DASHBOARD_PATH = `${STAFF_BASE}/dashboard`;
 
 export const SAVE_ORDER = `${SUPER_ADMIN_BASE}/save/order`;
 
@@ -277,6 +281,22 @@ const router = createBrowserRouter([
 
       { path: BACKUP_PROCESSING_PATH, element: <ProtectedRoute role="superadmin"><BackupProcessing /></ProtectedRoute> },
       { path: LOGIN_HISTORY_PATH, element: <ProtectedRoute role="superadmin"><LoginHistory /></ProtectedRoute> },
+    ],
+  },
+  {
+    path: DRIVER_BASE,
+    element: <MainLayout />,
+    errorElement: <ErrorPage />,
+    children: [
+      { path: DRIVER_DASHBOARD_PATH, element: <ProtectedRoute role="driver"><DriverDashboard /></ProtectedRoute> },
+    ],
+  },
+  {
+    path: STAFF_BASE,
+    element: <MainLayout />,
+    errorElement: <ErrorPage />,
+    children: [
+      { path: JPS_DASHBOARD_PATH, element: <ProtectedRoute role="jps"><JpsDashboard /></ProtectedRoute> },
     ],
   },
 ]);

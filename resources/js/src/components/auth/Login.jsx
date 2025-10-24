@@ -24,7 +24,7 @@ import { FORGOT } from '../../router';
 import { loginUser } from '../../services/authService';
 import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
-import { SUPER_ADMIN_BASE, ADMIN_BASE, USER_BASE, STAFF_BASE, DASHBOARD } from '../../router';
+import { SUPER_ADMIN_BASE, ADMIN_BASE, DRIVER_BASE, STAFF_BASE, DASHBOARD } from '../../router';
 
 export default function Login() {
   const [show, setShow] = useState(false);
@@ -42,9 +42,9 @@ export default function Login() {
           navigate(`${SUPER_ADMIN_BASE}/${DASHBOARD}`);
       } else if (storedToken && role === 'admin') {
           navigate(`${ADMIN_BASE}/${DASHBOARD}`);
-      } else if (storedToken && role === 'user') {
-          navigate(`${USER_BASE}/${DASHBOARD}`);
-      } else if (storedToken && role === 'staff') {
+      } else if (storedToken && role === 'driver') {
+          navigate(`${DRIVER_BASE}/${DASHBOARD}`);
+      } else if (storedToken && role === 'jps') {
           navigate(`${STAFF_BASE}/${DASHBOARD}`);
       }
 
@@ -52,9 +52,9 @@ export default function Login() {
 
   const onSubmit = async (data) => {
         setIsSubmitting(true);
-        const { email, password } = data;
+        const { login, password } = data;
         try {
-            const res = await loginUser(email, password);
+            const res = await loginUser(login, password);
             localStorage.setItem('auth_token', res.data.token);
             localStorage.setItem('role', res.data.role);
             localStorage.setItem('favicon', res.data.favicon);
@@ -71,9 +71,9 @@ export default function Login() {
                 navigate(`${SUPER_ADMIN_BASE}/${DASHBOARD}`);
             } else if (res.data.token && res.data.role === 'admin') {
                 navigate(`${ADMIN_BASE}/${DASHBOARD}`);
-            } else if (res.data.token && res.data.role === 'user') {
-                navigate(`${USER_BASE}/${DASHBOARD}`);
-            } else if (res.data.token && res.data.role === 'staff') {
+            } else if (res.data.token && res.data.role === 'driver') {
+                navigate(`${DRIVER_BASE}/${DASHBOARD}`);
+            } else if (res.data.token && res.data.role === 'jps') {
                 navigate(`${STAFF_BASE}/${DASHBOARD}`);
             }
         } catch (err) {
@@ -109,7 +109,7 @@ export default function Login() {
           boxShadow={'lg'}
           p={8}>
           <Stack spacing={4}>
-            <FormControl id="email">
+            <FormControl id="login">
               <FormLabel>Email Or Username </FormLabel>
               <Input type="text" {...register("login", { required: true })} />
             </FormControl>

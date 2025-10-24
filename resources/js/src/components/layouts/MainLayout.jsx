@@ -3,9 +3,11 @@ import {useColorModeValue, useDisclosure, Box, Drawer, DrawerContent} from '@cha
 import SidebarContent from './SidebarContent';
 import TopNav from './TopNav';
 import { Outlet } from "react-router-dom";
+import useIdleLogout from '../../useIdleLogout';
 
 const MainLayout = ({ children }) => {
     const { isOpen, onOpen, onClose } = useDisclosure();
+    useIdleLogout(10 * 60 * 1000);
   return (
     <>
         <Box minH="100vh" bg={useColorModeValue('gray.100', 'gray.900')}>
