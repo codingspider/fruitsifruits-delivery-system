@@ -2,18 +2,20 @@
 
 namespace App\Http\Controllers\API;
 
-use App\Http\Controllers\API\BaseController as BaseController;
-use App\Http\Controllers\Controller;
-use App\Mail\ForgotPasswordMail;
 use App\Models\User;
+use App\Models\Setting;
+use Illuminate\Support\Str;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
+use App\Mail\ForgotPasswordMail;
 use Illuminate\Support\Facades\DB;
+use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Password;
 use Illuminate\Support\Facades\Validator;
-use Illuminate\Support\Str;
+use App\Http\Controllers\API\BaseController as BaseController;
 
 class RegisterController extends BaseController
 {
@@ -58,9 +60,12 @@ class RegisterController extends BaseController
             $success['token'] =  $user->createToken('MyApp')->plainTextToken; 
             $success['name'] =  $user->name;
             $success['role'] =  $user->role;
-            $success['favicon'] =  asset('icons/favicon.svg');
-            $success['logo'] =  asset('icons/logo.png');
-            $success['app_name'] =  env('APP_NAME');
+            $business = Setting::first();
+            
+            $success['favicon'] = asset(Storage::url($business->favicon));
+            $success['logo'] = asset(Storage::url($business->logo));
+
+            $success['app_name'] =  $business->name ?? "Fruit Production";
 
             $user->last_login_at = now();
             $user->save();

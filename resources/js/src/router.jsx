@@ -58,7 +58,8 @@ import ProductionList from "./components/production/ProductionList";
 import ProductionCreate from "./components/production/ProductionCreate";
 import ProductionEdit from "./components/production/ProductionEdit";
 import ProductionView from "./components/production/ProductionView";
-
+import BackupProcessing from "./components/backup/BackupProcessing";
+import LoginHistory from "./components/backup/LoginHistory";
 
 // ✅ Public Routes
 export const ROOT = '/';
@@ -184,6 +185,9 @@ export const BOTTLE_LIST_PATH = `${SUPER_ADMIN_BASE}/bottle/cost/list`;
 export const BOTTLE_ADD_PATH = `${SUPER_ADMIN_BASE}/bottle/cost/create`;
 export const BOTTLE_EDIT_PATH = (id) => `${SUPER_ADMIN_BASE}/bottle/cost/edit/${id}`;
 
+export const BACKUP_PROCESSING_PATH = `${SUPER_ADMIN_BASE}/backup/processing`;
+export const LOGIN_HISTORY_PATH = `${SUPER_ADMIN_BASE}/login/history`;
+
 const router = createBrowserRouter([
   {
     path: LOGIN,
@@ -266,6 +270,9 @@ const router = createBrowserRouter([
       { path: PRODUCTION_ADD_PATH, element: <ProtectedRoute role="superadmin"><ProductionCreate /></ProtectedRoute> },
       { path: PRODUCTION_EDIT, element: <ProtectedRoute role="superadmin"><ProductionEdit /></ProtectedRoute> },
       { path: PRODUCTION_VIEW, element: <ProtectedRoute role="superadmin"><ProductionView /></ProtectedRoute> },
+
+      { path: BACKUP_PROCESSING_PATH, element: <ProtectedRoute role="superadmin"><BackupProcessing /></ProtectedRoute> },
+      { path: LOGIN_HISTORY_PATH, element: <ProtectedRoute role="superadmin"><LoginHistory /></ProtectedRoute> },
     ],
   },
 ]);

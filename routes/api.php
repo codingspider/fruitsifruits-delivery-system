@@ -3,11 +3,14 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Artisan;
+use Illuminate\Support\Facades\Storage;
 use App\Http\Controllers\API\PLanController;
 use App\Http\Controllers\API\UserController;
 use App\Http\Controllers\API\RecipeController;
 use App\Http\Controllers\API\FlavourController;
 use App\Http\Controllers\API\ProductController;
+use App\Http\Controllers\API\BusinessController;
 use App\Http\Controllers\API\LocationController;
 use App\Http\Controllers\API\PurchaseController;
 use App\Http\Controllers\API\RegisterController;
@@ -46,6 +49,18 @@ Route::middleware(['auth:sanctum'])->prefix('superadmin')->group(function () {
 
     Route::get('get/products', [ProductController::class, 'getProducts']);
     Route::get('get/finished/goods', [ProductController::class, 'finishGoods']);
+
+
+    Route::post('save/business/setting', [BusinessController::class, 'store']);
+    Route::get('get/business/data', [BusinessController::class, 'index']);
+    Route::get('login-history', [BusinessController::class, 'loginHistory']);
+
+    Route::get('/backup-and-download', function () {
+        Artisan::call('backup:run');
+        $files = Storage::files('private/Laravel');
+        $latestFile = collect($files)->sortDesc()->first();
+        return Storage::download($latestFile);
+    });
 });
 
 

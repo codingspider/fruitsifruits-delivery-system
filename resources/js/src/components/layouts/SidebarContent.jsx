@@ -33,7 +33,8 @@ import {
   
 } from '@chakra-ui/react';
 import { useTranslation } from 'react-i18next';
-import { DRIVER_ROUTE_LIST_PATH, FINISH_GOOD_LIST_PATH, FLAVOUR_LIST_PATH, INGREDIENT_LIST_PATH, JUICE_ALLOCATION_LIST_PATH, LOCATION_LIST_PATH, PRODUCTION_LIST_PATH, PURCHASE_LIST_PATH, RECIPE_LIST_PATH, USER_LIST_PATH } from '../../router';
+import { BACKUP_PROCESSING_PATH, DRIVER_ROUTE_LIST_PATH, FINISH_GOOD_LIST_PATH, FLAVOUR_LIST_PATH, INGREDIENT_LIST_PATH, JUICE_ALLOCATION_LIST_PATH, LOCATION_LIST_PATH, LOGIN_HISTORY_PATH, PRODUCTION_LIST_PATH, PURCHASE_LIST_PATH, RECIPE_LIST_PATH, USER_LIST_PATH } from '../../router';
+import api from '../../axios';
 
 const SidebarContent = ({ onClose, ...rest }) => {
   const { t } = useTranslation();
@@ -161,8 +162,8 @@ const SidebarContent = ({ onClose, ...rest }) => {
       </Collapse>
       
       <NavLink to="/super/admin/settings" icon={FcSettings} activeBg={activeBg} activeColor={activeColor} hoverBg={hoverBg} active={isActive('/super/admin/settings')} label="Settings" />
-      <NavLink to="/super/admin/backup" icon={FcAddDatabase } activeBg={activeBg} activeColor={activeColor} hoverBg={hoverBg} active={isActive('/super/admin/backup')} label={t('backup')} />
-      <NavLink to="/super/admin/login/history" icon={FcMindMap } activeBg={activeBg} activeColor={activeColor} hoverBg={hoverBg} active={isActive('/super/admin/login/history')} label={ t('login_history') } />
+      <NavLink to={BACKUP_PROCESSING_PATH} icon={FcAddDatabase } activeBg={activeBg} activeColor={activeColor} hoverBg={hoverBg} active={isActive(BACKUP_PROCESSING_PATH)} label={t('backup')} />
+      <NavLink to={LOGIN_HISTORY_PATH} icon={FcMindMap } activeBg={activeBg} activeColor={activeColor} hoverBg={hoverBg} active={isActive(LOGIN_HISTORY_PATH)} label={ t('login_history') } />
       <NavLink to="/super/admin/logout" icon={FcAdvance} activeBg={activeBg} activeColor={activeColor} hoverBg={hoverBg} active={isActive('/super/admin/logout')} label="Logout" />
     </Box>
   );
