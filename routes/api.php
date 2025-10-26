@@ -20,6 +20,7 @@ use App\Http\Controllers\API\ProductionController;
 use App\Http\Controllers\API\DriverRouteController;
 use App\Http\Controllers\API\BottleManageController;
 use App\Http\Controllers\API\DriverManageController;
+use App\Http\Controllers\API\DriverProfileController;
 use App\Http\Controllers\API\DriverJuiceAllocationController;
 
 
@@ -40,6 +41,8 @@ Route::middleware(['auth:sanctum'])->prefix('driver')->group(function () {
     Route::post('save/sell/data', [AssignTaskController::class, 'store']);
     Route::get('allocated/juice', [AssignTaskController::class, 'driverJuiceAllocation']);
     Route::post('return/leftover', [AssignTaskController::class, 'returnLeftover']);
+    Route::get('profile/data', [DriverProfileController::class, 'profileData']);
+    Route::post('profile/update', [DriverProfileController::class, 'profileDataUpdate']);
 });
 
 Route::middleware(['auth:sanctum'])->prefix('superadmin')->group(function () {

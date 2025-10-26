@@ -169,4 +169,5 @@ return [
     'report' => 'Report',
     'return_leftover' => 'Return Leftover',
     'add_return_leftover' => 'Add Return Leftover',
+    'driver_profile' => 'Driver Profile',
 ];

@@ -69,6 +69,7 @@ import TaskDetails from "./components/driver/TaskDetails";
 import JuiceAllocation from "./components/driver/JuiceAllocation";
 import DriverReport from "./components/driver/report";
 import ReturnLeftover from "./components/driver_return/ReturnLeftover";
+import DriverProfile from "./components/driver/DriverProfile";
 
 // ✅ Public Routes
 export const ROOT = '/';
@@ -99,6 +100,7 @@ export const TASK_DETAILS = "task/details/:id";
 export const JUICE_ALLOCATION_PATH = `${DRIVER_BASE}/juice/allocation`;
 export const DRIVER_REPORT_PATH = `${DRIVER_BASE}/report`;
 export const RETURN_LEFTOVER_PATH = `${DRIVER_BASE}/return/leftover`;
+export const DRIVER_PROFILE_PATH = `${DRIVER_BASE}/driver/profile`;
 
 
 export const USER_LIST = "user/list";
@@ -309,6 +311,7 @@ const router = createBrowserRouter([
       { path: JUICE_ALLOCATION_PATH, element: <ProtectedRoute role="driver"><JuiceAllocation /></ProtectedRoute> },
       { path: DRIVER_REPORT_PATH, element: <ProtectedRoute role="driver"><DriverReport /></ProtectedRoute> },
       { path: RETURN_LEFTOVER_PATH, element: <ProtectedRoute role="driver"><ReturnLeftover /></ProtectedRoute> },
+      { path: DRIVER_PROFILE_PATH, element: <ProtectedRoute role="driver"><DriverProfile /></ProtectedRoute> },
     ],
   },
   {
