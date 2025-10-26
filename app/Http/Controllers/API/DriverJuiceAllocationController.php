@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\API;
 
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
@@ -130,7 +131,6 @@ class DriverJuiceAllocationController extends BaseController
     }
 
 
-
     /**
      * Delete product
      */
@@ -144,4 +144,6 @@ class DriverJuiceAllocationController extends BaseController
             return $this->sendError('Server Error: '.$e->getMessage(), 500);
         }
     }
+
+    
 }

@@ -15,11 +15,16 @@ class LocationFlavour extends Model
 
     public function product()
     {
-        return $this->belongsTo(Product::class);
+        return $this->belongsTo(Product::class, 'product_id', 'id');
     }
     
-    public function falvour()
+    public function bottle()
     {
-        return $this->belongsTo(Flavour::class);
+        return $this->belongsTo(Product::class, 'bottle_id', 'id');
+    }
+    
+    public function flavour()
+    {
+        return $this->belongsTo(Flavour::class, 'flavour_id', 'id');
     }
 }

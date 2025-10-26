@@ -19,7 +19,10 @@ import {
   FcHeatMap,
   FcTimeline,
   FcMultipleInputs,
-  FcFactory
+  FcFactory,
+  FcDatabase,
+  FcFlowChart,
+  FcUndo
 } from 'react-icons/fc';
 import { Link as RouterLink, useLocation } from 'react-router-dom';
 import {
@@ -34,7 +37,7 @@ import {
 } from '@chakra-ui/react';
 import { BiBox } from "react-icons/bi";
 import { useTranslation } from 'react-i18next';
-import { BACKUP_PROCESSING_PATH, DRIVER_ROUTE_LIST_PATH, FINISH_GOOD_LIST_PATH, FLAVOUR_LIST_PATH, INGREDIENT_LIST_PATH, JUICE_ALLOCATION_LIST_PATH, LOCATION_LIST_PATH, LOGIN_HISTORY_PATH, PRODUCTION_LIST_PATH, PURCHASE_LIST_PATH, RECIPE_LIST_PATH, USER_LIST_PATH, BOTTLE_LIST_PATH } from '../../router';
+import { BACKUP_PROCESSING_PATH, DRIVER_ROUTE_LIST_PATH, FINISH_GOOD_LIST_PATH, FLAVOUR_LIST_PATH, INGREDIENT_LIST_PATH, JUICE_ALLOCATION_LIST_PATH, LOCATION_LIST_PATH, LOGIN_HISTORY_PATH, PRODUCTION_LIST_PATH, PURCHASE_LIST_PATH, RECIPE_LIST_PATH, USER_LIST_PATH, BOTTLE_LIST_PATH, ASSIGN_TASK_PATH, DRIVER_DASHBOARD_PATH, JUICE_ALLOCATION_PATH, DRIVER_REPORT_PATH, RETURN_LEFTOVER_PATH } from '../../router';
 import api from '../../axios';
 import { logoutUser } from '../../services/authService';
 import { useNavigate } from "react-router-dom";
@@ -162,6 +165,16 @@ const SidebarContent = ({ onClose, ...rest }) => {
       <NavLink to={BACKUP_PROCESSING_PATH} icon={FcAddDatabase } activeBg={activeBg} activeColor={activeColor} hoverBg={hoverBg} active={isActive(BACKUP_PROCESSING_PATH)} label={t('backup')} />
       <NavLink to={LOGIN_HISTORY_PATH} icon={FcMindMap } activeBg={activeBg} activeColor={activeColor} hoverBg={hoverBg} active={isActive(LOGIN_HISTORY_PATH)} label={ t('login_history') } />
       </>
+      )}
+
+      {role === 'driver' && ( 
+        <>
+        <NavLink to={DRIVER_DASHBOARD_PATH} icon={FcHome } activeBg={activeBg} activeColor={activeColor} hoverBg={hoverBg} active={isActive(DRIVER_DASHBOARD_PATH)} label={ t('dashboard') } />
+        <NavLink to={ASSIGN_TASK_PATH} icon={FcList } activeBg={activeBg} activeColor={activeColor} hoverBg={hoverBg} active={isActive(ASSIGN_TASK_PATH)} label={ t('assign_task') } />
+        <NavLink to={JUICE_ALLOCATION_PATH} icon={FcFlowChart } activeBg={activeBg} activeColor={activeColor} hoverBg={hoverBg} active={isActive(JUICE_ALLOCATION_PATH)} label={ t('juice_allocation') } />
+        <NavLink to={DRIVER_REPORT_PATH} icon={FcBarChart } activeBg={activeBg} activeColor={activeColor} hoverBg={hoverBg} active={isActive(DRIVER_REPORT_PATH)} label={ t('report') } />
+        <NavLink to={RETURN_LEFTOVER_PATH} icon={FcUndo } activeBg={activeBg} activeColor={activeColor} hoverBg={hoverBg} active={isActive(RETURN_LEFTOVER_PATH)} label={ t('return_leftover') } />
+        </>
       )}
       <Flex
         align="center"

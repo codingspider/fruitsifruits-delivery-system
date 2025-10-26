@@ -14,6 +14,7 @@ use App\Http\Controllers\API\BusinessController;
 use App\Http\Controllers\API\LocationController;
 use App\Http\Controllers\API\PurchaseController;
 use App\Http\Controllers\API\RegisterController;
+use App\Http\Controllers\API\AssignTaskController;
 use App\Http\Controllers\API\IngredientController;
 use App\Http\Controllers\API\ProductionController;
 use App\Http\Controllers\API\DriverRouteController;
@@ -31,6 +32,14 @@ Route::controller(RegisterController::class)->group(function(){
 
 Route::middleware(['auth:sanctum'])->group(function () {
     Route::post('logout', [RegisterController::class, 'logout']);
+});
+
+Route::middleware(['auth:sanctum'])->prefix('driver')->group(function () {
+    Route::get('assign/tasks', [AssignTaskController::class, 'index']);
+    Route::get('location/products/details/{id}', [AssignTaskController::class, 'locationProductDetails']);
+    Route::post('save/sell/data', [AssignTaskController::class, 'store']);
+    Route::get('allocated/juice', [AssignTaskController::class, 'driverJuiceAllocation']);
+    Route::post('return/leftover', [AssignTaskController::class, 'returnLeftover']);
 });
 
 Route::middleware(['auth:sanctum'])->prefix('superadmin')->group(function () {

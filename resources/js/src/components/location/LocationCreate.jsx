@@ -38,6 +38,8 @@ const LocationCreate = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [products, setProducts] = useState([]);
   const [flavours, setFlavours] = useState([]);
+  const [bottles, setBottles] = useState([]);
+
   const toast = useToast();
   const navigate = useNavigate();
 
@@ -98,6 +100,7 @@ const LocationCreate = () => {
       {
         productId: "",
         flavourId: "",
+        bottle_id: "",
         quantity: 1,
         price: 0,
         deal_enabled: false,
@@ -131,11 +134,17 @@ const LocationCreate = () => {
     }
   };
 
+  const getBottles = async () => {
+      const res = await api.get("superadmin/get/bottles");
+      setBottles(res.data.data.data);
+  };
+
   useEffect(() => {
     const app_name = localStorage.getItem("app_name") || "App";
     document.title = `${app_name} | Location Create`;
     getProducts();
     getFlavours();
+    getBottles();
   }, []);
 
   const onSubmit = async () => {
@@ -185,6 +194,7 @@ const LocationCreate = () => {
       products: items.map((it) => ({
         product_id: it.productId,
         flavour_id: it.flavourId,
+        bottle_id: it.bottle_id,
         quantity: Number(it.quantity) || 0,
         price: Number(it.price) || 0,
         deal_enabled: Boolean(it.deal_enabled),
@@ -357,7 +367,7 @@ const LocationCreate = () => {
                   <Box key={index} p={4} borderWidth={1} borderRadius="md">
                     <HStack spacing={4} align="flex-start">
                       {/* Product */}
-                      <FormControl>
+                      <FormControl isRequired>
                         <FormLabel>{t("product")}</FormLabel>
                         <Select
                           placeholder="Select Product"
@@ -376,7 +386,7 @@ const LocationCreate = () => {
                       </FormControl>
 
                       {/* Flavour */}
-                      <FormControl>
+                      <FormControl isRequired>
                         <FormLabel>{t("flavour")}</FormLabel>
                         <Select
                           placeholder="Select Flavour"
@@ -393,8 +403,26 @@ const LocationCreate = () => {
                         </Select>
                       </FormControl>
 
+                      <FormControl isRequired>
+                            <FormLabel>{t("bottle")}</FormLabel>
+                            <Select
+                                placeholder="Select"
+                                value={item.bottle_id}
+                                onChange={(e) =>
+                                    handleItemChange(index, "bottle_id", e.target.value)
+                                }
+                            >
+                                {bottles.map((bottle) => (
+                                    <option key={bottle.id} value={bottle.id}>
+                                        {bottle.name}
+                                    </option>
+                                ))}
+                            </Select>
+                        </FormControl>
+                      
+
                       {/* Quantity */}
-                      <FormControl>
+                      <FormControl isRequired>
                         <FormLabel>Quantity</FormLabel>
                         <Input
                           type="number"

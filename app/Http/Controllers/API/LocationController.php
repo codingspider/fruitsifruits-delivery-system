@@ -73,6 +73,7 @@ class LocationController extends BaseController
                 $line->location_id = $location->id;
                 $line->product_id = $product['product_id'];
                 $line->flavour_id = $product['flavour_id'];
+                $line->bottle_id = $product['bottle_id'];
                 $line->deal_quantity = $product['deal_amount'];
                 $line->specific_quantity = $product['quantity'];
                 $line->price = $product['price'];
@@ -127,6 +128,7 @@ class LocationController extends BaseController
                 $line->location_id = $location->id;
                 $line->product_id = $product['product_id'];
                 $line->flavour_id = $product['flavour_id'];
+                $line->bottle_id = $product['bottle_id'];
                 $line->deal_quantity = $product['deal_amount'] ?? 0;
                 $line->specific_quantity = $product['quantity'] ?? 0;
                 $line->price = $product['price'] ?? 0;

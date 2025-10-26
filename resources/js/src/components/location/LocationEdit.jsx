@@ -38,6 +38,7 @@ const LocationEdit = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [products, setProducts] = useState([]);
   const [flavours, setFlavours] = useState([]);
+  const [bottles, setBottles] = useState([]); 
   const toast = useToast();
   const navigate = useNavigate();
   const { id } = useParams();
@@ -99,6 +100,7 @@ const LocationEdit = () => {
       {
         productId: "",
         flavourId: "",
+        bottle_id: "",
         quantity: 1,
         price: 0,
         deal_enabled: false,
@@ -112,6 +114,11 @@ const LocationEdit = () => {
 
   const removeItem = (index) => {
     setItems((prev) => prev.filter((_, i) => i !== index));
+  };
+
+  const getBottles = async () => {
+      const res = await api.get("superadmin/get/bottles");
+      setBottles(res.data.data.data);
   };
 
   const getProducts = async () => {
@@ -148,6 +155,7 @@ const LocationEdit = () => {
             location.location_flavours.map((line) => ({
                 productId: line.product_id ?? '',
                 flavourId: line.flavour_id ?? '',
+                bottle_id: line.bottle_id ?? '',
                 quantity: line.specific_quantity,
                 price: line.price,
                 deal_enabled: line.deal_quantity > 0 ? true : false,
@@ -164,6 +172,7 @@ const LocationEdit = () => {
     document.title = `${app_name} | Location Create`;
     getProducts();
     getFlavours();
+    getBottles();
     getLocation();
   }, []);
 
@@ -214,6 +223,7 @@ const LocationEdit = () => {
       products: items.map((it) => ({
         product_id: it.productId,
         flavour_id: it.flavourId,
+        bottle_id: it.bottle_id,
         quantity: Number(it.quantity) || 0,
         price: Number(it.price) || 0,
         deal_enabled: Boolean(it.deal_enabled),
@@ -223,8 +233,6 @@ const LocationEdit = () => {
         discount_value: it.discount_value ? Number(it.discount_value) : null,
       })),
     };
-
-    console.log(payload);
 
     setIsSubmitting(true);
     try {
@@ -386,7 +394,7 @@ const LocationEdit = () => {
                   <Box key={index} p={4} borderWidth={1} borderRadius="md">
                     <HStack spacing={4} align="flex-start">
                       {/* Product */}
-                      <FormControl>
+                      <FormControl isRequired>
                         <FormLabel>{t("product")}</FormLabel>
                         <Select
                           placeholder="Select Product"
@@ -405,7 +413,7 @@ const LocationEdit = () => {
                       </FormControl>
 
                       {/* Flavour */}
-                      <FormControl>
+                      <FormControl isRequired>
                         <FormLabel>{t("flavour")}</FormLabel>
                         <Select
                           placeholder="Select Flavour"
@@ -420,6 +428,23 @@ const LocationEdit = () => {
                             </option>
                           ))}
                         </Select>
+                      </FormControl>
+
+                      <FormControl isRequired>
+                          <FormLabel>{t("bottle")}</FormLabel>
+                          <Select
+                              placeholder="Select"
+                              value={item.bottle_id}
+                              onChange={(e) =>
+                                  handleItemChange(index, "bottle_id", e.target.value)
+                              }
+                          >
+                              {bottles.map((bottle) => (
+                                  <option key={bottle.id} value={bottle.id}>
+                                      {bottle.name}
+                                  </option>
+                              ))}
+                          </Select>
                       </FormControl>
 
                       {/* Quantity */}

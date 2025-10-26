@@ -9,7 +9,7 @@ return [
     |--------------------------------------------------------------------------
     */
 
-    'install-button' => true,
+    'install-button' => false,
 
     /*
     |--------------------------------------------------------------------------
@@ -19,7 +19,7 @@ return [
     */
 
     'manifest' => [
-        'name' => 'Laundry APP PWA',
+        'name' => 'Fruit Production',
         'short_name' => 'LPT',
         'background_color' => '#6777ef',
         'display' => 'fullscreen',

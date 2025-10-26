@@ -64,6 +64,12 @@ import JuiceAllocationView from "./components/allocations/JuiceAllocationView";
 import DriverDashboard from "./components/dashboard/DriverDashboard";
 import JpsDashboard from "./components/dashboard/JpsDashboard";
 
+import AssignTask from "./components/driver/AssignTask";
+import TaskDetails from "./components/driver/TaskDetails";
+import JuiceAllocation from "./components/driver/JuiceAllocation";
+import DriverReport from "./components/driver/report";
+import ReturnLeftover from "./components/driver_return/ReturnLeftover";
+
 // ✅ Public Routes
 export const ROOT = '/';
 export const LOGIN = '/login';
@@ -84,6 +90,15 @@ export const DRIVER_DASHBOARD_PATH = `${DRIVER_BASE}/dashboard`;
 export const JPS_DASHBOARD_PATH = `${STAFF_BASE}/dashboard`;
 
 export const SAVE_ORDER = `${SUPER_ADMIN_BASE}/save/order`;
+
+
+// driver routes 
+export const ASSIGN_TASK_PATH = `${DRIVER_BASE}/assign/task`;
+export const TASK_DETAILS_PATH = (id) => `${DRIVER_BASE}/task/details/${id}`;
+export const TASK_DETAILS = "task/details/:id";
+export const JUICE_ALLOCATION_PATH = `${DRIVER_BASE}/juice/allocation`;
+export const DRIVER_REPORT_PATH = `${DRIVER_BASE}/report`;
+export const RETURN_LEFTOVER_PATH = `${DRIVER_BASE}/return/leftover`;
 
 
 export const USER_LIST = "user/list";
@@ -289,6 +304,11 @@ const router = createBrowserRouter([
     errorElement: <ErrorPage />,
     children: [
       { path: DRIVER_DASHBOARD_PATH, element: <ProtectedRoute role="driver"><DriverDashboard /></ProtectedRoute> },
+      { path: ASSIGN_TASK_PATH, element: <ProtectedRoute role="driver"><AssignTask /></ProtectedRoute> },
+      { path: TASK_DETAILS, element: <ProtectedRoute role="driver"><TaskDetails /></ProtectedRoute> },
+      { path: JUICE_ALLOCATION_PATH, element: <ProtectedRoute role="driver"><JuiceAllocation /></ProtectedRoute> },
+      { path: DRIVER_REPORT_PATH, element: <ProtectedRoute role="driver"><DriverReport /></ProtectedRoute> },
+      { path: RETURN_LEFTOVER_PATH, element: <ProtectedRoute role="driver"><ReturnLeftover /></ProtectedRoute> },
     ],
   },
   {
@@ -297,6 +317,7 @@ const router = createBrowserRouter([
     errorElement: <ErrorPage />,
     children: [
       { path: JPS_DASHBOARD_PATH, element: <ProtectedRoute role="jps"><JpsDashboard /></ProtectedRoute> },
+      
     ],
   },
 ]);
