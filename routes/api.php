@@ -45,6 +45,10 @@ Route::middleware(['auth:sanctum'])->prefix('driver')->group(function () {
     Route::post('profile/update', [DriverProfileController::class, 'profileDataUpdate']);
 });
 
+Route::middleware(['auth:sanctum'])->prefix('jps')->group(function () {
+    Route::get('assign/tasks', [AssignTaskController::class, 'index']);
+});
+
 Route::middleware(['auth:sanctum'])->prefix('superadmin')->group(function () {
     // Add more super admin routes here
     Route::apiResource('plans', PLanController::class);

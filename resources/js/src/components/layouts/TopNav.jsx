@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Link as ReactRouterLink } from "react-router-dom";
 import { Button, Link as ChakraLink } from "@chakra-ui/react";
@@ -29,10 +29,17 @@ import { LanguageContext } from "../../LanguageProvider";
 const TopNav = ({ onOpen, ...rest }) => {
     const { colorMode, toggleColorMode } = useColorMode();
     const { lang, changeLanguage } = useContext(LanguageContext);
+    const [user, setUser] = useState([]);
     const navigate = useNavigate();
     const handleLogout = async () => {
         await logoutUser(navigate);
     };
+    useEffect (() => {
+        const name = localStorage.getItem('name');
+        const role = localStorage.getItem('role');
+        const data = { role: role, name: name };
+        setUser(data);
+    }, []);
     return (
         <>
             <Flex
@@ -78,7 +85,7 @@ const TopNav = ({ onOpen, ...rest }) => {
                         onChange={(e) => changeLanguage(e.target.value)}
                     >
                         <option value="en">English</option>
-                        <option value="bn">বাংলা</option>
+                        {/* <option value="bn">বাংলা</option> */}
                     </Select>
 
                     <IconButton
@@ -91,28 +98,19 @@ const TopNav = ({ onOpen, ...rest }) => {
                     <Menu>
                         <MenuButton>
                             <HStack>
-                                <Avatar
-                                    size="sm"
-                                    src="https://i.pravatar.cc/40"
-                                />
+                                <Avatar name={user.name} src="" />
                                 <VStack
                                     display={{ base: "none", md: "flex" }}
                                     align="flex-start"
                                     spacing="0"
                                     ml="2"
                                 >
-                                    <Text fontSize="sm">John Doe</Text>
-                                    <Text fontSize="xs" color="gray.500">
-                                        Admin
-                                    </Text>
+                                    <Text fontSize="sm">{user.name}</Text>
                                 </VStack>
                                 <FiChevronDown />
                             </HStack>
                         </MenuButton>
                         <MenuList>
-                            <MenuItem>Profile</MenuItem>
-                            <MenuItem>Settings</MenuItem>
-                            <MenuDivider />
                             <MenuItem onClick={handleLogout}>Logout</MenuItem>
                         </MenuList>
                     </Menu>

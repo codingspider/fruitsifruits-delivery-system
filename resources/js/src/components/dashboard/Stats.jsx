@@ -16,7 +16,7 @@ const Stats = () => {
             {Array.from({ length: 5 }).map((_, i) => (
                 <Card key={i}>
                 <CardHeader>
-                    <Heading size="md">Customer dashboard</Heading>
+                    <Heading size="md">Dashboard Item </Heading>
                 </CardHeader>
                 <CardBody>
                     <Heading size="sm">Stat {i + 1}</Heading>

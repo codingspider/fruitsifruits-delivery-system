@@ -60,6 +60,7 @@ export default function Login() {
             localStorage.setItem('favicon', res.data.favicon);
             localStorage.setItem('logo', res.data.logo);
             localStorage.setItem('app_name', res.data.app_name);
+            localStorage.setItem('name', res.data.name);
             toast({
                 position: 'bottom-right',
                 title: 'Login successful!',

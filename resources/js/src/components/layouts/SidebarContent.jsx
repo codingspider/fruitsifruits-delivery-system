@@ -38,7 +38,7 @@ import {
 } from '@chakra-ui/react';
 import { BiBox } from "react-icons/bi";
 import { useTranslation } from 'react-i18next';
-import { BACKUP_PROCESSING_PATH, DRIVER_ROUTE_LIST_PATH, FINISH_GOOD_LIST_PATH, FLAVOUR_LIST_PATH, INGREDIENT_LIST_PATH, JUICE_ALLOCATION_LIST_PATH, LOCATION_LIST_PATH, LOGIN_HISTORY_PATH, PRODUCTION_LIST_PATH, PURCHASE_LIST_PATH, RECIPE_LIST_PATH, USER_LIST_PATH, BOTTLE_LIST_PATH, ASSIGN_TASK_PATH, DRIVER_DASHBOARD_PATH, JUICE_ALLOCATION_PATH, DRIVER_REPORT_PATH, RETURN_LEFTOVER_PATH, DRIVER_PROFILE_PATH } from '../../router';
+import { BACKUP_PROCESSING_PATH, DRIVER_ROUTE_LIST_PATH, FINISH_GOOD_LIST_PATH, FLAVOUR_LIST_PATH, INGREDIENT_LIST_PATH, JUICE_ALLOCATION_LIST_PATH, LOCATION_LIST_PATH, LOGIN_HISTORY_PATH, PRODUCTION_LIST_PATH, PURCHASE_LIST_PATH, RECIPE_LIST_PATH, USER_LIST_PATH, BOTTLE_LIST_PATH, ASSIGN_TASK_PATH, DRIVER_DASHBOARD_PATH, JUICE_ALLOCATION_PATH, DRIVER_REPORT_PATH, RETURN_LEFTOVER_PATH, DRIVER_PROFILE_PATH, JPS_DASHBOARD_PATH, JPS_REPORT_PATH } from '../../router';
 import api from '../../axios';
 import { logoutUser } from '../../services/authService';
 import { useNavigate } from "react-router-dom";
@@ -177,6 +177,17 @@ const SidebarContent = ({ onClose, ...rest }) => {
         <NavLink to={RETURN_LEFTOVER_PATH} icon={FcUndo } activeBg={activeBg} activeColor={activeColor} hoverBg={hoverBg} active={isActive(RETURN_LEFTOVER_PATH)} label={ t('return_leftover') } />
         <NavLink to={DRIVER_PROFILE_PATH} icon={FcBusinessman } activeBg={activeBg} activeColor={activeColor} hoverBg={hoverBg} active={isActive(DRIVER_PROFILE_PATH)} label={ t('driver_profile') } />
         </>
+      )}
+      
+      {role === 'jps' && ( 
+        <>
+        <NavLink to={JPS_DASHBOARD_PATH} icon={FcHome } activeBg={activeBg} activeColor={activeColor} hoverBg={hoverBg} active={isActive(JPS_DASHBOARD_PATH)} label={ t('dashboard') } />
+        <NavLink to={JUICE_ALLOCATION_LIST_PATH}      icon={FcShop} activeBg={activeBg} activeColor={activeColor} hoverBg={hoverBg} active={isActive(JUICE_ALLOCATION_LIST_PATH)} label={t('driver_allocation')} />
+        <NavLink to={DRIVER_ROUTE_LIST_PATH}  icon={FcList} activeBg={activeBg} activeColor={activeColor} hoverBg={hoverBg} active={isActive(DRIVER_ROUTE_LIST_PATH)} label={t('manage_route')} />
+        <NavLink to={LOCATION_LIST_PATH} icon={FcHeatMap } activeBg={activeBg} activeColor={activeColor} hoverBg={hoverBg} active={isActive(LOCATION_LIST_PATH)} label={t('manage_locations')} />
+        <NavLink to={PRODUCTION_LIST_PATH} icon={FcFactory } activeBg={activeBg} activeColor={activeColor} hoverBg={hoverBg} active={isActive(PRODUCTION_LIST_PATH)} label={t('juice_production')} />
+        <NavLink to={JPS_REPORT_PATH} icon={FcMindMap } activeBg={activeBg} activeColor={activeColor} hoverBg={hoverBg} active={isActive(JPS_REPORT_PATH)} label={t('report')} />
+       </>
       )}
       <Flex
         align="center"

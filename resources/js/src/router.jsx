@@ -62,7 +62,7 @@ import BackupProcessing from "./components/backup/BackupProcessing";
 import LoginHistory from "./components/backup/LoginHistory";
 import JuiceAllocationView from "./components/allocations/JuiceAllocationView";
 import DriverDashboard from "./components/dashboard/DriverDashboard";
-import JpsDashboard from "./components/dashboard/JpsDashboard";
+import JpsDashboard from "./components/jps/JpsDashboard";
 
 import AssignTask from "./components/driver/AssignTask";
 import TaskDetails from "./components/driver/TaskDetails";
@@ -70,6 +70,7 @@ import JuiceAllocation from "./components/driver/JuiceAllocation";
 import DriverReport from "./components/driver/report";
 import ReturnLeftover from "./components/driver_return/ReturnLeftover";
 import DriverProfile from "./components/driver/DriverProfile";
+import JpsReport from "./components/jps/JpsReport";
 
 // ✅ Public Routes
 export const ROOT = '/';
@@ -84,6 +85,7 @@ export const ADMIN_BASE = '/admin';
 export const DRIVER_BASE = '/driver';
 export const STAFF_BASE = '/jps';
 export const DASHBOARD = 'dashboard';
+export const COMMON_BASE = 'dashboard';
 
 export const MASTER_SETTING = `${SUPER_ADMIN_BASE}/settings`;
 export const DASHBOARD_PATH = `${SUPER_ADMIN_BASE}/dashboard`;
@@ -92,6 +94,9 @@ export const JPS_DASHBOARD_PATH = `${STAFF_BASE}/dashboard`;
 
 export const SAVE_ORDER = `${SUPER_ADMIN_BASE}/save/order`;
 
+
+// jps routes 
+export const JPS_REPORT_PATH = `${STAFF_BASE}/jps/report`;
 
 // driver routes 
 export const ASSIGN_TASK_PATH = `${DRIVER_BASE}/assign/task`;
@@ -274,27 +279,27 @@ const router = createBrowserRouter([
       { path: FLAVOUR_ADD_PATH, element: <ProtectedRoute role="superadmin"><FlavourCreate /></ProtectedRoute> },
       { path: FLAVOUR_EDIT, element: <ProtectedRoute role="superadmin"><FlavourEdit /></ProtectedRoute> },
 
-      { path: LOCATION_LIST_PATH, element: <ProtectedRoute role="superadmin"><LocationList /></ProtectedRoute> },
-      { path: LOCATION_ADD_PATH, element: <ProtectedRoute role="superadmin"><LocationCreate /></ProtectedRoute> },
-      { path: LOCATION_EDIT, element: <ProtectedRoute role="superadmin"><LocationEdit /></ProtectedRoute> },
+      { path: LOCATION_LIST_PATH, element: <ProtectedRoute roles={["superadmin", "jps"]}><LocationList /></ProtectedRoute> },
+      { path: LOCATION_ADD_PATH,  element: <ProtectedRoute roles={["superadmin", "jps"]}><LocationCreate /></ProtectedRoute> },
+      { path: LOCATION_EDIT,      element: <ProtectedRoute roles={["superadmin", "jps"]}><LocationEdit /></ProtectedRoute> },
       
-      { path: DRIVER_ROUTE_LIST_PATH, element: <ProtectedRoute role="superadmin"><RouteList /></ProtectedRoute> },
-      { path: DRIVER_ROUTE_ADD_PATH, element: <ProtectedRoute role="superadmin"><RouteCreate /></ProtectedRoute> },
-      { path: DRIVER_ROUTE_EDIT, element: <ProtectedRoute role="superadmin"><RouteEdit /></ProtectedRoute> },
+      { path: DRIVER_ROUTE_LIST_PATH, element: <ProtectedRoute role={["superadmin", "jps"]}><RouteList /></ProtectedRoute> },
+      { path: DRIVER_ROUTE_ADD_PATH, element: <ProtectedRoute role={["superadmin", "jps"]}><RouteCreate /></ProtectedRoute> },
+      { path: DRIVER_ROUTE_EDIT, element: <ProtectedRoute role={["superadmin", "jps"]}><RouteEdit /></ProtectedRoute> },
       
-      { path: JUICE_ALLOCATION_LIST_PATH, element: <ProtectedRoute role="superadmin"><JuiceAllocationList /></ProtectedRoute> },
-      { path: JUICE_ALLOCATION_ADD_PATH, element: <ProtectedRoute role="superadmin"><JuiceAllocationCreate /></ProtectedRoute> },
-      { path: JUICE_ALLOCATION_EDIT, element: <ProtectedRoute role="superadmin"><JuiceAllocationEdit /></ProtectedRoute> },
-      { path: JUICE_ALLOCATION_VIEW, element: <ProtectedRoute role="superadmin"><JuiceAllocationView /></ProtectedRoute> },
+      { path: JUICE_ALLOCATION_LIST_PATH, element: <ProtectedRoute role={["superadmin", "jps"]}><JuiceAllocationList /></ProtectedRoute> },
+      { path: JUICE_ALLOCATION_ADD_PATH, element: <ProtectedRoute role={["superadmin", "jps"]}><JuiceAllocationCreate /></ProtectedRoute> },
+      { path: JUICE_ALLOCATION_EDIT, element: <ProtectedRoute role={["superadmin", "jps"]}><JuiceAllocationEdit /></ProtectedRoute> },
+      { path: JUICE_ALLOCATION_VIEW, element: <ProtectedRoute role={["superadmin", "jps"]}><JuiceAllocationView /></ProtectedRoute> },
       
       { path: RECIPE_LIST_PATH, element: <ProtectedRoute role="superadmin"><RecipeList /></ProtectedRoute> },
       { path: RECIPE_ADD_PATH, element: <ProtectedRoute role="superadmin"><RecipeCreate /></ProtectedRoute> },
       { path: RECIPE_EDIT, element: <ProtectedRoute role="superadmin"><RecipeEdit /></ProtectedRoute> },
       
-      { path: PRODUCTION_LIST_PATH, element: <ProtectedRoute role="superadmin"><ProductionList /></ProtectedRoute> },
-      { path: PRODUCTION_ADD_PATH, element: <ProtectedRoute role="superadmin"><ProductionCreate /></ProtectedRoute> },
-      { path: PRODUCTION_EDIT, element: <ProtectedRoute role="superadmin"><ProductionEdit /></ProtectedRoute> },
-      { path: PRODUCTION_VIEW, element: <ProtectedRoute role="superadmin"><ProductionView /></ProtectedRoute> },
+      { path: PRODUCTION_LIST_PATH, element: <ProtectedRoute role={["superadmin", "jps"]}><ProductionList /></ProtectedRoute> },
+      { path: PRODUCTION_ADD_PATH, element: <ProtectedRoute role={["superadmin", "jps"]}><ProductionCreate /></ProtectedRoute> },
+      { path: PRODUCTION_EDIT, element: <ProtectedRoute role={["superadmin", "jps"]}><ProductionEdit /></ProtectedRoute> },
+      { path: PRODUCTION_VIEW, element: <ProtectedRoute role={["superadmin", "jps"]}><ProductionView /></ProtectedRoute> },
 
       { path: BACKUP_PROCESSING_PATH, element: <ProtectedRoute role="superadmin"><BackupProcessing /></ProtectedRoute> },
       { path: LOGIN_HISTORY_PATH, element: <ProtectedRoute role="superadmin"><LoginHistory /></ProtectedRoute> },
@@ -320,6 +325,7 @@ const router = createBrowserRouter([
     errorElement: <ErrorPage />,
     children: [
       { path: JPS_DASHBOARD_PATH, element: <ProtectedRoute role="jps"><JpsDashboard /></ProtectedRoute> },
+      { path: JPS_REPORT_PATH, element: <ProtectedRoute role="jps"><JpsReport /></ProtectedRoute> },
       
     ],
   },
