@@ -66,6 +66,8 @@ class BusinessController extends BaseController
                 'address' => $request->address,
                 'city' => $request->city,
                 'zip_code' => $request->zip_code,
+                'map_api_key' => $request->map_api_key,
+                'lat_long' => $request->lat_long,
                 
             ]);
 

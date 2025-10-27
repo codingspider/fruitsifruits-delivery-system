@@ -37,7 +37,9 @@ const MasterSetting = () => {
     formData.append("email", data.email);
     formData.append("address", data.address);
     formData.append("city", data.city);
-    formData.append("zip_code", data.zip);
+    formData.append("zip_code", data.zip_code);
+    formData.append("map_api_key", data.map_api_key);
+    formData.append("lat_long", data.lat_long);
 
     if (data.app_logo?.[0]) {
       formData.append("logo", data.app_logo[0]);
@@ -91,11 +93,15 @@ const MasterSetting = () => {
             city: business.city,
             state: business.state,
             zip_code: business.zip_code,
+            map_api_key: business.map_api_key,
+            lat_long: business.lat_long,
         });
 
     };
 
   useEffect(() => {
+      const app_name = localStorage.getItem("app_name") || "App";
+      document.title = `${app_name} | Setting`;
       getBusinesData();
   }, []);
 
@@ -151,6 +157,14 @@ const MasterSetting = () => {
                 <FormControl isRequired>
                   <FormLabel>{t("zip")}</FormLabel>
                   <Input type="text" {...register("zip_code", { required: true })} />
+                </FormControl>
+                <FormControl isRequired>
+                  <FormLabel>{t("map_api_key")}</FormLabel>
+                  <Input type="text" {...register("map_api_key", { required: true })} />
+                </FormControl>
+                <FormControl isRequired>
+                  <FormLabel>{t("center_lat_long")}</FormLabel>
+                  <Input type="text" {...register("lat_long", { required: true })} />
                 </FormControl>
               </SimpleGrid>
 

@@ -55,6 +55,8 @@ class AssignTaskController extends BaseController
                     'id'            => $route->id ?? null,
                     'location_id'   => $loc->id,                
                     'location_name' => $loc->name,
+                    'lat'           => $loc->lat,
+                    'lon'           => $loc->lon,
                     'status'        => $route->status ?? 'inactive',
                     'date'          => Carbon::today()->toDateString()
                 ];

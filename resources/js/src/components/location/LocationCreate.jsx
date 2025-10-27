@@ -136,8 +136,9 @@ const LocationCreate = () => {
     getBottles();
 
     if (!window.google) {
+      const map_api_key = localStorage.getItem("map_api_key");
       const script = document.createElement("script");
-      script.src = `https://maps.googleapis.com/maps/api/js?key=AIzaSyDjb20izAR-trpI_UePYVNMeZkIOn1q6Ws&libraries=places`;
+      script.src = `https://maps.googleapis.com/maps/api/js?key=${map_api_key}&libraries=places`;
       script.async = true;
       document.body.appendChild(script);
       script.onload = initMap;
@@ -148,44 +149,62 @@ const LocationCreate = () => {
   }, []);
 
   function initMap() {
-      const mapInstance = new window.google.maps.Map(mapRef.current, {
-        center: { lat: 23.8103, lng: 90.4125 },
-        zoom: 13,
-      });
-      setMap(mapInstance);
+  const coords = localStorage.getItem("lat_long");
+  let mapInstance = null; // define mapInstance in outer scope
 
-      // Attach autocomplete to the existing name input
-      const input = document.querySelector('input[name="name"]');
-      const autocomplete = new window.google.maps.places.Autocomplete(input);
-      autocomplete.bindTo("bounds", mapInstance);
+  if (coords) {
+    const [latStr, lonStr] = coords.split(",");
+    const lat = parseFloat(latStr);
+    const lon = parseFloat(lonStr);
 
-      autocomplete.addListener("place_changed", () => {
-        const place = autocomplete.getPlace();
-        if (!place.geometry || !place.geometry.location) return;
+    mapInstance = new window.google.maps.Map(mapRef.current, {
+      center: { lat, lng: lon },
+      zoom: 13,
+    });
 
-        // Center map
-        mapInstance.setCenter(place.geometry.location);
-        mapInstance.setZoom(15);
-
-        // Drop marker
-        if (marker) marker.setMap(null);
-        const newMarker = new window.google.maps.Marker({
-          position: place.geometry.location,
-          map: mapInstance,
-        });
-        setMarker(newMarker);
-
-        // Update form fields: name, lat, lon
-        setForm((prev) => ({
-          ...prev,
-          name: place.name || place.formatted_address || prev.name,
-          lat: place.geometry.location.lat(),
-          lon: place.geometry.location.lng(),
-        }));
-      });
-
-      autocompleteRef.current = autocomplete;
+    setMap(mapInstance);
+  } else {
+    // fallback if no coords
+    mapInstance = new window.google.maps.Map(mapRef.current, {
+      center: { lat: 0, lng: 0 },
+      zoom: 2,
+    });
+    setMap(mapInstance);
   }
+
+  // Attach autocomplete to the existing name input
+  const input = document.querySelector('input[name="name"]');
+  const autocomplete = new window.google.maps.places.Autocomplete(input);
+  autocomplete.bindTo("bounds", mapInstance);
+
+  autocomplete.addListener("place_changed", () => {
+    const place = autocomplete.getPlace();
+    if (!place.geometry || !place.geometry.location) return;
+
+    // Center map
+    mapInstance.setCenter(place.geometry.location);
+    mapInstance.setZoom(15);
+
+    // Drop marker
+    if (marker) marker.setMap(null); // marker should come from state or ref
+    const newMarker = new window.google.maps.Marker({
+      position: place.geometry.location,
+      map: mapInstance,
+    });
+    setMarker(newMarker);
+
+    // Update form fields: name, lat, lon
+    setForm((prev) => ({
+      ...prev,
+      name: place.name || place.formatted_address || prev.name,
+      lat: place.geometry.location.lat(),
+      lon: place.geometry.location.lng(),
+    }));
+  });
+
+  autocompleteRef.current = autocomplete;
+  }
+
 
   const onSubmit = async () => {
     if (!form.name) {

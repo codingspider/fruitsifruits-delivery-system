@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import {
   Box,
   Button,
@@ -42,6 +42,12 @@ const LocationEdit = () => {
   const toast = useToast();
   const navigate = useNavigate();
   const { id } = useParams();
+  const [coords, setCoords] = useState(null);
+  const mapRef = useRef(null); 
+  const [marker, setMarker] = useState(null);
+  const autocompleteRef = useRef(null); 
+  const [map, setMap] = useState(null);
+  const [location, setLocation] = useState(null);
 
   const [form, setForm] = useState({
     name: "",
@@ -142,7 +148,7 @@ const LocationEdit = () => {
     const getLocation = async () => {
         const res = await api.get(`superadmin/locations/${id}`);
         const location = res.data.data;
-
+        setLocation(location);
         setForm({
             name: location.name ?? "",
             lat: location.lat ?? "",
@@ -165,6 +171,7 @@ const LocationEdit = () => {
                 discount_value: line.discount_amount,
             }))
         );
+
     };
 
   useEffect(() => {
@@ -174,7 +181,82 @@ const LocationEdit = () => {
     getFlavours();
     getBottles();
     getLocation();
+
+    if (!window.google) {
+      const map_api_key = localStorage.getItem("map_api_key");
+      const script = document.createElement("script");
+      script.src = `https://maps.googleapis.com/maps/api/js?key=${map_api_key}&libraries=places`;
+      script.async = true;
+      document.body.appendChild(script);
+      script.onload = () => {}; // do nothing here
+      return () => document.body.removeChild(script);
+    }
+
   }, []);
+
+  useEffect(() => {
+    if (location && window.google && mapRef.current) {
+      initMap();
+    }
+  }, [location]); 
+
+  function initMap() {
+  const coords = localStorage.getItem("lat_long");
+  let mapInstance = null; // define mapInstance in outer scope
+
+  if (coords) {
+    const [latStr, lonStr] = coords.split(",");
+    const lat = parseFloat(latStr);
+    const lon = parseFloat(lonStr);
+
+    mapInstance = new window.google.maps.Map(mapRef.current, {
+      center: { lat, lng: lon },
+      zoom: 13,
+    });
+
+    setMap(mapInstance);
+  } else {
+    // fallback if no coords
+    mapInstance = new window.google.maps.Map(mapRef.current, {
+      center: { lat: 0, lng: 0 },
+      zoom: 2,
+    });
+    setMap(mapInstance);
+  }
+
+  // Attach autocomplete to the existing name input
+  const input = document.querySelector('input[name="name"]');
+  const autocomplete = new window.google.maps.places.Autocomplete(input);
+  autocomplete.bindTo("bounds", mapInstance);
+
+  autocomplete.addListener("place_changed", () => {
+    const place = autocomplete.getPlace();
+    if (!place.geometry || !place.geometry.location) return;
+
+    // Center map
+    mapInstance.setCenter(place.geometry.location);
+    mapInstance.setZoom(15);
+
+    // Drop marker
+    if (marker) marker.setMap(null); // marker should come from state or ref
+    const newMarker = new window.google.maps.Marker({
+      position: place.geometry.location,
+      map: mapInstance,
+    });
+    setMarker(newMarker);
+
+    // Update form fields: name, lat, lon
+    setForm((prev) => ({
+      ...prev,
+      name: place.name || place.formatted_address || prev.name,
+      lat: place.geometry.location.lat(),
+      lon: place.geometry.location.lng(),
+    }));
+  });
+
+  autocompleteRef.current = autocomplete;
+  }
+
 
   const onSubmit = async () => {
     // Validate minimal: ensure name and items have product selected
@@ -565,6 +647,8 @@ const LocationEdit = () => {
                   {t("add_row")}
                 </Button>
               </VStack>
+
+              <Box ref={mapRef} height="400px" mt={4}></Box> 
 
               <HStack spacing={4} mt={6}>
                 <Button

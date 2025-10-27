@@ -19,38 +19,21 @@ import {
     Flex,
     InputRightElement,
 } from "@chakra-ui/react";
-import { useTranslation } from "react-i18next";
-import { useForm } from "react-hook-form";
-import React, { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
-import api from "../../axios";
-import { DASHBOARD_PATH, JUICE_ALLOCATION_LIST, PRODUCTION_LIST_PATH } from "../../router";
 import { Link as ReactRouterLink } from "react-router-dom";
-import { DRIVER_LIST_PATH } from './../../router';
+import { DRIVER_DASHBOARD_PATH, PRODUCTION_LIST_PATH } from "../../router";
+import { useTranslation } from "react-i18next";
 
-const JpsReport = () => {
-    const { register, handleSubmit, reset } = useForm();
-    const { t } = useTranslation();
-    const [isSubmitting, setIsSubmitting] = useState(false);
-    const toast = useToast();
-    const navigate = useNavigate();
-
-
-    useEffect(() => {
-        const app_name = localStorage.getItem("app_name");
-        document.title = `${app_name} | Report`;
-    }, []);
-
+const DriverReport = () => {
+  const { t } = useTranslation(); 
     return (
         <>
-            {/* Breadcrumb */}
             <Card mb={5}>
                 <CardBody>
                     <Breadcrumb fontSize={{ base: "sm", md: "md" }}>
                         <BreadcrumbItem>
                             <BreadcrumbLink
                                 as={ReactRouterLink}
-                                to={DASHBOARD_PATH}
+                                to={DRIVER_DASHBOARD_PATH}
                             >
                                 {t("dashboard")}
                             </BreadcrumbLink>
@@ -74,13 +57,11 @@ const JpsReport = () => {
                             <Heading size="md">{t("report")}</Heading>
                         </Flex>
                     </CardHeader>
-                    <CardBody>
-
-                    </CardBody>
+                    <CardBody></CardBody>
                 </Card>
             </Box>
         </>
     );
 };
 
-export default JpsReport;
+export default DriverReport;

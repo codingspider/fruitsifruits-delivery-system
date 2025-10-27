@@ -170,4 +170,7 @@ return [
     'return_leftover' => 'Return Leftover',
     'add_return_leftover' => 'Add Return Leftover',
     'driver_profile' => 'Driver Profile',
+    'map_api_key' => 'Map Api Key',
+    'location_overview' => 'Location Overview',
+    'center_lat_long' => 'Center Latitude Longitude',
 ];
