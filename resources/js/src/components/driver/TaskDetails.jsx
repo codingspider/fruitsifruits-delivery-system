@@ -1,29 +1,12 @@
 import React, { useEffect, useState } from "react";
 import {
     Box,
-    Button,
     Card,
     CardBody,
-    CardHeader,
-    CardFooter,
-    CardBody as ChakraCardBody,
-    Card as ChakraCard,
-    CardHeader as ChakraCardHeader,
-    Divider,
-    FormControl,
-    FormLabel,
-    Heading,
-    HStack,
-    Input,
-    Select,
-    SimpleGrid,
-    VStack,
     Breadcrumb,
     BreadcrumbItem,
     BreadcrumbLink,
     useToast,
-    Checkbox,
-    Flex,
 } from "@chakra-ui/react";
 import { useForm } from "react-hook-form";
 import {
@@ -31,38 +14,30 @@ import {
     useNavigate,
     useParams,
 } from "react-router-dom";
-import { BsFillTrash3Fill } from "react-icons/bs";
 import api from "../../axios";
 import { useTranslation } from "react-i18next";
 import { DASHBOARD_PATH, LOCATION_LIST_PATH } from "../../router";
-import AssignProduct from "../sell/AssignProduct";
-import LocationInfo from "../sell/LocationInfo";
+import AssignmentForm from "../assignment/AssignmentForm";
 
 const TaskDetails = () => {
     const { handleSubmit, reset } = useForm();
     const { t } = useTranslation();
-    const [isSubmitting, setIsSubmitting] = useState(false);
     const [products, setProducts] = useState([]);
     const [flavours, setFlavours] = useState([]);
     const [bottles, setBottles] = useState([]);
-    const [locations, setLocation] = useState([]);
+    const [location, setLocation] = useState(null);
     const [items, setItems] = useState([]);
-
     const toast = useToast();
     const navigate = useNavigate();
     const { id } = useParams();
 
-    const [form, setForm] = useState({
-        name: "",
-        lat: "",
-        lon: "",
-        tax_enabled: false,
-        tax_amount: "",
-    });
-
     const getBottles = async () => {
-        const res = await api.get("superadmin/get/bottles");
-        setBottles(res.data.data.data);
+        try {
+            const res = await api.get("superadmin/get/bottles");
+            setBottles(res.data?.data?.data || []);
+        } catch (err) {
+            console.error("Failed to fetch bottles:", err);
+        }
     };
 
     const getProducts = async () => {
@@ -70,7 +45,7 @@ const TaskDetails = () => {
             const res = await api.get("superadmin/get/finished/goods");
             setProducts(res.data?.data?.data || []);
         } catch (err) {
-            console.error("Failed to fetch products", err);
+            console.error("Failed to fetch products:", err);
         }
     };
 
@@ -79,38 +54,38 @@ const TaskDetails = () => {
             const res = await api.get("superadmin/flavours");
             setFlavours(res.data?.data?.data || []);
         } catch (err) {
-            console.error("Failed to fetch flavours", err);
+            console.error("Failed to fetch flavours:", err);
         }
     };
 
     const getLocation = async () => {
-        const res = await api.get(`superadmin/locations/${id}`);
-        const location = res.data.data;
-        setLocation(location);
+        try {
+            const res = await api.get(`superadmin/locations/${id}`);
+            const locationData = res.data?.data || {};
+            setLocation(locationData);
 
-        setForm({
-            name: location.name ?? "",
-            lat: location.lat ?? "",
-            lon: location.lon ?? "",
-            tax_enabled: location.tax_amount > 0 ? true : false,
-            tax_amount: location.tax_amount ?? "",
-        });
+            // ✅ Safely map items
+            const mappedItems = (locationData.location_flavours || []).map(
+                (line) => ({
+                    productId: line.product_id ?? "",
+                    flavourId: line.flavour_id ?? "",
+                    bottle_id: line.bottle_id ?? "",
+                    quantity: line.specific_quantity ?? 0,
+                    price: line.price ?? 0,
+                })
+            );
 
-        setItems(
-            location.location_flavours.map((line) => ({
-                productId: line.product_id ?? '',
-                flavourId: line.flavour_id ?? '',
-                bottle_id: line.bottle_id ?? '',
-                quantity: line.specific_quantity,
-                price: line.price,
-            }))
-        );
+            setItems(mappedItems);
+        } catch (err) {
+            console.error("Failed to fetch location:", err);
+        }
     };
-
 
     useEffect(() => {
         const app_name = localStorage.getItem("app_name") || "App";
         document.title = `${app_name} | Make Sell`;
+
+        // Fetch all
         getProducts();
         getFlavours();
         getBottles();
@@ -142,13 +117,16 @@ const TaskDetails = () => {
                     </Breadcrumb>
                 </CardBody>
             </Card>
-            
-                <AssignProduct
-                flavours={flavours}
-                bottles={bottles}
-                products={products}
-                items={items}
-                ></AssignProduct>
+
+            {items.length > 0 && (
+                <AssignmentForm
+                    flavours={flavours}
+                    bottles={bottles}
+                    products={products}
+                    items={items}
+                    location={location}
+                />
+            )}
         </>
     );
 };
