@@ -87,7 +87,6 @@ const TaskDetails = () => {
         const res = await api.get(`superadmin/locations/${id}`);
         const location = res.data.data;
         setLocation(location);
-        console.log(locations);
 
         setForm({
             name: location.name ?? "",

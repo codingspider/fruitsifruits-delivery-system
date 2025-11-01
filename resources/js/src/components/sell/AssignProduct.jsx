@@ -39,7 +39,7 @@ import { useParams, useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { TASK_DETAILS_PATH } from "../../router";
 
-const AssignmentForm = () => {
+const AssignmentForm = ({flavours, bottles, products, items}) => {
   const toast = useToast();
   const { id } = useParams();
   const { register, handleSubmit, reset } = useForm(); 
@@ -47,7 +47,7 @@ const AssignmentForm = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [location, setLocation] = useState(null);
-  const [flavours, setFlavours] = useState([]);
+
   const [returns, setReturns] = useState([]);
   const [paid, setPaid] = useState(false);
   const [paymentMethod, setPaymentMethod] = useState("Cash");
@@ -104,7 +104,7 @@ const AssignmentForm = () => {
   // flavour & bottle options
   const flavourOptions = useMemo(() => {
     const uniq = [];
-    (location?.location_flavours || []).forEach((lf) => {
+    (flavours || []).forEach((lf) => {
       if (lf.flavour && !uniq.find((u) => u.id === lf.flavour.id)) uniq.push(lf.flavour);
     });
     return uniq;
@@ -112,7 +112,7 @@ const AssignmentForm = () => {
 
   const bottleOptions = useMemo(() => {
     const uniq = [];
-    (location?.location_flavours || []).forEach((lf) => {
+    (bottles || []).forEach((lf) => {
       if (lf.bottle && !uniq.find((u) => u.id === lf.bottle.id)) uniq.push(lf.bottle);
     });
     return uniq;
@@ -261,9 +261,9 @@ const AssignmentForm = () => {
                 <CardBody>
                   <Heading textAlign="center">{location?.name || "—"}</Heading>
                   <Stack spacing={2} textAlign="center" mt={4}>
-                    <Text><strong>{t('assigned_date')}:</strong> {location?.route.created_at ? new Date(location.route.created_at).toLocaleDateString() : "—"}</Text>
-                    <Text><strong>{t('day_of_week')}:</strong> {location?.route.day ? new Date(location.route.created_at).toLocaleDateString(undefined, { weekday: "long" }) : "—"}</Text>
-                    <Text><strong>{t('status')}:</strong> <Text as="span" color="orange.500">{location.route.status}</Text></Text>
+                    <Text><strong>{t('assigned_date')}:</strong> </Text>
+                    <Text><strong>{t('day_of_week')}:</strong> </Text>
+                    <Text><strong>{t('status')}:</strong> <Text as="span" color="orange.500">{location.status}</Text></Text>
                   </Stack>
                 </CardBody>
               </Card>

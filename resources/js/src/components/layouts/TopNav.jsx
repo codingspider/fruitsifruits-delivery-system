@@ -88,13 +88,13 @@ const TopNav = ({ onOpen, ...rest }) => {
                         {/* <option value="bn">বাংলা</option> */}
                     </Select>
 
-                    <IconButton
+                    {/* <IconButton
                         size="lg"
                         variant="ghost"
                         w="40px"
                         h="40px"
                         icon={<FcGlobe />}
-                    />
+                    /> */}
                     <Menu>
                         <MenuButton>
                             <HStack>

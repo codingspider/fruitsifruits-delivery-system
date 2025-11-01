@@ -118,7 +118,7 @@ const SidebarContent = ({ onClose, ...rest }) => {
       <NavLink to={PRODUCTION_LIST_PATH} icon={FcFactory } activeBg={activeBg} activeColor={activeColor} hoverBg={hoverBg} active={isActive(PRODUCTION_LIST_PATH)} label={t('juice_production')} />
       
       <NavLink to={FLAVOUR_LIST_PATH} icon={FcFilledFilter } activeBg={activeBg} activeColor={activeColor} hoverBg={hoverBg} active={isActive(FLAVOUR_LIST_PATH)} label={t('manage_flavour')} />
-      <NavLink to={PURCHASE_LIST_PATH} icon={FcMoneyTransfer } activeBg={activeBg} activeColor={activeColor} hoverBg={hoverBg} active={isActive(PURCHASE_LIST_PATH)} label={t('purchase')} />
+      {/* <NavLink to={PURCHASE_LIST_PATH} icon={FcMoneyTransfer } activeBg={activeBg} activeColor={activeColor} hoverBg={hoverBg} active={isActive(PURCHASE_LIST_PATH)} label={t('purchase')} /> */}
 
       {/* ----- Dropdown: user management ----- */}
       <DropdownHeader

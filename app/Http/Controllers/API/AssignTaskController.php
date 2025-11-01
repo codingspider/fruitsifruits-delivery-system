@@ -71,7 +71,7 @@ class AssignTaskController extends BaseController
     public function locationProductDetails($id)
     {
         try {
-            $data = DriverRouteLocation::where('user_id', auth()->user()->id)->whereJsonContains('locations', ['location_id' => $id])->latest()->first();
+            $data = DriverRouteLocation::where('user_id', auth()->user()->id)->whereJsonContains('locations', ['location_id' => $id])->where('status', 'pending')->latest()->first();
             return $this->sendResponse($data, 'Data retrieved successfully.');
         } catch (\Exception $e) {
             return $this->sendError('Server Error: ' . $e->getMessage());

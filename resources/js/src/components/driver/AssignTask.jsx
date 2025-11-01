@@ -29,6 +29,8 @@ const AssignTask = () => {
     const fetchTasks = async () => {
         try {
             const res = await api.get("/driver/assign/tasks");
+            console.log(res.data.data);
+
             setTask(res.data.data);
         } catch (err) {
             console.error("fetchFlavours error:", err);
