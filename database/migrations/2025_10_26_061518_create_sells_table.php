@@ -14,8 +14,9 @@ return new class extends Migration
         Schema::create('sells', function (Blueprint $table) {
             $table->id();
 
-            $table->unsignedBigInteger('location_id');
+            
             $table->unsignedBigInteger('transaction_id');
+            
             $table->boolean('paid')->default(false);
             $table->string('payment_method')->nullable();
             $table->text('remarks')->nullable();
@@ -27,7 +28,7 @@ return new class extends Migration
             $table->decimal('tax', 10, 2)->default(0);
             $table->decimal('grand_total', 10, 2)->default(0);
 
-            $table->foreign('location_id')->references('id')->on('locations')->onDelete('cascade');
+            
             $table->foreign('transaction_id')->references('id')->on('transactions')->onDelete('cascade');
 
             $table->timestamps();

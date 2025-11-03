@@ -173,4 +173,6 @@ return [
     'map_api_key' => 'Map Api Key',
     'location_overview' => 'Location Overview',
     'center_lat_long' => 'Center Latitude Longitude',
+    'timezone' => 'Default Timezone',
+    'profit_report' => 'Profit Report',
 ];

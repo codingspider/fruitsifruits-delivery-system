@@ -12,4 +12,5 @@ class Location extends Model
     {
         return $this->hasMany(LocationFlavour::class);
     }
+
 }

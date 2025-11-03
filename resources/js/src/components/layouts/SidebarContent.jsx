@@ -38,10 +38,9 @@ import {
   useColorModeValue,
   Button
 } from '@chakra-ui/react';
-import { BiBox } from "react-icons/bi";
+
 import { useTranslation } from 'react-i18next';
-import { BACKUP_PROCESSING_PATH, DRIVER_ROUTE_LIST_PATH, FINISH_GOOD_LIST_PATH, FLAVOUR_LIST_PATH, INGREDIENT_LIST_PATH, JUICE_ALLOCATION_LIST_PATH, LOCATION_LIST_PATH, LOGIN_HISTORY_PATH, PRODUCTION_LIST_PATH, PURCHASE_LIST_PATH, RECIPE_LIST_PATH, USER_LIST_PATH, BOTTLE_LIST_PATH, ASSIGN_TASK_PATH, DRIVER_DASHBOARD_PATH, JUICE_ALLOCATION_PATH, DRIVER_REPORT_PATH, RETURN_LEFTOVER_PATH, DRIVER_PROFILE_PATH, JPS_DASHBOARD_PATH, JPS_REPORT_PATH, DRIVER_LOCATION_OVERVIEW } from '../../router';
-import api from '../../axios';
+import { BACKUP_PROCESSING_PATH, DRIVER_ROUTE_LIST_PATH, FINISH_GOOD_LIST_PATH, FLAVOUR_LIST_PATH, INGREDIENT_LIST_PATH, JUICE_ALLOCATION_LIST_PATH, LOCATION_LIST_PATH, LOGIN_HISTORY_PATH, PRODUCTION_LIST_PATH, PURCHASE_LIST_PATH, RECIPE_LIST_PATH, USER_LIST_PATH, BOTTLE_LIST_PATH, ASSIGN_TASK_PATH, DRIVER_DASHBOARD_PATH, JUICE_ALLOCATION_PATH, DRIVER_REPORT_PATH, RETURN_LEFTOVER_PATH, DRIVER_PROFILE_PATH, JPS_DASHBOARD_PATH, JPS_REPORT_PATH, DRIVER_LOCATION_OVERVIEW,DASHBOARD_PATH, LOCAITON_PROFIT_REPORT_PATH } from '../../router';
 import { logoutUser } from '../../services/authService';
 import { useNavigate } from "react-router-dom";
 
@@ -65,7 +64,6 @@ const SidebarContent = ({ onClose, ...rest }) => {
   const activeBg    = useColorModeValue('teal.500', 'teal.700');
   const activeColor = 'white';
   const hoverBg     = useColorModeValue('teal.400', 'teal.600');
-  const subBg       = useColorModeValue('gray.50', 'gray.800');
   const role = localStorage.getItem('role');
 
   const isActive = (path) => location.pathname === path;
@@ -106,7 +104,7 @@ const SidebarContent = ({ onClose, ...rest }) => {
       <>
       
       {/* ----- Static links ----- */}
-      <NavLink to="/super/admin/dashboard" icon={FcHome} activeBg={activeBg} activeColor={activeColor} hoverBg={hoverBg} active={isActive('/super/admin/dashboard')} label={t('dashboard')} />
+      <NavLink to={DASHBOARD_PATH} icon={FcHome} activeBg={activeBg} activeColor={activeColor} hoverBg={hoverBg} active={isActive(DASHBOARD_PATH)} label={t('dashboard')} />
       <NavLink to={JUICE_ALLOCATION_LIST_PATH}      icon={FcShop} activeBg={activeBg} activeColor={activeColor} hoverBg={hoverBg} active={isActive(JUICE_ALLOCATION_LIST_PATH)} label={t('driver_allocation')} />
       <NavLink to={DRIVER_ROUTE_LIST_PATH}  icon={FcList} activeBg={activeBg} activeColor={activeColor} hoverBg={hoverBg} active={isActive(DRIVER_ROUTE_LIST_PATH)} label={t('manage_route')} />
       <NavLink to={LOCATION_LIST_PATH} icon={FcHeatMap } activeBg={activeBg} activeColor={activeColor} hoverBg={hoverBg} active={isActive(LOCATION_LIST_PATH)} label={t('manage_locations')} />
@@ -159,7 +157,7 @@ const SidebarContent = ({ onClose, ...rest }) => {
       />
       <Collapse in={open.reports || location.pathname.startsWith('/super/admin/reports')} animateOpacity>
         <Box ml="8" mt="1"  borderRadius="md">
-          <NavLink to="/super/admin/reports/sales"    icon={null} activeBg={activeBg} activeColor={activeColor} hoverBg={hoverBg} active={isActive('/super/admin/reports/sales')}    label={t('sales_report')}   small />
+          <NavLink to={LOCAITON_PROFIT_REPORT_PATH}    icon={null} activeBg={activeBg} activeColor={activeColor} hoverBg={hoverBg} active={isActive(LOCAITON_PROFIT_REPORT_PATH)}    label={t('profit_report')}   small />
           <NavLink to="/super/admin/reports/expense"  icon={null} activeBg={activeBg} activeColor={activeColor} hoverBg={hoverBg} active={isActive('/super/admin/reports/expense')}  label={t('expense_report')} small />
         </Box>
       </Collapse>

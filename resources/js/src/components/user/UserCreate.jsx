@@ -208,6 +208,7 @@ const UserCreate = () => {
                                         {...register("role")}
                                         defaultValue="staff"
                                     >
+                                        <option value="superadmin">Admin</option>
                                         <option value="jps">JPS</option>
                                     </Select>
                                 </FormControl>

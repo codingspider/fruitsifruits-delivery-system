@@ -27,6 +27,7 @@ import { BsFillTrash3Fill } from "react-icons/bs";
 import api from "../../axios";
 import { useTranslation } from "react-i18next";
 import { DASHBOARD_PATH, LOCATION_LIST_PATH } from "../../router";
+import { useGoogleMaps } from "../../useGoogleMaps";
 
 const LocationCreate = () => {
   const { handleSubmit, reset } = useForm();
@@ -40,6 +41,9 @@ const LocationCreate = () => {
   const [marker, setMarker] = useState(null);
   const autocompleteRef = useRef(null); 
   const [map, setMap] = useState(null); 
+
+  const map_api_key = localStorage.getItem("map_api_key");
+  const googleMapsPromise = useGoogleMaps(map_api_key);
 
   const toast = useToast();
   const navigate = useNavigate();
@@ -134,19 +138,10 @@ const LocationCreate = () => {
     getProducts();
     getFlavours();
     getBottles();
+    if (!googleMapsPromise) return;
+    googleMapsPromise.then(() => initMap());
 
-    if (!window.google) {
-      const map_api_key = localStorage.getItem("map_api_key");
-      const script = document.createElement("script");
-      script.src = `https://maps.googleapis.com/maps/api/js?key=${map_api_key}&libraries=places`;
-      script.async = true;
-      document.body.appendChild(script);
-      script.onload = initMap;
-      return () => document.body.removeChild(script);
-    } else {
-      initMap();
-    }
-  }, []);
+  }, [googleMapsPromise]);
 
   function initMap() {
   const coords = localStorage.getItem("lat_long");

@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Storage;
 use App\Http\Controllers\API\PLanController;
 use App\Http\Controllers\API\UserController;
 use App\Http\Controllers\API\RecipeController;
+use App\Http\Controllers\API\ReportController;
 use App\Http\Controllers\API\FlavourController;
 use App\Http\Controllers\API\ProductController;
 use App\Http\Controllers\API\BusinessController;
@@ -72,10 +73,11 @@ Route::middleware(['auth:sanctum'])->prefix('superadmin')->group(function () {
 
     Route::get('get/finished/goods', [ProductController::class, 'finishGoods']);
 
-
     Route::post('save/business/setting', [BusinessController::class, 'store']);
     Route::get('get/business/data', [BusinessController::class, 'index']);
     Route::get('login-history', [BusinessController::class, 'loginHistory']);
+    Route::get('get/timezone', [BusinessController::class, 'timezone']);
+    Route::post('get/profit/report', [ReportController::class, 'profitReport']);
 
     Route::get('/backup-and-download', function () {
         Artisan::call('backup:run');

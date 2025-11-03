@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('mfg_productions', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('location_id')->constrained('locations')->cascadeOnDelete();
+            $table->foreignId('location_id')->nullable()->constrained('locations')->cascadeOnDelete();
             $table->foreignId('created_by')->constrained('users')->cascadeOnDelete();
             $table->foreignId('product_id')->constrained('products')->cascadeOnDelete();
             $table->string('ref_no')->nullable();

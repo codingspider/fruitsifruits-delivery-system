@@ -108,8 +108,9 @@ class AssignTaskController extends BaseController
             $route->save();
 
             $transaction = new Transaction();
-            $transaction->transaction_type = 'delivery';
-            $transaction->reference_no  = 'SEL-' . Str::uuid();
+            $transaction->location_id = $request->location_id;
+            $transaction->transaction_type = 'sell';
+            $transaction->reference_no  = 'SEL-' . time();
             $transaction->total_amount  = $request->totals['grandTotal'] ?? 0;
             $transaction->date  = now();
             $transaction->notes  = $request->remarks ?? null;
@@ -119,7 +120,6 @@ class AssignTaskController extends BaseController
             // 2) Create Assignment (main)
             $assignment = Sell::create([
                 'transaction_id'  => $transaction->id,
-                'location_id'     => $request->location_id,
                 'paid'            => $request->payment['paid'] ?? false,
                 'payment_method'  => $request->payment['method'] ?? null,
                 'remarks'         => $request->remarks ?? null,

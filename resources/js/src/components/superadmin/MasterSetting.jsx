@@ -14,6 +14,7 @@ import {
   BreadcrumbItem,
   BreadcrumbLink,
   SimpleGrid,
+  Select
 } from "@chakra-ui/react";
 import { useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
@@ -24,6 +25,7 @@ const MasterSetting = () => {
   const { t } = useTranslation();
   const { register, handleSubmit, reset, formState: { errors } } = useForm();
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [time_zones, setTimeZone] = useState([]);
   const toast = useToast();
   const navigate = useNavigate();
 
@@ -40,6 +42,7 @@ const MasterSetting = () => {
     formData.append("zip_code", data.zip_code);
     formData.append("map_api_key", data.map_api_key);
     formData.append("lat_long", data.lat_long);
+    formData.append("timezone", data.timezone);
 
     if (data.app_logo?.[0]) {
       formData.append("logo", data.app_logo[0]);
@@ -82,11 +85,17 @@ const MasterSetting = () => {
     }
   };
 
+    const getTimeZone = async () => {
+        const res = await api.get(`superadmin/get/timezone`);
+        const timezones = res.data.data;
+        setTimeZone(timezones.zones);
+    };
+
   const getBusinesData = async () => {
         const res = await api.get(`superadmin/get/business/data`);
         const business = res.data.data;
-        reset({
-            name: business.name,
+        reset(() => ({
+          name: business.name,
             email: business.email,
             phone: business.phone,
             address: business.address,
@@ -95,15 +104,21 @@ const MasterSetting = () => {
             zip_code: business.zip_code,
             map_api_key: business.map_api_key,
             lat_long: business.lat_long,
-        });
-
+            timezone: business.timezone,
+        }));
+      
     };
+  
+
 
   useEffect(() => {
       const app_name = localStorage.getItem("app_name") || "App";
       document.title = `${app_name} | Setting`;
       getBusinesData();
+      getTimeZone();
   }, []);
+
+  const timeZoneOptions = Object.keys(time_zones);
 
   return (
     <>
@@ -165,6 +180,16 @@ const MasterSetting = () => {
                 <FormControl isRequired>
                   <FormLabel>{t("center_lat_long")}</FormLabel>
                   <Input type="text" {...register("lat_long", { required: true })} />
+                </FormControl>
+                <FormControl isRequired>
+                  <FormLabel>{t("timezone")}</FormLabel>
+                     <Select {...register("timezone", { required: true })}>
+                      {timeZoneOptions.map((tz) => (
+                        <option key={tz} value={tz}>
+                          {tz} (UTC {time_zones[tz] / 3600 >= 0 ? "+" : ""}{time_zones[tz] / 3600})
+                        </option>
+                      ))}
+                    </Select>
                 </FormControl>
               </SimpleGrid>
 

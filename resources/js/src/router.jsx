@@ -73,6 +73,7 @@ import DriverProfile from "./components/driver/DriverProfile";
 import JpsReport from "./components/jps/JpsReport";
 
 import LocationOverview from "./components/driver/LocationOverview";
+import LocationProfitReport from "./components/reports/LocationProfitReport";
 
 // ✅ Public Routes
 export const ROOT = '/';
@@ -219,6 +220,7 @@ export const BOTTLE_EDIT_PATH = (id) => `${SUPER_ADMIN_BASE}/bottle/cost/edit/${
 
 export const BACKUP_PROCESSING_PATH = `${SUPER_ADMIN_BASE}/backup/processing`;
 export const LOGIN_HISTORY_PATH = `${SUPER_ADMIN_BASE}/login/history`;
+export const LOCAITON_PROFIT_REPORT_PATH = `${SUPER_ADMIN_BASE}/location/profit/report`;
 
 const router = createBrowserRouter([
   {
@@ -306,6 +308,7 @@ const router = createBrowserRouter([
 
       { path: BACKUP_PROCESSING_PATH, element: <ProtectedRoute role="superadmin"><BackupProcessing /></ProtectedRoute> },
       { path: LOGIN_HISTORY_PATH, element: <ProtectedRoute role="superadmin"><LoginHistory /></ProtectedRoute> },
+      { path: LOCAITON_PROFIT_REPORT_PATH, element: <ProtectedRoute role="superadmin"><LocationProfitReport /></ProtectedRoute> },
     ],
   },
   {

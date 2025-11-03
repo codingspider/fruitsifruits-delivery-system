@@ -39,26 +39,37 @@ class BusinessController extends BaseController
             return $this->sendError('Server Error.'.$e->getMessage());
         }
     }
-
+    
     public function store(Request $request)
     {
         DB::beginTransaction();
-        try {
 
-            $business = Setting::first();
-            
+        try {
+            // Check if record exists, otherwise create new
+            $business = Setting::first() ?? new Setting();
+
+            // Handle logo upload
             if ($request->hasFile('logo')) {
+                // delete old file if exists
+                if ($business->logo && Storage::disk('public')->exists($business->logo)) {
+                    Storage::disk('public')->delete($business->logo);
+                }
+
                 $logoPath = $request->file('logo')->store('uploads/business/logo', 'public');
                 $business->logo = $logoPath;
             }
 
             // Handle favicon upload
             if ($request->hasFile('favicon')) {
+                if ($business->favicon && Storage::disk('public')->exists($business->favicon)) {
+                    Storage::disk('public')->delete($business->favicon);
+                }
+
                 $faviconPath = $request->file('favicon')->store('uploads/business/favicon', 'public');
                 $business->favicon = $faviconPath;
             }
 
-            // Update fields
+            // Fill or update fields
             $business->fill([
                 'name' => $request->name,
                 'email' => $request->email,
@@ -68,17 +79,23 @@ class BusinessController extends BaseController
                 'zip_code' => $request->zip_code,
                 'map_api_key' => $request->map_api_key,
                 'lat_long' => $request->lat_long,
-                
+                'timezone' => $request->timezone,
             ]);
 
             $business->save();
 
             DB::commit();
-            return $this->sendResponse(['business' => $business], 'Setting saved successfully.', 500);
-
+            return $this->sendResponse(['business' => $business], 'Setting saved successfully.', 200);
         } catch (\Exception $e) {
+            DB::rollBack(); // rollback is important
             return $this->sendError('Server Error: ' . $e->getMessage(), 500);
         }
+    }
+
+
+    public function timezone(){
+        $times = timeZone();
+        return $this->sendResponse(['zones' => $times], 'Setting get successfully.', 200);
     }
 
    
