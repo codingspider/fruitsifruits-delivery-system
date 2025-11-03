@@ -22,12 +22,15 @@ import {
     Card,
     CardHeader,
     CardBody,
+    Stack,
+    Badge
 } from "@chakra-ui/react";
 import { t } from "i18next";
 import api from "../../axios";
 import { useForm } from "react-hook-form";
+import moment from "moment"; 
 
-const LocationProfitReport = () => {
+const DeliverySummeryReport = () => {
     const bg = useColorModeValue("gray.50", "gray.800");
     const cardBg = useColorModeValue("white", "gray.700");
     const [locations, setLocations] = useState([]);
@@ -47,17 +50,19 @@ const LocationProfitReport = () => {
         }
     };
 
+
     useEffect(() => {
         const app_name = localStorage.getItem("app_name") || "App";
         document.title = `${app_name} | Location Profit Report`;
         getLocations();
+        onSubmit(); 
     }, []);
 
     const onSubmit = async (data) => {
         setIsSubmitting(true);
         try {
-            const res = await api.post("superadmin/get/profit/report", data);
-            setTransactionLocation(res.data.data);
+            const res = await api.post("superadmin/get/delivery/summery/report", data);
+            setReports(res.data.data);
         } catch (err) {
             const errorResponse = err?.response?.data;
             if (errorResponse?.errors) {
@@ -150,88 +155,54 @@ const LocationProfitReport = () => {
             </Box>
 
             {/* Data Table */}
-            {tran_locations && tran_locations.length > 0 ? (
-                tran_locations.map((item, index) => (
-                    <Card key={index} mb={6}>
-                        <CardHeader fontWeight="bold" fontSize="lg">
-                            Location: {item.location} — Total Profit: $
-                            {item.total_profit.toFixed(2)}
-                        </CardHeader>
+            <Card>
+                <CardBody>
+                <TableContainer
+                    bg={cardBg}
+                    p={4}
+                    rounded="xl"
+                    shadow="md"
+                >
+                    <Table variant="simple">
+                        <Thead>
+                            <Tr>
+                                <Th>Location</Th>
+                                <Th>Total Deliveries</Th>
+                                <Th>Total Quantity</Th>
+                                <Th>Drivers</Th>
+                                <Th>Last Delivery Date</Th>
+                                <Th>Paid</Th>
+                            </Tr>
+                        </Thead>
 
-                        <CardBody>
-                            <TableContainer
-                                bg={cardBg}
-                                p={4}
-                                rounded="xl"
-                                shadow="md"
-                            >
-                                <Table variant="simple">
-                                    <Thead>
-                                        <Tr>
-                                            <Th>Flavor</Th>
-                                            <Th isNumeric>Total Quantity</Th>
-                                            <Th isNumeric>Price per Unit</Th>
-                                            <Th isNumeric>Cost per Bottle</Th>
-                                            <Th isNumeric>Net Price</Th>
-                                            <Th isNumeric>Deal Quantity</Th>
-                                            <Th isNumeric>Deal Cost</Th>
-                                            <Th isNumeric>Total Profit</Th>
-                                        </Tr>
-                                    </Thead>
-
-                                    <Tbody>
-                                        {item.flavors &&
-                                        item.flavors.length > 0 ? (
-                                            item.flavors.map((report, i) => (
-                                                <Tr key={i}>
-                                                    <Td>{report.flavor}</Td>
-                                                    <Td isNumeric>
-                                                        {report.total_quantity}
-                                                    </Td>
-                                                    <Td isNumeric>
-                                                        {report.price_per_unit}
-                                                    </Td>
-                                                    <Td isNumeric>
-                                                        {report.cost_per_bottle}
-                                                    </Td>
-                                                    <Td isNumeric>
-                                                        {report.net_price}
-                                                    </Td>
-                                                    <Td isNumeric>
-                                                        {report.deal_quantity}
-                                                    </Td>
-                                                    <Td isNumeric>
-                                                        {report.deal_cost}
-                                                    </Td>
-                                                    <Td isNumeric>
-                                                        {report.total_profit}
-                                                    </Td>
-                                                </Tr>
-                                            ))
-                                        ) : (
-                                            <Tr>
-                                                <Td
-                                                    colSpan={8}
-                                                    textAlign="center"
-                                                    py={6}
-                                                >
-                                                    No flavors found
-                                                </Td>
-                                            </Tr>
-                                        )}
-                                    </Tbody>
-                                </Table>
-                            </TableContainer>
-                        </CardBody>
-                    </Card>
-                ))
-            ) : (
-                <Box textAlign="center" py={10}>
-                    No locations found
-                </Box>
-            )}
+                        <Tbody>
+                            {reports.map((item, index) => (
+                                <Tr key={index}>
+                                    <Td>{item.location_name}</Td>
+                                    <Td>{item.total_deliveries}</Td>
+                                    <Td>{item.total_quantity}</Td>
+                                    <Td>{item.driver_name}</Td>
+                                    <Td>{moment(item.last_delivery_date).format("MMMM Do YYYY, h:mm:ss A")} </Td>
+                                    <Td>
+                                        <Stack direction='row'>
+                                            <Badge variant='solid' colorScheme='green'>
+                                                Paid {item.paid_deliveries}
+                                            </Badge>
+                                            <Badge variant='subtle' colorScheme='red'>
+                                                Unpaid {item.unpaid_deliveries}
+                                            </Badge>
+                                        </Stack>
+                                        
+                                    </Td>
+                                </Tr>
+                            )) }
+                        </Tbody>
+                    </Table>
+                </TableContainer>
+            </CardBody>
+            </Card>
         </Box>
     );
 };
 
-export default LocationProfitReport;
+export default DeliverySummeryReport;

@@ -78,6 +78,7 @@ Route::middleware(['auth:sanctum'])->prefix('superadmin')->group(function () {
     Route::get('login-history', [BusinessController::class, 'loginHistory']);
     Route::get('get/timezone', [BusinessController::class, 'timezone']);
     Route::post('get/profit/report', [ReportController::class, 'profitReport']);
+    Route::post('get/delivery/summery/report', [ReportController::class, 'deliverySummeryReport']);
 
     Route::get('/backup-and-download', function () {
         Artisan::call('backup:run');

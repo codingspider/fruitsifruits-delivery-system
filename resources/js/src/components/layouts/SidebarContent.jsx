@@ -40,7 +40,7 @@ import {
 } from '@chakra-ui/react';
 
 import { useTranslation } from 'react-i18next';
-import { BACKUP_PROCESSING_PATH, DRIVER_ROUTE_LIST_PATH, FINISH_GOOD_LIST_PATH, FLAVOUR_LIST_PATH, INGREDIENT_LIST_PATH, JUICE_ALLOCATION_LIST_PATH, LOCATION_LIST_PATH, LOGIN_HISTORY_PATH, PRODUCTION_LIST_PATH, PURCHASE_LIST_PATH, RECIPE_LIST_PATH, USER_LIST_PATH, BOTTLE_LIST_PATH, ASSIGN_TASK_PATH, DRIVER_DASHBOARD_PATH, JUICE_ALLOCATION_PATH, DRIVER_REPORT_PATH, RETURN_LEFTOVER_PATH, DRIVER_PROFILE_PATH, JPS_DASHBOARD_PATH, JPS_REPORT_PATH, DRIVER_LOCATION_OVERVIEW,DASHBOARD_PATH, LOCAITON_PROFIT_REPORT_PATH } from '../../router';
+import { BACKUP_PROCESSING_PATH, DRIVER_ROUTE_LIST_PATH, FINISH_GOOD_LIST_PATH, FLAVOUR_LIST_PATH, INGREDIENT_LIST_PATH, JUICE_ALLOCATION_LIST_PATH, LOCATION_LIST_PATH, LOGIN_HISTORY_PATH, PRODUCTION_LIST_PATH, PURCHASE_LIST_PATH, RECIPE_LIST_PATH, USER_LIST_PATH, BOTTLE_LIST_PATH, ASSIGN_TASK_PATH, DRIVER_DASHBOARD_PATH, JUICE_ALLOCATION_PATH, DRIVER_REPORT_PATH, RETURN_LEFTOVER_PATH, DRIVER_PROFILE_PATH, JPS_DASHBOARD_PATH, JPS_REPORT_PATH, DRIVER_LOCATION_OVERVIEW,DASHBOARD_PATH, LOCAITON_PROFIT_REPORT_PATH, DELIVERY_SUMMERY_REPORT_PATH } from '../../router';
 import { logoutUser } from '../../services/authService';
 import { useNavigate } from "react-router-dom";
 
@@ -158,7 +158,7 @@ const SidebarContent = ({ onClose, ...rest }) => {
       <Collapse in={open.reports || location.pathname.startsWith('/super/admin/reports')} animateOpacity>
         <Box ml="8" mt="1"  borderRadius="md">
           <NavLink to={LOCAITON_PROFIT_REPORT_PATH}    icon={null} activeBg={activeBg} activeColor={activeColor} hoverBg={hoverBg} active={isActive(LOCAITON_PROFIT_REPORT_PATH)}    label={t('profit_report')}   small />
-          <NavLink to="/super/admin/reports/expense"  icon={null} activeBg={activeBg} activeColor={activeColor} hoverBg={hoverBg} active={isActive('/super/admin/reports/expense')}  label={t('expense_report')} small />
+          <NavLink to={DELIVERY_SUMMERY_REPORT_PATH}  icon={null} activeBg={activeBg} activeColor={activeColor} hoverBg={hoverBg} active={isActive(DELIVERY_SUMMERY_REPORT_PATH)}  label={t('delivery_summery_report')} small />
         </Box>
       </Collapse>
       

@@ -30,7 +30,7 @@ class ReportController extends BaseController
             }
 
             // ✅ Build report
-            $data = $query->get()
+            $data = $query->where('transaction_type', 'sell')->get()
                 ->flatMap(function ($transaction) {
                     return $transaction->sell_lines->map(function ($line) use ($transaction) {
                         $price_per_unit = optional($line->product)->cost_price ?? 0;
@@ -85,5 +85,65 @@ class ReportController extends BaseController
             return $this->sendError('Server Error: ' . $e->getMessage());
         }
     }
+
+    public function deliverySummeryReport(Request $request)
+    {
+        try {
+            $query = Transaction::query()
+                ->with([
+                    'sell',
+                    'location:id,name',
+                    'sell_lines.product:id,cost_price',
+                    'sell_lines.bottle:id,cost_price',
+                    'sell_lines.flavor:id,name',
+                    'created_by_user:id,name'
+                ])
+                ->where('transaction_type', 'sell');
+
+            // ✅ Filters
+            if ($request->start_date && $request->end_date) {
+                $query->whereBetween('created_at', [$request->start_date, $request->end_date]);
+            }
+
+            if ($request->location_id) {
+                $query->where('location_id', $request->location_id);
+            }
+
+            // ✅ Fetch transactions
+            $transactions = $query->get();
+
+            // ✅ Group by driver (created_by)
+            $grouped = $transactions->groupBy('created_by')->map(function ($driverTrans) {
+                $driverName = optional($driverTrans->first()->created_by_user)->name ?? 'Unknown';
+                $locationName = optional($driverTrans->first()->location)->name ?? 'N/A';
+
+                $totalDeliveries = $driverTrans->count();
+
+                $totalQty = $driverTrans->sum(function ($t) {
+                    return $t->sell_lines->sum('remaining');
+                });
+
+                $paidDeliveries = $driverTrans->filter(fn($t) => $t->sell && $t->sell->paid == 1)->count();
+                $unpaidDeliveries = $driverTrans->filter(fn($t) => $t->sell && $t->sell->paid != 1)->count();
+
+                $lastDeliveryDate = optional($driverTrans->sortByDesc('created_at')->first())->created_at;
+
+                return [
+                    'driver_name' => $driverName,
+                    'location_name' => $locationName,
+                    'total_deliveries' => $totalDeliveries,
+                    'total_quantity' => $totalQty,
+                    'paid_deliveries' => $paidDeliveries,
+                    'unpaid_deliveries' => $unpaidDeliveries,
+                    'last_delivery_date' => $lastDeliveryDate,
+                ];
+            })->values();
+
+            return $this->sendResponse($grouped, 'Report retrieved successfully.');
+        } catch (\Exception $e) {
+            return $this->sendError('Server Error: ' . $e->getMessage());
+        }
+    }
+
 
 }

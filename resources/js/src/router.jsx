@@ -74,6 +74,7 @@ import JpsReport from "./components/jps/JpsReport";
 
 import LocationOverview from "./components/driver/LocationOverview";
 import LocationProfitReport from "./components/reports/LocationProfitReport";
+import DeliverySummeryReport from "./components/reports/DeliverySummeryReport";
 
 // ✅ Public Routes
 export const ROOT = '/';
@@ -220,7 +221,10 @@ export const BOTTLE_EDIT_PATH = (id) => `${SUPER_ADMIN_BASE}/bottle/cost/edit/${
 
 export const BACKUP_PROCESSING_PATH = `${SUPER_ADMIN_BASE}/backup/processing`;
 export const LOGIN_HISTORY_PATH = `${SUPER_ADMIN_BASE}/login/history`;
+
+
 export const LOCAITON_PROFIT_REPORT_PATH = `${SUPER_ADMIN_BASE}/location/profit/report`;
+export const DELIVERY_SUMMERY_REPORT_PATH = `${SUPER_ADMIN_BASE}/delivery/summery/report`;
 
 const router = createBrowserRouter([
   {
@@ -309,6 +313,7 @@ const router = createBrowserRouter([
       { path: BACKUP_PROCESSING_PATH, element: <ProtectedRoute role="superadmin"><BackupProcessing /></ProtectedRoute> },
       { path: LOGIN_HISTORY_PATH, element: <ProtectedRoute role="superadmin"><LoginHistory /></ProtectedRoute> },
       { path: LOCAITON_PROFIT_REPORT_PATH, element: <ProtectedRoute role="superadmin"><LocationProfitReport /></ProtectedRoute> },
+      { path: DELIVERY_SUMMERY_REPORT_PATH, element: <ProtectedRoute role="superadmin"><DeliverySummeryReport /></ProtectedRoute> },
     ],
   },
   {
@@ -324,6 +329,7 @@ const router = createBrowserRouter([
       { path: RETURN_LEFTOVER_PATH, element: <ProtectedRoute role="driver"><ReturnLeftover /></ProtectedRoute> },
       { path: DRIVER_PROFILE_PATH, element: <ProtectedRoute role="driver"><DriverProfile /></ProtectedRoute> },
       { path: DRIVER_LOCATION_OVERVIEW, element: <ProtectedRoute role="driver"><LocationOverview /></ProtectedRoute> },
+      
     ],
   },
   {

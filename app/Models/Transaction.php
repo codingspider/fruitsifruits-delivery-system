@@ -25,7 +25,7 @@ class Transaction extends Model
         return $this->belongsTo(Location::class); 
     }
 
-    public function createdBy() { 
+    public function created_by_user() { 
         return $this->belongsTo(User::class,'created_by'); 
     }
 }

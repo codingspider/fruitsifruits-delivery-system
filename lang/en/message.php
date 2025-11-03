@@ -175,4 +175,5 @@ return [
     'center_lat_long' => 'Center Latitude Longitude',
     'timezone' => 'Default Timezone',
     'profit_report' => 'Profit Report',
+    'delivery_summery_report' => 'Delivery Summery',
 ];
