@@ -101,12 +101,12 @@ export default function ProductionList() {
         }
     };
     const columns = [
-        { header: "Location", accessorFn: row => row.location.name || ""},
         { header: "Product", accessorFn: row => row.product.name || ""},
         { header: "Created By",
             accessorFn: row => row.user.name || "", 
         },
         { header: "Ref.No", accessorKey: "ref_no"},
+        { header: "Total Quantity", accessorKey: "quantity"},
         { header: "Manufacture Date", accessorKey: "mfg_date"},
         {
             header: "Actions",
@@ -123,16 +123,6 @@ export default function ProductionList() {
                         >
                             <ViewIcon />
                         </ChakraLink>
-
-                        {/* <ChakraLink
-                            border="1px solid black"
-                            padding={2}
-                            borderRadius="md"
-                            cursor="pointer"
-                            onClick={() => deleteProduction(row.original.id)}
-                        >
-                            <DeleteIcon color="red.500" />
-                        </ChakraLink> */}
                     </Box>
                 </>
             ), enableColumnFilter: false,

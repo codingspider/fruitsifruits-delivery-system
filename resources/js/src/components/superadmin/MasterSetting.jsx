@@ -43,6 +43,7 @@ const MasterSetting = () => {
     formData.append("map_api_key", data.map_api_key);
     formData.append("lat_long", data.lat_long);
     formData.append("timezone", data.timezone);
+    formData.append("currency", data.currency);
 
     if (data.app_logo?.[0]) {
       formData.append("logo", data.app_logo[0]);
@@ -105,6 +106,7 @@ const MasterSetting = () => {
             map_api_key: business.map_api_key,
             lat_long: business.lat_long,
             timezone: business.timezone,
+            currency: business.currency,
         }));
       
     };
@@ -191,6 +193,7 @@ const MasterSetting = () => {
                       ))}
                     </Select>
                 </FormControl>
+
               </SimpleGrid>
 
               <SimpleGrid columns={{ base: 1, md: 3 }} spacing={6} mt={8}>
@@ -202,6 +205,11 @@ const MasterSetting = () => {
                 <FormControl>
                   <FormLabel>{t("fav_icon")}</FormLabel>
                   <Input type="file" {...register("fav_icon")} />
+                </FormControl>
+
+                <FormControl isRequired>
+                  <FormLabel>{t("currency")}</FormLabel>
+                  <Input type="text" {...register("currency", { required: true })} />
                 </FormControl>
               </SimpleGrid>
 

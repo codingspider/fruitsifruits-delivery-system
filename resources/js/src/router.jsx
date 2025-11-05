@@ -75,6 +75,9 @@ import JpsReport from "./components/jps/JpsReport";
 import LocationOverview from "./components/driver/LocationOverview";
 import LocationProfitReport from "./components/reports/LocationProfitReport";
 import DeliverySummeryReport from "./components/reports/DeliverySummeryReport";
+import DailyCollection from "./components/driver/DailyCollection";
+
+import DriverReportStats from "./components/driver/DriverStats";
 
 // ✅ Public Routes
 export const ROOT = '/';
@@ -98,7 +101,6 @@ export const JPS_DASHBOARD_PATH = `${STAFF_BASE}/dashboard`;
 
 export const SAVE_ORDER = `${SUPER_ADMIN_BASE}/save/order`;
 
-
 // jps routes 
 export const JPS_REPORT_PATH = `${STAFF_BASE}/jps/report`;
 
@@ -111,7 +113,8 @@ export const DRIVER_REPORT_PATH = `${DRIVER_BASE}/report`;
 export const RETURN_LEFTOVER_PATH = `${DRIVER_BASE}/return/leftover`;
 export const DRIVER_PROFILE_PATH = `${DRIVER_BASE}/driver/profile`;
 export const DRIVER_LOCATION_OVERVIEW = `${DRIVER_BASE}/driver/location/overview`;
-
+export const DRIVER_DAILY_COLLECTION = `${DRIVER_BASE}/driver/daily/collection`;
+export const DRIVER_REPORT_STATS = `${DRIVER_BASE}/driver/report/stats`;
 
 export const USER_LIST = "user/list";
 export const USER_ADD = "user/create";
@@ -129,7 +132,6 @@ export const DRIVER_LIST_PATH = `${SUPER_ADMIN_BASE}/driver/list`;
 export const DRIVER_ADD_PATH = `${SUPER_ADMIN_BASE}/driver/create`;
 export const DRIVER_EDIT_PATH = (id) => `${SUPER_ADMIN_BASE}/driver/edit/${id}`;
 
-
 export const FLAVOUR_LIST = "flavour/list";
 export const FLAVOUR_ADD = "flavour/create";
 export const FLAVOUR_EDIT = "flavour/edit/:id";
@@ -137,7 +139,6 @@ export const FLAVOUR_EDIT = "flavour/edit/:id";
 export const FLAVOUR_LIST_PATH = `${SUPER_ADMIN_BASE}/flavour/list`;
 export const FLAVOUR_ADD_PATH = `${SUPER_ADMIN_BASE}/flavour/create`;
 export const FLAVOUR_EDIT_PATH = (id) => `${SUPER_ADMIN_BASE}/flavour/edit/${id}`;
-
 
 export const PURCHASE_LIST = "purchase/list";
 export const PURCHASE_ADD = "purchase/create";
@@ -156,7 +157,6 @@ export const LOCATION_LIST_PATH = `${SUPER_ADMIN_BASE}/location/list`;
 export const LOCATION_ADD_PATH = `${SUPER_ADMIN_BASE}/location/create`;
 export const LOCATION_EDIT_PATH = (id) => `${SUPER_ADMIN_BASE}/location/edit/${id}`;
 
-
 export const JUICE_ALLOCATION_LIST = "juice/allocation/list";
 export const JUICE_ALLOCATION_ADD = "juice/allocation/create";
 export const JUICE_ALLOCATION_EDIT = "juice/allocation/edit/:id";
@@ -166,7 +166,6 @@ export const JUICE_ALLOCATION_LIST_PATH = `${SUPER_ADMIN_BASE}/juice/allocation/
 export const JUICE_ALLOCATION_ADD_PATH = `${SUPER_ADMIN_BASE}/juice/allocation/create`;
 export const JUICE_ALLOCATION_EDIT_PATH = (id) => `${SUPER_ADMIN_BASE}/juice/allocation/edit/${id}`;
 export const JUICE_ALLOCATION_VIEW_PATH = (id) => `${SUPER_ADMIN_BASE}/juice/allocation/view/${id}`;
-
 
 export const DRIVER_ROUTE_LIST = "driver/route/list";
 export const DRIVER_ROUTE_ADD = "driver/route/create";
@@ -201,7 +200,6 @@ export const PRODUCTION_LIST_PATH = `${SUPER_ADMIN_BASE}/production/list`;
 export const PRODUCTION_ADD_PATH = `${SUPER_ADMIN_BASE}/production/create`;
 export const PRODUCTION_VIEW_PATH = (id) => `${SUPER_ADMIN_BASE}/production/view/${id}`;
 export const PRODUCTION_EDIT_PATH = (id) => `${SUPER_ADMIN_BASE}/production/edit/${id}`;
-
 
 export const INGREDIENT_LIST = "ingredient/list";
 export const INGREDIENT_ADD = "ingredient/create";
@@ -249,7 +247,7 @@ const router = createBrowserRouter([
   },
 
 
-    // 🔐 SUPER ADMIN ROUTES
+  // 🔐 SUPER ADMIN ROUTES
   {
     path: SUPER_ADMIN_BASE,
     element: <MainLayout />,
@@ -329,6 +327,8 @@ const router = createBrowserRouter([
       { path: RETURN_LEFTOVER_PATH, element: <ProtectedRoute role="driver"><ReturnLeftover /></ProtectedRoute> },
       { path: DRIVER_PROFILE_PATH, element: <ProtectedRoute role="driver"><DriverProfile /></ProtectedRoute> },
       { path: DRIVER_LOCATION_OVERVIEW, element: <ProtectedRoute role="driver"><LocationOverview /></ProtectedRoute> },
+      { path: DRIVER_DAILY_COLLECTION, element: <ProtectedRoute role="driver"><DailyCollection /></ProtectedRoute> },
+      { path: DRIVER_REPORT_STATS, element: <ProtectedRoute role="driver"><DriverReportStats /></ProtectedRoute> },
       
     ],
   },

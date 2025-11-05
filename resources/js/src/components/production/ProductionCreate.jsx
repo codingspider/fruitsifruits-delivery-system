@@ -208,7 +208,7 @@ const ProductionCreate = () => {
                                 </FormControl>
 
                                 {/* Location */}
-                                <FormControl isRequired>
+                                <FormControl>
                                     <FormLabel>{t("location")}</FormLabel>
                                     <Select
                                         placeholder="Select Location"

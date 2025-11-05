@@ -6,15 +6,22 @@ import { Card, CardHeader, CardBody, CardFooter,
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import api from '../../axios';
+import { useCurrencyFormatter } from './../../useCurrencyFormatter';
 
-const Stats = () => {
+const DriverStats = () => {
     const { t } = useTranslation();
-    const [monthlProduction, setMonthlyProduction] = useState([]); 
+    const [totalDelivery, setTotalDelivery] = useState(null); 
+    const [totalEarning, setTotalEarning] = useState(null); 
+    const [totalPending, setTotalPending] = useState(null); 
     const [isLoading, setIsLoading] = useState(true);
+    const { formatAmount, currency } = useCurrencyFormatter();
+
     const DashboardStats = async () => {
         try {
-            const res = await api.get("/superadmin/get/stats");
-            setMonthlyProduction(res.data.data.monthly_production);
+            const res = await api.get("/driver/get/stats");
+            setTotalDelivery(res.data.data.total_delivery);
+            setTotalEarning(res.data.data.total_amount);
+            setTotalPending(res.data.data.total_pending_amount);
         } catch (err) {
             console.error("fetchFlavours error:", err);
         } finally {
@@ -33,10 +40,10 @@ const Stats = () => {
             >
             <Card>
                 <CardHeader>
-                    <Heading size="md">{t('monthly_production')}</Heading>
+                    <Heading size="md">{t('total_deliveries')}</Heading>
                 </CardHeader>
                 <CardBody>
-                    <Heading size="sm">{monthlProduction}</Heading>
+                    <Heading size="sm">{totalDelivery}</Heading>
                 </CardBody>
                 <CardFooter>
                     <Button colorScheme='teal' size="sm">{t('details')}</Button>
@@ -44,10 +51,10 @@ const Stats = () => {
             </Card>
             <Card>
                 <CardHeader>
-                    <Heading size="md">{t('to_be_delivered')}</Heading>
+                    <Heading size="md">{t('total_earning')}</Heading>
                 </CardHeader>
                 <CardBody>
-                    <Heading size="sm">Stat </Heading>
+                    <Heading size="sm">{formatAmount(totalEarning)}</Heading>
                 </CardBody>
                 <CardFooter>
                     <Button colorScheme='teal' size="sm">{t('details')}</Button>
@@ -55,40 +62,19 @@ const Stats = () => {
             </Card>
             <Card>
                 <CardHeader>
-                    <Heading size="md">{t('total_delivered')}</Heading>
+                    <Heading size="md">{t('pending_payments')}</Heading>
                 </CardHeader>
                 <CardBody>
-                    <Heading size="sm">Stat </Heading>
+                    <Heading size="sm">{formatAmount(totalPending)}</Heading>
                 </CardBody>
                 <CardFooter>
                     <Button colorScheme='teal' size="sm">{t('details')}</Button>
                 </CardFooter>
             </Card>
-            <Card>
-                <CardHeader>
-                    <Heading size="md">{t('pending_orders')}</Heading>
-                </CardHeader>
-                <CardBody>
-                    <Heading size="sm">Stat </Heading>
-                </CardBody>
-                <CardFooter>
-                    <Button colorScheme='teal' size="sm">{t('details')}</Button>
-                </CardFooter>
-            </Card>
-            <Card>
-                <CardHeader>
-                    <Heading size="md">{t('total_collection')}</Heading>
-                </CardHeader>
-                <CardBody>
-                    <Heading size="sm">Stat </Heading>
-                </CardBody>
-                <CardFooter>
-                    <Button colorScheme='teal' size="sm">{t('details')}</Button>
-                </CardFooter>
-            </Card>
+            
         </SimpleGrid>
     </>
   )
 }
 
-export default Stats
+export default DriverStats

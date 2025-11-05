@@ -18,6 +18,7 @@ import api from "../../axios";
 import { useTranslation } from "react-i18next";
 import { DASHBOARD_PATH, LOCATION_LIST_PATH } from "../../router";
 import AssignmentForm from "../assignment/AssignmentForm";
+import PreviousDue from "./PreviousDue";
 
 const TaskDetails = () => {
     const { handleSubmit, reset } = useForm();
@@ -117,6 +118,8 @@ const TaskDetails = () => {
                     </Breadcrumb>
                 </CardBody>
             </Card>
+
+            <PreviousDue></PreviousDue>
 
             {items.length > 0 && (
                 <AssignmentForm

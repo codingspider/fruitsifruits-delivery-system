@@ -7,6 +7,7 @@ use App\Models\Sell;
 use App\Models\Location;
 use App\Models\SellLine;
 use App\Models\SellReturn;
+use App\Models\PaymentLine;
 use App\Models\Transaction;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
@@ -45,7 +46,6 @@ class AssignTaskController extends BaseController
 
             // Build final response
             $grouped = $locations->map(function ($loc) use ($datas) {
-                // find the matching driver_route_location row
                 $route = $datas->first(function ($item) use ($loc) {
                     $locs = is_string($item->locations) ? json_decode($item->locations, true) : $item->locations;
                     return collect($locs)->contains('location_id', $loc->id);
@@ -116,6 +116,26 @@ class AssignTaskController extends BaseController
             $transaction->notes  = $request->remarks ?? null;
             $transaction->created_by  = auth()->user()->id;
             $transaction->save();
+
+            if($request->payment['paid']){
+                $status = 'paid';
+                $amount = $request->totals['grandTotal'];
+            }else{
+                $status = 'due';
+                $amount = 0;
+            }
+
+            $payment = new PaymentLine();
+            $payment->payment_mode = $request->payment['method'];
+            $payment->payment_for = 'sell-payment';
+            $payment->transaction_id = $transaction->id;
+            $payment->ref_no = time();
+            $payment->amount = $amount;
+            $payment->save();
+
+            $transaction->status = $status;
+            $transaction->save();
+
 
             // 2) Create Assignment (main)
             $assignment = Sell::create([

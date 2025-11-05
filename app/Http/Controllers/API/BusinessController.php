@@ -80,6 +80,7 @@ class BusinessController extends BaseController
                 'map_api_key' => $request->map_api_key,
                 'lat_long' => $request->lat_long,
                 'timezone' => $request->timezone,
+                'currency' => $request->currency,
             ]);
 
             $business->save();

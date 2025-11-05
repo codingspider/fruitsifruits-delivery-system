@@ -70,6 +70,8 @@ class RegisterController extends BaseController
                 'app_name'   => $business->name ?? 'Fruit Production',
                 'lat_long'   => $business->lat_long ?? '',
                 'map_api_key'   => $business->map_api_key ?? '',
+                'currency'   => $business->currency ?? '',
+                'locale'   => config('app.locale'),
             ];
 
             $user->last_login_at = now();

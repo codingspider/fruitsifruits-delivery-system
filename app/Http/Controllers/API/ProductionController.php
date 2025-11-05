@@ -38,7 +38,7 @@ class ProductionController extends BaseController
     {
         $validator = Validator::make($request->all(), [
             'product_id'     => 'required',
-            'location_id' => 'required',
+            'location_id' => 'nullable',
             'mfg_date' => 'required'
         ]);
 
@@ -48,11 +48,13 @@ class ProductionController extends BaseController
 
         DB::beginTransaction();
         try {
+            $totalQuantity = array_sum(array_column($request->lines, 'quantity'));
             $mfg = new MfgProduction();
             $mfg->product_id = $request->product_id;
             $mfg->location_id = $request->location_id;
             $mfg->ref_no = $request->ref_no;
             $mfg->mfg_date = $request->mfg_date;
+            $mfg->quantity = $totalQuantity;
             $mfg->created_by = auth()->id();
             $mfg->save();
 

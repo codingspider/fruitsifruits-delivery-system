@@ -22,6 +22,7 @@ use App\Http\Controllers\API\DriverRouteController;
 use App\Http\Controllers\API\BottleManageController;
 use App\Http\Controllers\API\DriverManageController;
 use App\Http\Controllers\API\DriverProfileController;
+use App\Http\Controllers\API\AdminDashboardController;
 use App\Http\Controllers\API\DriverJuiceAllocationController;
 
 
@@ -44,6 +45,10 @@ Route::middleware(['auth:sanctum'])->prefix('driver')->group(function () {
     Route::post('return/leftover', [AssignTaskController::class, 'returnLeftover']);
     Route::get('profile/data', [DriverProfileController::class, 'profileData']);
     Route::post('profile/update', [DriverProfileController::class, 'profileDataUpdate']);
+    Route::post('daily/collection', [DriverProfileController::class, 'dailyCollection']);
+    Route::get('get/stats', [DriverProfileController::class, 'getStats']);
+    Route::get('get/previous/due', [DriverProfileController::class, 'getPreviousDue']);
+    Route::post('make/payment', [DriverProfileController::class, 'makePayment']);
 });
 
 Route::middleware(['auth:sanctum'])->prefix('jps')->group(function () {
@@ -79,6 +84,8 @@ Route::middleware(['auth:sanctum'])->prefix('superadmin')->group(function () {
     Route::get('get/timezone', [BusinessController::class, 'timezone']);
     Route::post('get/profit/report', [ReportController::class, 'profitReport']);
     Route::post('get/delivery/summery/report', [ReportController::class, 'deliverySummeryReport']);
+
+    Route::get('get/stats', [AdminDashboardController::class, 'getStats']);
 
     Route::get('/backup-and-download', function () {
         Artisan::call('backup:run');

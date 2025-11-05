@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('transactions', function (Blueprint $table) {
             $table->id();
-            $table->enum('transaction_type', ['purchase','production','delivery','return','damage','expense', 'sell']);
+            $table->enum('transaction_type', ['purchase','production','delivery','return','damage','expense', 'sell', 'collection']);
             $table->unsignedBigInteger('location_id');
             $table->foreign('location_id')->references('id')->on('locations')->onDelete('cascade');
             $table->string('reference_no')->unique();

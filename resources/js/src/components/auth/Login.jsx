@@ -63,6 +63,9 @@ export default function Login() {
             localStorage.setItem('name', res.data.name);
             localStorage.setItem('lat_long', res.data.lat_long);
             localStorage.setItem('map_api_key', res.data.map_api_key);
+            localStorage.setItem("currency", res.data.currency);
+            localStorage.setItem("locale", res.data.locale);
+
             toast({
                 position: 'bottom-right',
                 title: 'Login successful!',
