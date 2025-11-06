@@ -111,4 +111,22 @@ class DriverProfileController extends BaseController
             return $this->sendError('Server Error: ' . $e->getMessage());
         }
     }
+    
+    public function getReports(Request $request)
+    {
+        try {
+            $transactions = Transaction::withSum(['sell_lines as total_remaining' => function ($query) {
+                $query->where('remaining', '>', 0);
+            }], 'remaining')
+            ->where('transaction_type', 'sell')
+            ->where('created_by', auth()->user()->id)
+            ->having('total_remaining', '>', 0)
+            ->orderByDesc('total_remaining')
+            ->get();
+
+            return $this->sendResponse($transactions, 'Data retrieved successfully.');
+        } catch (\Exception $e) {
+            return $this->sendError('Server Error: ' . $e->getMessage());
+        }
+    }
 }

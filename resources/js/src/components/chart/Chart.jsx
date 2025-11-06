@@ -1,31 +1,40 @@
-import React, { useRef, useEffect } from 'react';
-import { Chart as ChartJS } from 'chart.js/auto'; // rename to avoid collision
+import React, { useRef, useEffect, useState } from 'react';
+import { Chart as ChartJS } from 'chart.js/auto';
+import api from '../../axios';
 
 export default function AcquisitionsChart() {
   const canvasRef = useRef(null);
+  const [sellsByDate, setSellByDate] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
+
+  const DashboardStats = async () => {
+      try {
+          const res = await api.get("/superadmin/get/sells/by/date");
+          console.log(res.data.data);
+          setSellByDate(res.data.data);
+      } catch (err) {
+          console.error("fetchFlavours error:", err);
+      } finally {
+          setIsLoading(false);
+      }
+  };
 
   useEffect(() => {
-    const data = [
-      { year: 2010, count: 10 },
-      { year: 2011, count: 20 },
-      { year: 2012, count: 15 },
-      { year: 2013, count: 25 },
-      { year: 2014, count: 22 },
-      { year: 2015, count: 30 },
-      { year: 2016, count: 28 },
-    ];
+    DashboardStats();
+  }, []);
 
-    if (!canvasRef.current) return; // safety check
+  useEffect(() => {
+    if (!canvasRef.current || sellsByDate.length === 0) return;
 
     const chart = new ChartJS(canvasRef.current, {
-      type: 'bar',
+      type: "bar",
       data: {
-        labels: data.map(row => row.year),
+        labels: sellsByDate.map((row) => row.date),
         datasets: [
           {
-            label: 'Acquisitions by year',
-            data: data.map(row => row.count),
-            backgroundColor: '#319795',
+            label: "Sales by Date",
+            data: sellsByDate.map((row) => row.count),
+            backgroundColor: "#319795",
           },
         ],
       },
@@ -36,7 +45,7 @@ export default function AcquisitionsChart() {
     });
 
     return () => chart.destroy();
-  }, []);
+  }, [sellsByDate]);
 
   return (
     <div style={{ height: 300 }}>

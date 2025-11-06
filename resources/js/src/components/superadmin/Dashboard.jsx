@@ -3,6 +3,8 @@ import { Card, CardBody, Breadcrumb,
   BreadcrumbLink,
   SimpleGrid,
   Box,
+  CardHeader,
+  Text
  } from '@chakra-ui/react';
 import Chart from '../chart/Chart';
 import Pie from '../chart/Pie';
@@ -70,12 +72,18 @@ const Dashboard = () => {
       spacing={6}
     >
       <Card>
+        <CardHeader>
+          <Text>Recent Production </Text>
+        </CardHeader>
         <CardBody>
           <RecentOrder></RecentOrder>
         </CardBody>
       </Card>
 
       <Card>
+        <CardHeader>
+          <Text>Recent Sells </Text>
+        </CardHeader>
         <CardBody>
           <RecentPayment></RecentPayment>
         </CardBody>

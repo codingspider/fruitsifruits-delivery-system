@@ -48,6 +48,7 @@ Route::middleware(['auth:sanctum'])->prefix('driver')->group(function () {
     Route::post('daily/collection', [DriverProfileController::class, 'dailyCollection']);
     Route::get('get/stats', [DriverProfileController::class, 'getStats']);
     Route::get('get/previous/due', [DriverProfileController::class, 'getPreviousDue']);
+    Route::get('get/reports', [DriverProfileController::class, 'getReports']);
     Route::post('make/payment', [DriverProfileController::class, 'makePayment']);
 });
 
@@ -86,6 +87,10 @@ Route::middleware(['auth:sanctum'])->prefix('superadmin')->group(function () {
     Route::post('get/delivery/summery/report', [ReportController::class, 'deliverySummeryReport']);
 
     Route::get('get/stats', [AdminDashboardController::class, 'getStats']);
+    Route::get('get/sells/by/date', [AdminDashboardController::class, 'getSellByDate']);
+    Route::get('total-sell-by-date', [AdminDashboardController::class, 'totalSellByDate']);
+    Route::get('get/recent/productions', [AdminDashboardController::class, 'getRecentProduction']);
+    Route::get('get/recent/payments', [AdminDashboardController::class, 'getRecentPayments']);
 
     Route::get('/backup-and-download', function () {
         Artisan::call('backup:run');

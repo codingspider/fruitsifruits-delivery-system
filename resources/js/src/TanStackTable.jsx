@@ -45,6 +45,7 @@ export default function TanStackTable({
   pageCount,
   isLoading,
   addURL,
+  hideAddBtn="false"
 }) {
   const [globalFilter, setGlobalFilter] = useState("");
 
@@ -57,7 +58,7 @@ export default function TanStackTable({
     },
     onPaginationChange: (updater) =>
       setPageIndex(typeof updater === "function" ? updater({ pageIndex }).pageIndex : updater.pageIndex),
-    manualPagination: true, // server-side
+    manualPagination: true,
     pageCount,
     globalFilterFn: fuzzyGlobalFilter,
     getCoreRowModel: getCoreRowModel(),
@@ -77,18 +78,23 @@ export default function TanStackTable({
           onChange={(e) => setGlobalFilter(e.target.value)}
           maxW="250px"
         />
-        <Button
-          colorScheme="teal"
-          as={ReactRouterLink}
-          to={addURL}
-          display={{ base: "none", md: "inline-flex" }}
-          px={4}
-          py={2}
-          whiteSpace="normal"
-          textAlign="center"
-        >
-          {t("add")}
-        </Button>
+
+        {hideAddBtn && hideAddBtn == 'false' ? (
+          <Button
+            colorScheme="teal"
+            as={ReactRouterLink}
+            to={addURL}
+            display={{ base: "none", md: "inline-flex" }}
+            px={4}
+            py={2}
+            whiteSpace="normal"
+            textAlign="center"
+
+          >
+            {t("add")}
+          </Button>
+        ) : ('')}
+        
       </Flex>
 
       {/* Table */}
