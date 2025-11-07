@@ -116,8 +116,8 @@ class DriverProfileController extends BaseController
     {
         try {
             $transactions = Transaction::withSum(['sell_lines as total_remaining' => function ($query) {
-                $query->where('remaining', '>', 0);
-            }], 'remaining')
+                $query->where('to_be_filled', '>', 0);
+            }], 'to_be_filled')
             ->where('transaction_type', 'sell')
             ->where('created_by', auth()->user()->id)
             ->having('total_remaining', '>', 0)

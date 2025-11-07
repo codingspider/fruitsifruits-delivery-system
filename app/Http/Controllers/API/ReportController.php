@@ -36,7 +36,7 @@ class ReportController extends BaseController
                         $price_per_unit = optional($line->product)->cost_price ?? 0;
                         $cost_per_bottle = optional($line->bottle)->cost_price ?? 0;
                         $net_price = $price_per_unit - $cost_per_bottle;
-                        $quantity = $line->remaining ?? 0;
+                        $quantity = $line->to_be_filled ?? 0;
                         $deal_quantity = $line->deal_quantity ?? 0;
                         $deal_cost = $deal_quantity * $quantity;
 
@@ -120,7 +120,7 @@ class ReportController extends BaseController
                 $totalDeliveries = $driverTrans->count();
 
                 $totalQty = $driverTrans->sum(function ($t) {
-                    return $t->sell_lines->sum('remaining');
+                    return $t->sell_lines->sum('to_be_filled');
                 });
 
                 $paidDeliveries = $driverTrans->filter(fn($t) => $t->sell && $t->sell->paid == 1)->count();

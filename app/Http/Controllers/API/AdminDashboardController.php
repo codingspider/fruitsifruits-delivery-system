@@ -7,6 +7,7 @@ use App\Models\Transaction;
 use Illuminate\Http\Request;
 use App\Models\MfgProduction;
 use App\Http\Controllers\Controller;
+use App\Models\DriverJuiceAllocation;
 use App\Http\Controllers\API\BaseController;
 
 class AdminDashboardController extends BaseController
@@ -22,16 +23,21 @@ class AdminDashboardController extends BaseController
 
             $transactions = Transaction::withSum([
                 'sell_lines as total_remaining' => function ($query) {
-                    $query->where('remaining', '>', 0);
+                    $query->where('to_be_filled', '>', 0);
                 }
-            ], 'remaining')
+            ], 'to_be_filled')
+            ->whereDate('date', Carbon::today())
             ->where('transaction_type', 'sell')
             ->having('total_remaining', '>', 0)
             ->orderByDesc('total_remaining')
             ->get();
 
             $total = $transactions->sum('total_remaining');
-            $data['total_collection'] = Transaction::where('transaction_type', 'sell')->where('status', '=', 'paid')->sum('total_amount');
+
+            $data['total_collection'] = Transaction::where('transaction_type', 'sell')->whereDate('date', Carbon::today())->where('status', '=', 'paid')->sum('total_amount');
+            $data['to_be_delivered'] = DriverJuiceAllocation::whereDate('allocation_date', Carbon::today()) ->withSum('lines', 'quantity')
+            ->get()
+            ->sum('lines_sum_quantity');
             $data['monthly_production'] = $monthly_production;
             $data['total_delivered'] = $total;
             
