@@ -12,6 +12,10 @@ class MfgRecipeIngredient extends Model
         return $this->belongsTo(Product::class); 
     }
     
+    public function bottle() { 
+        return $this->belongsTo(Product::class, 'bottle_id', 'id'); 
+    }
+    
     public function recipe() { 
         return $this->belongsTo(MfgRecipe::class); 
     }

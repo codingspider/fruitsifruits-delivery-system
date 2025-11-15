@@ -1,6 +1,10 @@
 <?php 
 
+use Carbon\Carbon;
+use App\Models\SellLine;
 use App\Models\Transaction;
+use App\Models\ReturnLeftoverItem;
+use App\Models\DriverJuiceAllocationLine;
 
 function timeZone(){
     $time = array(
@@ -472,4 +476,43 @@ function unPaidSell($request){
     $unpaid_sell_query->where('transaction_type', 'sell')->where('status', '!=', 'paid');
 
     return $unpaid_sell_query;
+}
+
+
+function getAllocated($startDate, $endDate, $flavour_id, $bottle_id){
+    $query = DriverJuiceAllocationLine::query();
+    if($startDate && $endDate){
+        $query->whereDate('created_at', '>=', $startDate)->whereDate('created_at', '<=', $endDate);
+    }else{
+        $query->whereDate('created_at', '=', Carbon::today());
+    }
+
+    $data = $query->where('flavour_id', $flavour_id)->where('bottle_id', $bottle_id)->first();
+    return $data->quantity ?? 0;
+}
+
+
+function getDelivered($startDate, $endDate, $flavour_id, $bottle_id){
+    $query = SellLine::query();
+    if($startDate && $endDate){
+        $query->whereDate('created_at', '>=', $startDate)->whereDate('created_at', '<=', $endDate);
+    }else{
+        $query->whereDate('created_at', '=', Carbon::today());
+    }
+
+    $data = $query->where('flavour_id', $flavour_id)->where('bottle_id', $bottle_id)->sum('to_be_filled');
+    return $data;
+}
+
+
+function getReturned($startDate, $endDate, $flavour_id, $bottle_id){
+    $query = ReturnLeftoverItem::query();
+    if($startDate && $endDate){
+        $query->whereDate('created_at', '>=', $startDate)->whereDate('created_at', '<=', $endDate);
+    }else{
+        $query->whereDate('created_at', '=', Carbon::today());
+    }
+
+    $data = $query->where('flavour_id', $flavour_id)->where('bottle_id', $bottle_id)->sum('quantity');
+    return $data;
 }

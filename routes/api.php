@@ -15,6 +15,7 @@ use App\Http\Controllers\API\BusinessController;
 use App\Http\Controllers\API\LocationController;
 use App\Http\Controllers\API\PurchaseController;
 use App\Http\Controllers\API\RegisterController;
+use App\Http\Controllers\API\JpsReportController;
 use App\Http\Controllers\API\AssignTaskController;
 use App\Http\Controllers\API\IngredientController;
 use App\Http\Controllers\API\ProductionController;
@@ -54,6 +55,7 @@ Route::middleware(['auth:sanctum'])->prefix('driver')->group(function () {
 
 Route::middleware(['auth:sanctum'])->prefix('jps')->group(function () {
     Route::get('assign/tasks', [AssignTaskController::class, 'index']);
+    Route::post('get/reports', [JpsReportController::class, 'getReport']);
 });
 
 Route::middleware(['auth:sanctum'])->prefix('superadmin')->group(function () {

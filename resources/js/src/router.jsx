@@ -98,11 +98,10 @@ export const MASTER_SETTING = `${SUPER_ADMIN_BASE}/settings`;
 export const DASHBOARD_PATH = `${SUPER_ADMIN_BASE}/dashboard`;
 export const DRIVER_DASHBOARD_PATH = `${DRIVER_BASE}/dashboard`;
 export const JPS_DASHBOARD_PATH = `${STAFF_BASE}/dashboard`;
-
 export const SAVE_ORDER = `${SUPER_ADMIN_BASE}/save/order`;
 
 // jps routes 
-export const JPS_REPORT_PATH = `${STAFF_BASE}/jps/report`;
+export const JPS_REPORT_PATH = `${STAFF_BASE}/report`;
 
 // driver routes 
 export const ASSIGN_TASK_PATH = `${DRIVER_BASE}/assign/task`;
