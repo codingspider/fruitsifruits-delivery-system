@@ -1,5 +1,7 @@
 <?php 
 
+use App\Models\Transaction;
+
 function timeZone(){
     $time = array(
         'Pacific/Midway' => -39600,
@@ -425,3 +427,49 @@ function timeZone(){
     return $time;
 }
 
+
+function paidSell($request){
+    $paid_sell_query = Transaction::query()
+        ->with([
+            'location:id,name',
+            'sell_lines.product:id,cost_price',
+            'sell_lines.bottle:id,cost_price',
+            'sell_lines.flavor:id,name',
+        ]);
+
+    // ✅ Filters
+    if ($request->start_date && $request->end_date) {
+        $paid_sell_query->whereDate('created_at', '>=', $request->start_date)->whereDate('created_at', '<=', $request->end_date);
+    }
+
+    if ($request->location_id) {
+        $paid_sell_query->where('location_id', $request->location_id);
+    }
+
+    $paid_sell_query->where('transaction_type', 'sell')->where('status', 'paid');
+
+    return $paid_sell_query;
+}
+
+function unPaidSell($request){
+    $unpaid_sell_query = Transaction::query()
+        ->with([
+            'location:id,name',
+            'sell_lines.product:id,cost_price',
+            'sell_lines.bottle:id,cost_price',
+            'sell_lines.flavor:id,name',
+        ]);
+
+    // ✅ Filters
+    if ($request->start_date && $request->end_date) {
+        $unpaid_sell_query->whereDate('created_at', '>=', $request->start_date)->whereDate('created_at', '<=', $request->end_date);
+    }
+
+    if ($request->location_id) {
+        $unpaid_sell_query->where('location_id', $request->location_id);
+    }
+
+    $unpaid_sell_query->where('transaction_type', 'sell')->where('status', '!=', 'paid');
+
+    return $unpaid_sell_query;
+}

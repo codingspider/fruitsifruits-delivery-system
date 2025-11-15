@@ -71,10 +71,13 @@ Route::middleware(['auth:sanctum'])->prefix('superadmin')->group(function () {
     Route::apiResource('recipes', RecipeController::class);
     Route::apiResource('productions', ProductionController::class);
 
+    Route::post('get/profit/report', [ReportController::class, 'profitReport']);
+    
     Route::get('products/{product}/edit', [ProductController::class, 'edit']);
     Route::get('flavours/{flavour}/edit', [FlavourController::class, 'edit']);
 
     Route::get('get/products', [ProductController::class, 'getProducts']);
+    Route::get('get/ingredients', [ProductController::class, 'getIngredients']);
     Route::get('get/bottles', [ProductController::class, 'getBottles']);
 
     Route::get('get/finished/goods', [ProductController::class, 'finishGoods']);
@@ -83,7 +86,7 @@ Route::middleware(['auth:sanctum'])->prefix('superadmin')->group(function () {
     Route::get('get/business/data', [BusinessController::class, 'index']);
     Route::get('login-history', [BusinessController::class, 'loginHistory']);
     Route::get('get/timezone', [BusinessController::class, 'timezone']);
-    Route::post('get/profit/report', [ReportController::class, 'profitReport']);
+    
     Route::post('get/delivery/summery/report', [ReportController::class, 'deliverySummeryReport']);
 
     Route::get('get/stats', [AdminDashboardController::class, 'getStats']);

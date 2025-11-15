@@ -13,6 +13,10 @@ class Transaction extends Model
         return $this->hasMany(TransactionLine::class); 
     }
     
+    public function reports() { 
+        return $this->hasMany(Report::class); 
+    }
+    
     public function sell_lines() { 
         return $this->hasMany(SellLine::class); 
     }

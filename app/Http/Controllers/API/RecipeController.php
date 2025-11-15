@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\API;
 
+use App\Models\Product;
 use App\Models\MfgRecipe;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -47,6 +48,7 @@ class RecipeController extends BaseController
     {
         $validator = Validator::make($request->all(), [
             'product_id'     => 'required',
+            'flavour_id'     => 'required',
             'ingredients_cost' => 'required',
             'total_quantity' => 'required',
             'instructions'      => 'nullable',
@@ -67,10 +69,10 @@ class RecipeController extends BaseController
         try {
             $mfg = new MfgRecipe();
             $mfg->product_id = $request->product_id;
+            $mfg->flavour_id = $request->flavour_id;
             $mfg->instructions = $request->notes;
             $mfg->ingredients_cost = $request->ingredients_cost;
             $mfg->total_quantity = $request->total_quantity;
-            $mfg->unit = $request->unit;
             $mfg->created_by = auth()->user()->id;
             $mfg->save();
 
@@ -78,7 +80,9 @@ class RecipeController extends BaseController
                 $line = new MfgRecipeIngredient();
                 $line->mfg_recipe_id = $mfg->id;
                 $line->product_id = $product['product_id'];
+                $line->bottle_id = $product['bottle_id'];
                 $line->quantity = $product['quantity'];
+                $line->unit = $product['unit'];
                 $line->save();
             }
 
@@ -96,10 +100,12 @@ class RecipeController extends BaseController
     public function update(Request $request, $id)
     {
         $validator = Validator::make($request->all(), [
-            'total'     => 'required',
-            'date'      => 'required',
-            'ref_no' => 'nullable|string|max:255|unique:transactions,reference_no,' . $id . ',id',
-
+            'product_id'     => 'required',
+            'flavour_id'     => 'required',
+            'ingredients_cost' => 'required',
+            'total_quantity' => 'required',
+            'instructions'      => 'nullable',
+            'unit' => 'nullable',
         ]);
 
         if ($validator->fails()) {
@@ -110,35 +116,41 @@ class RecipeController extends BaseController
         try {
 
             // If no ref number submitted, keep old one or set time
-            $ref = $request->ref_no ?: $transaction->reference_no ?? time();
+            $mfg = MfgRecipe::find($id);
+            $mfg->product_id = $request->product_id;
+            $mfg->flavour_id = $request->flavour_id;
+            $mfg->instructions = $request->instructions;
+            $mfg->ingredients_cost = $request->ingredients_cost;
+            $mfg->total_quantity = $request->total_quantity;
+            $mfg->save();
 
-            // ✅ Update transaction instead of creating new
-            $transaction = MfgRecipe::find($id);
-            $transaction->date = $request->date;
-            $transaction->total_amount = $request->total;
-            $transaction->reference_no = $ref;
-            $transaction->notes = $request->notes;
-            $transaction->save();
+            $mfg->recipe_items()->delete();
 
-            // ✅ Delete old lines before inserting new ones
-            $transaction->lines()->delete();
+            $total = 0;
 
-            // ✅ Insert new lines
-            foreach ($request->products as $product) {
-                $line = new TransactionLine();
-                $line->transaction_id = $transaction->id;
+            foreach($request->products as $product){
+
+                $pro = Product::find($product['product_id']);
+                $total += $pro->cost_price * $product['quantity'];
+                
+                $line = new MfgRecipeIngredient();
+                $line->mfg_recipe_id = $mfg->id;
                 $line->product_id = $product['product_id'];
+                $line->bottle_id = $product['bottle_id'];
                 $line->quantity = $product['quantity'];
-                $line->unit_cost = $product['price'];
-                $line->sub_total = $product['price'] * $product['quantity'];
+                $line->unit = $product['unit'];
                 $line->save();
             }
 
-            // ✅ Recalculate stock etc.
-            TransactionService::processTransaction($transaction);
+
+            if ($total != $request->ingredients_cost) {
+                $mfg->ingredients_cost = $total;
+                $mfg->save();
+            }
+
 
             DB::commit();
-            return $this->sendResponse($transaction, 'Transaction updated successfully.');
+            return $this->sendResponse($mfg, 'Data updated successfully.');
 
         } catch (\Exception $e) {
             DB::rollBack();

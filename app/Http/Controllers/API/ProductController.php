@@ -42,7 +42,20 @@ class ProductController extends BaseController
     public function getProducts(Request $request)
     {
         try {
-            $products = Product::whereIn('product_type', ['raw', 'packaging'])
+            $products = Product::whereIn('product_type', ['finished'])
+                ->latest()
+                ->paginate(10);
+
+            return $this->sendResponse($products, 'Products retrieved successfully.');
+        } catch (\Exception $e) {
+            return $this->sendError('Server Error: '.$e->getMessage());
+        }
+    }
+    
+    public function getIngredients(Request $request)
+    {
+        try {
+            $products = Product::whereIn('product_type', ['raw'])
                 ->latest()
                 ->paginate(10);
 

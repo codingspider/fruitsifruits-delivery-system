@@ -57,6 +57,7 @@ const LocationProfitReport = () => {
         setIsSubmitting(true);
         try {
             const res = await api.post("superadmin/get/profit/report", data);
+            console.log(res.data.data);
             setTransactionLocation(res.data.data);
         } catch (err) {
             const errorResponse = err?.response?.data;
@@ -154,8 +155,7 @@ const LocationProfitReport = () => {
                 tran_locations.map((item, index) => (
                     <Card key={index} mb={6}>
                         <CardHeader fontWeight="bold" fontSize="lg">
-                            Location: {item.location} — Total Profit: $
-                            {item.total_profit.toFixed(2)}
+                            Location: {item.location} — Total Tax : ${item.total_tax.toFixed(2)},  Total Profit: ${item.total_profit.toFixed(2) - item.total_tax.toFixed(2)}
                         </CardHeader>
 
                         <CardBody>

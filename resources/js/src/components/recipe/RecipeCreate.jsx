@@ -34,23 +34,40 @@ const RecipeCreate = () => {
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [ingredients, setIngredients] = useState([]);
     const [products, setProducts] = useState([]);
+    const [flavours, setFlavours] = useState([]); 
+    const [bottles, setBottles] = useState([]); 
     
     const toast = useToast();
     const navigate = useNavigate();
 
     const [items, setItems] = useState([
-        { productId: "", quantity: 1, price: 0 },
+        { productId: "", bottle_id: "", quantity: 1, price: 0, unit: "" },
     ]);
 
     // ✅ Corrected form state — added missing "notes" and "total"
     const [form, setForm] = useState({
         product_id: "",
+        flavour_id: "",
         total_quantity: "",
         ingredients_cost: "",
         instructions: "",
         notes: "",
         total: 0,
     });
+
+    const getFlavours = async () => {
+        try {
+            const res = await api.get("superadmin/flavours");
+            setFlavours(res.data?.data?.data || []);
+        } catch (err) {
+            console.error("Failed to fetch flavours", err);
+        }
+    }; 
+
+    const getBottles = async () => {
+        const res = await api.get("superadmin/get/bottles");
+        setBottles(res.data.data.data);
+    };
 
     // ➕ Add new product row
     const addItem = () => {
@@ -99,6 +116,7 @@ const RecipeCreate = () => {
         try {
             const payload = {
                 product_id: form.product_id,
+                flavour_id: form.flavour_id,
                 total_quantity: form.total_quantity,
                 ingredients_cost: getTotal(),
                 instructions: form.instructions,
@@ -106,9 +124,13 @@ const RecipeCreate = () => {
                 products: items.map((item) => ({
                     product_id: item.productId,
                     quantity: item.quantity,
+                    bottle_id: item.bottle_id,
+                    unit: item.unit,
                     price: item.price,
                 })),
             };
+
+            console.log("Payload:", payload);
 
             const res = await api.post("superadmin/recipes", payload);
             reset();
@@ -152,7 +174,7 @@ const RecipeCreate = () => {
 
     // 📦 Fetch ingredients (raw materials)
     const getIngredients = async () => {
-        const res = await api.get("superadmin/get/products");
+        const res = await api.get("superadmin/get/ingredients");
         setIngredients(res.data.data.data);
     };
 
@@ -168,6 +190,8 @@ const RecipeCreate = () => {
         document.title = `${app_name} | Recipe Create`; // ✅ Fixed wrong title
         getIngredients();
         getProducts();
+        getFlavours();
+        getBottles();
     }, []);
 
     return (
@@ -231,6 +255,19 @@ const RecipeCreate = () => {
                                         ))}
                                     </Select>
                                 </FormControl>
+                                <FormControl isRequired>
+                                    <FormLabel>{t("flavour")}</FormLabel>
+                                    <Select placeholder="Select Flavour"  value={form.flavour_id}
+                                        onChange={(e) =>
+                                            setForm((prev) => ({
+                                                ...prev,
+                                                flavour_id: e.target.value,
+                                            }))
+                                        }>
+                                        {flavours.map((flavour) => (<option key={flavour.id} value={flavour.id}>{flavour.name}</option>))}
+                                    </Select>
+                                </FormControl>
+                                
 
                                 {/* ✅ Notes field fixed (was misreferencing notes/instructions) */}
                                 <FormControl mb={3}>
@@ -279,6 +316,23 @@ const RecipeCreate = () => {
                                                 </Select>
                                             </FormControl>
 
+                                            <FormControl>
+                                                <FormLabel>{t("bottle")}</FormLabel>
+                                                <Select
+                                                    placeholder="Select"
+                                                    value={item.bottle_id}
+                                                    onChange={(e) =>
+                                                        handleChange(index, "bottle_id", e.target.value)
+                                                    }
+                                                >
+                                                    {bottles.map((bottle) => (
+                                                        <option key={bottle.id} value={bottle.id}>
+                                                            {bottle.name}
+                                                        </option>
+                                                    ))}
+                                                </Select>
+                                            </FormControl> 
+
                                             {/* Quantity */}
                                             <FormControl>
                                                 <FormLabel>{t("quantity")}</FormLabel>
@@ -295,6 +349,42 @@ const RecipeCreate = () => {
                                                     }
                                                 />
                                             </FormControl>
+
+                                            <FormControl isRequired>
+                                                <FormLabel>{t("unit")}</FormLabel>
+                                                <Select 
+                                                    value={item.unit}
+                                                    onChange={(e) =>
+                                                    handleChange(
+                                                        index,
+                                                        "unit",
+                                                        e.target.value
+                                                    )
+                                                    } placeholder="Select unit">
+                                                    {/* Weight */}
+                                                    <option value="kg">Kilogram (kg)</option>
+                                                    <option value="g">Gram (g)</option>
+                                                    <option value="mg">Milligram (mg)</option>
+                                                    <option value="lb">Pound (lb)</option>
+
+                                                    {/* Volume */}
+                                                    <option value="liter">Liter (L)</option>
+                                                    <option value="ml">Milliliter (mL)</option>
+                                                    <option value="gal">Gallon (gal)</option>
+
+                                                    {/* Units / Count */}
+                                                    <option value="pcs">Pieces (pcs)</option>
+                                                    <option value="pack">Pack</option>
+                                                    <option value="box">Box</option>
+                                                    <option value="carton">Carton</option>
+                                                    <option value="bottle">Bottle</option>
+                                                    <option value="bag">Bag</option>
+                                                    {/* Other */}
+                                                    <option value="dozen">Dozen</option>
+                                                    <option value="set">Set</option>
+                                                </Select>
+                                            </FormControl>
+                                            
 
 
                                             {/* Remove Row */}

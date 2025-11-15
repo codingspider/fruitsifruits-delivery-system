@@ -18,6 +18,7 @@ class ReportController extends BaseController
                     'sell_lines.product:id,cost_price',
                     'sell_lines.bottle:id,cost_price',
                     'sell_lines.flavor:id,name',
+                    'sell'
                 ]);
 
             // ✅ Filters
@@ -35,6 +36,7 @@ class ReportController extends BaseController
                     return $transaction->sell_lines->map(function ($line) use ($transaction) {
                         $price_per_unit = optional($line->product)->cost_price ?? 0;
                         $cost_per_bottle = optional($line->bottle)->cost_price ?? 0;
+
                         $net_price = $price_per_unit - $cost_per_bottle;
                         $quantity = $line->to_be_filled ?? 0;
                         $deal_quantity = $line->deal_quantity ?? 0;
@@ -42,6 +44,7 @@ class ReportController extends BaseController
 
                         return [
                             'location' => optional($transaction->location)->name ?? 'N/A',
+                            'tax' => optional($transaction->sell)->tax ?? 'N/A',
                             'flavor' => optional($line->flavor)->name ?? 'N/A',
                             'total_quantity' => $quantity,
                             'price_per_unit' => round($price_per_unit, 2),
@@ -68,6 +71,7 @@ class ReportController extends BaseController
                             'net_price' => round($flavorItems->avg('net_price'), 2),
                             'deal_quantity' => $flavorItems->sum('deal_quantity'),
                             'deal_cost' => round($flavorItems->sum('deal_cost'), 2),
+                            'total_tax' => round($flavorItems->sum('tax'), 2),
                             'total_profit' => round($flavorItems->sum('total_profit'), 2),
                         ];
                     });
@@ -76,6 +80,7 @@ class ReportController extends BaseController
                         'location' => $location,
                         'flavors' => $flavorGroups->values(),
                         'total_profit' => round($flavorGroups->sum('total_profit'), 2),
+                        'total_tax' => round($flavorGroups->sum('total_tax'), 2),
                     ];
                 })
                 ->values();

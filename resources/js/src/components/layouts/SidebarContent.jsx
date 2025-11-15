@@ -100,7 +100,6 @@ const SidebarContent = ({ onClose, ...rest }) => {
       </Flex>
 
       {role === 'superadmin' && (
-
       <>
       
       {/* ----- Static links ----- */}
@@ -112,7 +111,7 @@ const SidebarContent = ({ onClose, ...rest }) => {
       <NavLink to={BOTTLE_LIST_PATH} icon={FcIcons8Cup } activeBg={activeBg} activeColor={activeColor} hoverBg={hoverBg} active={isActive(BOTTLE_LIST_PATH)} label={t('manage_bottle')} />
       
       <NavLink to={FINISH_GOOD_LIST_PATH} icon={FcOk } activeBg={activeBg} activeColor={activeColor} hoverBg={hoverBg} active={isActive(FINISH_GOOD_LIST_PATH)} label={t('products')} />
-      {/* <NavLink to={RECIPE_LIST_PATH} icon={FcMultipleInputs } activeBg={activeBg} activeColor={activeColor} hoverBg={hoverBg} active={isActive(RECIPE_LIST_PATH)} label={t('recipe')} /> */}
+      <NavLink to={RECIPE_LIST_PATH} icon={FcMultipleInputs } activeBg={activeBg} activeColor={activeColor} hoverBg={hoverBg} active={isActive(RECIPE_LIST_PATH)} label={t('recipe')} />
       <NavLink to={PRODUCTION_LIST_PATH} icon={FcFactory } activeBg={activeBg} activeColor={activeColor} hoverBg={hoverBg} active={isActive(PRODUCTION_LIST_PATH)} label={t('juice_production')} />
       
       <NavLink to={FLAVOUR_LIST_PATH} icon={FcFilledFilter } activeBg={activeBg} activeColor={activeColor} hoverBg={hoverBg} active={isActive(FLAVOUR_LIST_PATH)} label={t('manage_flavour')} />

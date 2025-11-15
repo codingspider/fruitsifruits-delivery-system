@@ -14,10 +14,10 @@ return new class extends Migration
         Schema::create('mfg_recipes', function (Blueprint $table) {
             $table->id();
             $table->foreignId('product_id')->constrained('products')->cascadeOnDelete();
+            $table->foreignId('flavour_id')->nullable()->constrained('flavours')->cascadeOnDelete();
             $table->text('instructions')->nullable();
             $table->decimal('ingredients_cost', 10, 2)->nullable();
             $table->decimal('total_quantity', 10, 2)->nullable();
-            $table->string('unit')->nullable();
             $table->timestamps();
         });
     }
