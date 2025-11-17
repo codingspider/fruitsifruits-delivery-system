@@ -102,6 +102,7 @@ export default function Flavour() {
     const columns = [
         { header: "ID", accessorKey: "id"},
         { header: "Name", accessorKey: "name"},
+        { header: "Cost", accessorKey: "price"},
         { header: "status", accessorKey: "status"},
         {
             header: "Actions",

@@ -53,6 +53,7 @@ const RecipeCreate = () => {
         instructions: "",
         notes: "",
         total: 0,
+        output_quantity: 0,
     });
 
     const getFlavours = async () => {
@@ -121,6 +122,7 @@ const RecipeCreate = () => {
                 ingredients_cost: getTotal(),
                 instructions: form.instructions,
                 notes: form.notes,
+                output_quantity: form.output_quantity,
                 products: items.map((item) => ({
                     product_id: item.productId,
                     quantity: item.quantity,
@@ -268,8 +270,6 @@ const RecipeCreate = () => {
                                     </Select>
                                 </FormControl>
                                 
-
-                                {/* ✅ Notes field fixed (was misreferencing notes/instructions) */}
                                 <FormControl mb={3}>
                                     <FormLabel>{t("notes")}</FormLabel>
                                     <Input
@@ -281,6 +281,21 @@ const RecipeCreate = () => {
                                             setForm((prev) => ({
                                                 ...prev,
                                                 notes: e.target.value,
+                                            }))
+                                        }
+                                    />
+                                </FormControl>
+                                <FormControl mb={3} isRequired>
+                                    <FormLabel>{t("output_quantity")}</FormLabel>
+                                    <Input
+                                        name="batch_yield"
+                                        type="text"
+                                        placeholder={t("output_quantity")}
+                                        value={form.output_quantity}
+                                        onChange={(e) =>
+                                            setForm((prev) => ({
+                                                ...prev,
+                                                output_quantity: e.target.value,
                                             }))
                                         }
                                     />

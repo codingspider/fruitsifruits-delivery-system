@@ -53,11 +53,14 @@ const RecipeEdit = () => {
         ingredients_cost: "",
         instructions: "",
         total: 0,
+        output_quantity: 0,
     });
 
     const getRecipe = async () => {
         const res = await api.get(`superadmin/recipes/${id}`);
         const recipe = res.data.data;
+
+        console.log(recipe);
 
         // Map API data to local form shape
         setForm({
@@ -66,6 +69,7 @@ const RecipeEdit = () => {
             instructions: recipe.instructions ?? "",
             total_quantity: recipe.total_quantity ?? 0,
             ingredients_cost: recipe.ingredients_cost ?? 0,
+            output_quantity: recipe.flavor?.batch_yield ?? 0,
         });
 
         setItems(
@@ -163,6 +167,7 @@ const RecipeEdit = () => {
                 total_quantity: form.total_quantity,
                 ingredients_cost: getTotal(),
                 instructions: form.instructions,
+                output_quantity: form.output_quantity,
                 products: items.map((item) => ({
                     product_id: item.productId,
                     quantity: item.quantity,
@@ -324,6 +329,21 @@ const RecipeEdit = () => {
                                             setForm((prev) => ({
                                                 ...prev,
                                                 instructions: e.target.value,
+                                            }))
+                                        }
+                                    />
+                                </FormControl>
+                                <FormControl mb={3} isRequired>
+                                    <FormLabel>{t("output_quantity")}</FormLabel>
+                                    <Input
+                                        name="batch_yield"
+                                        type="text"
+                                        placeholder={t("output_quantity")}
+                                        value={form.output_quantity}
+                                        onChange={(e) =>
+                                            setForm((prev) => ({
+                                                ...prev,
+                                                output_quantity: e.target.value,
                                             }))
                                         }
                                     />

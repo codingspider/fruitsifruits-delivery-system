@@ -29,6 +29,9 @@ import { t } from "i18next";
 import api from "../../axios";
 import { useForm } from "react-hook-form";
 import moment from "moment"; 
+import { useRef } from "react";
+import { useReactToPrint } from "react-to-print";
+
 
 const DeliverySummeryReport = () => {
     const bg = useColorModeValue("gray.50", "gray.800");
@@ -39,6 +42,13 @@ const DeliverySummeryReport = () => {
     const { register, handleSubmit, reset } = useForm();
     const [isSubmitting, setIsSubmitting] = useState(false);
     const toast = useToast();
+
+    const componentRef = useRef(null);
+    
+    const handlePrint = useReactToPrint({
+        contentRef: componentRef,
+        documentTitle: "Report",
+    });
 
     // Fetch locations
     const getLocations = async () => {
@@ -97,6 +107,23 @@ const DeliverySummeryReport = () => {
             <Heading size="md" mb={4}>
                 {t("profit_report")}
             </Heading>
+            <style>
+                {`
+                @media print {
+                    button {
+                    display: none;
+                    }
+                    table {
+                    width: 100% !important;
+                    border-collapse: collapse;
+                    }
+                    th, td {
+                    border: 1px solid #ccc !important;
+                    padding: 8px !important;
+                    }
+                }
+                `}
+            </style>
 
             {/* Filter Form */}
             <Box bg={cardBg} p={6} rounded="xl" shadow="md" mb={8}>
@@ -157,12 +184,10 @@ const DeliverySummeryReport = () => {
             {/* Data Table */}
             <Card>
                 <CardBody>
-                <TableContainer
-                    bg={cardBg}
-                    p={4}
-                    rounded="xl"
-                    shadow="md"
-                >
+                    <Button colorScheme="blue" onClick={handlePrint}>
+                        Print Report
+                    </Button>
+                <TableContainer p={4} ref={componentRef}>
                     <Table variant="simple">
                         <Thead>
                             <Tr>
@@ -182,7 +207,7 @@ const DeliverySummeryReport = () => {
                                     <Td>{item.total_deliveries}</Td>
                                     <Td>{item.total_quantity}</Td>
                                     <Td>{item.driver_name}</Td>
-                                    <Td>{moment(item.last_delivery_date).format("MMMM Do YYYY, h:mm:ss A")} </Td>
+                                    <Td>{moment(item.last_delivery_date).format("MMMM Do YYYY")} </Td>
                                     <Td>
                                         <Stack direction='row'>
                                             <Badge variant='solid' colorScheme='green'>

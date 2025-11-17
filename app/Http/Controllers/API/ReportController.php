@@ -4,6 +4,7 @@ namespace App\Http\Controllers\API;
 
 use App\Models\Transaction;
 use Illuminate\Http\Request;
+use App\Models\MfgProduction;
 use App\Http\Controllers\Controller;
 use App\Http\Controllers\API\BaseController;
 
@@ -12,80 +13,73 @@ class ReportController extends BaseController
     public function profitReport(Request $request)
     {
         try {
-            $query = Transaction::query()
+
+            $query = MfgProduction::query()
                 ->with([
                     'location:id,name',
-                    'sell_lines.product:id,cost_price',
-                    'sell_lines.bottle:id,cost_price',
-                    'sell_lines.flavor:id,name',
-                    'sell'
+                    'product',
+                    'items',
+                    'items.flavour:id,name,price,batch_yield,batch_ingredient_cost',
                 ]);
 
-            // ✅ Filters
+            // Filters
             if ($request->start_date && $request->end_date) {
-                $query->whereDate('created_at', '>=', $request->start_date)->whereDate('created_at', '<=', $request->end_date);
+                $query->whereBetween('created_at', [
+                    $request->start_date,
+                    $request->end_date
+                ]);
             }
 
             if ($request->location_id) {
                 $query->where('location_id', $request->location_id);
             }
 
-            // ✅ Build report
-            $data = $query->where('transaction_type', 'sell')->get()
-                ->flatMap(function ($transaction) {
-                    return $transaction->sell_lines->map(function ($line) use ($transaction) {
-                        $price_per_unit = optional($line->product)->cost_price ?? 0;
-                        $cost_per_bottle = optional($line->bottle)->cost_price ?? 0;
+            $result = $query->get();
 
-                        $net_price = $price_per_unit - $cost_per_bottle;
-                        $quantity = $line->to_be_filled ?? 0;
-                        $deal_quantity = $line->deal_quantity ?? 0;
-                        $deal_cost = $deal_quantity * $quantity;
+            // STEP 1 — Flatten rows
+            $rows = $result->flatMap(function ($production) {
 
-                        return [
-                            'location' => optional($transaction->location)->name ?? 'N/A',
-                            'tax' => optional($transaction->sell)->tax ?? 'N/A',
-                            'flavor' => optional($line->flavor)->name ?? 'N/A',
-                            'total_quantity' => $quantity,
-                            'price_per_unit' => round($price_per_unit, 2),
-                            'cost_per_bottle' => round($cost_per_bottle, 2),
-                            'net_price' => round($net_price, 2),
-                            'deal_quantity' => $deal_quantity,
-                            'deal_cost' => round($deal_cost, 2),
-                            'total_profit' => round($net_price * $quantity, 2),
-                        ];
-                    });
-                })
-                ->filter();
+                return $production->items->map(function ($line) use ($production) {
 
-            // ✅ Group by location, then flavor
-            $grouped = $data
-                ->groupBy('location')
-                ->map(function ($items, $location) {
-                    $flavorGroups = $items->groupBy('flavor')->map(function ($flavorItems, $flavor) {
-                        return [
-                            'flavor' => $flavor,
-                            'total_quantity' => $flavorItems->sum('total_quantity'),
-                            'price_per_unit' => round($flavorItems->avg('price_per_unit'), 2),
-                            'cost_per_bottle' => round($flavorItems->avg('cost_per_bottle'), 2),
-                            'net_price' => round($flavorItems->avg('net_price'), 2),
-                            'deal_quantity' => $flavorItems->sum('deal_quantity'),
-                            'deal_cost' => round($flavorItems->sum('deal_cost'), 2),
-                            'total_tax' => round($flavorItems->sum('tax'), 2),
-                            'total_profit' => round($flavorItems->sum('total_profit'), 2),
-                        ];
-                    });
+                    $flavour = $line->flavour;
+
+                    // Bottle cost calculation
+                    $batchYield = $flavour->batch_yield ?? 0;
+                    $costPerBottle  = $flavour->batch_ingredient_cost ?? 0;
+
+                    $pricePerUnit = $flavour->price ?? 0;
+                    $quantity     = $line->quantity;
+                    $netPrice = $pricePerUnit - $costPerBottle;
+                    $profit = $netPrice * $quantity;
 
                     return [
-                        'location' => $location,
-                        'flavors' => $flavorGroups->values(),
-                        'total_profit' => round($flavorGroups->sum('total_profit'), 2),
-                        'total_tax' => round($flavorGroups->sum('total_tax'), 2),
+                        'flavor'          => $flavour->name,
+                        'product'         => optional($production->product)->name,
+                        'total_quantity'  => $quantity,
+                        'price_per_unit'  => $pricePerUnit,
+                        'cost_per_bottle' => $costPerBottle,
+                        'net_price'       => $netPrice,
+                        'total_profit'    => $profit,
                     ];
-                })
-                ->values();
+                });
+            });
 
-            return $this->sendResponse($grouped, 'Report retrieved successfully.');
+            // STEP 2 — GROUP by flavor
+            $final = $rows->groupBy('flavor')->map(function ($group) {
+
+                return [
+                    'flavor'          => $group->first()['flavor'],
+                    'total_quantity'  => $group->sum('total_quantity'),
+                    'price_per_unit'  => $group->first()['price_per_unit'],
+                    'cost_per_bottle' => $group->first()['cost_per_bottle'],
+                    'net_price'       => $group->first()['net_price'],
+                    'total_profit'    => $group->sum('total_profit'),
+                ];
+            })->values();
+
+
+            return $this->sendResponse($final, 'Report retrieved successfully.');
+
         } catch (\Exception $e) {
             return $this->sendError('Server Error: ' . $e->getMessage());
         }

@@ -59,6 +59,7 @@ class FlavourController extends BaseController
         $validator = Validator::make($request->all(), [
             'name'           => 'required|string|max:255',
             'status'  => 'required',
+            'price'  => 'required',
         ]);
 
         if ($validator->fails()) {
@@ -70,6 +71,7 @@ class FlavourController extends BaseController
             $flavour = new Flavour();
             $flavour->name = $request->name;
             $flavour->status = $request->status;
+            $flavour->price = $request->price;
             $flavour->save();
 
             DB::commit();
@@ -88,6 +90,7 @@ class FlavourController extends BaseController
         $validator = Validator::make($request->all(), [
             'name'           => 'required|string|max:255',
             'status'         => 'required',
+            'price'         => 'required',
         ]);
 
         if ($validator->fails()) {
@@ -98,6 +101,7 @@ class FlavourController extends BaseController
         try {
             $flavour->name = $request->name;
             $flavour->status = $request->status;
+            $flavour->price = $request->price;
             $flavour->save();
 
             DB::commit();

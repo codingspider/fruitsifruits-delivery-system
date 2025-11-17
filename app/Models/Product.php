@@ -12,6 +12,10 @@ class Product extends Model
         return $this->hasMany(TransactionLine::class); 
     }
     
+    public function productions() { 
+        return $this->hasMany(MfgProduction::class); 
+    }
+    
     public function stockMoves() { 
         return $this->hasMany(StockMove::class); 
     }

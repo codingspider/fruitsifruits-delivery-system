@@ -145,6 +145,16 @@ const FlavourCreate = () => {
                                     />
                                 </FormControl>
                                 <FormControl isRequired>
+                                    <FormLabel>{t("price")}</FormLabel>
+                                    <Input
+                                        {...register("price", {
+                                            required: true,
+                                        })}
+                                        type="number"
+                                        placeholder={t("price")}
+                                    />
+                                </FormControl>
+                                <FormControl isRequired>
                                     <FormLabel>{t("status")}</FormLabel>
                                     <Select
                                         {...register("status")}

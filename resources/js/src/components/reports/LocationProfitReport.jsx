@@ -22,10 +22,14 @@ import {
     Card,
     CardHeader,
     CardBody,
+    Tfoot,
 } from "@chakra-ui/react";
 import { t } from "i18next";
 import api from "../../axios";
 import { useForm } from "react-hook-form";
+import { useCurrencyFormatter } from "../../useCurrencyFormatter";
+import { useRef } from "react";
+import { useReactToPrint } from "react-to-print";
 
 const LocationProfitReport = () => {
     const bg = useColorModeValue("gray.50", "gray.800");
@@ -36,6 +40,14 @@ const LocationProfitReport = () => {
     const { register, handleSubmit, reset } = useForm();
     const [isSubmitting, setIsSubmitting] = useState(false);
     const toast = useToast();
+    const { formatAmount, currency } = useCurrencyFormatter();
+
+    const componentRef = useRef(null);
+
+    const handlePrint = useReactToPrint({
+        contentRef: componentRef,
+        documentTitle: "Report",
+    });
 
     // Fetch locations
     const getLocations = async () => {
@@ -58,7 +70,7 @@ const LocationProfitReport = () => {
         try {
             const res = await api.post("superadmin/get/profit/report", data);
             console.log(res.data.data);
-            setTransactionLocation(res.data.data);
+            setReports(res.data.data);
         } catch (err) {
             const errorResponse = err?.response?.data;
             if (errorResponse?.errors) {
@@ -88,11 +100,42 @@ const LocationProfitReport = () => {
         }
     };
 
+    const totals = reports?.reduce(
+        (acc, row) => {
+            acc.totalQuantity += Number(row.total_quantity);
+            acc.totalNetPrice += Number(row.net_price);
+            acc.totalProfit += Number(row.total_profit);
+            return acc;
+        },
+        {
+            totalQuantity: 0,
+            totalNetPrice: 0,
+            totalProfit: 0,
+        }
+    );
+
     return (
         <Box p={6} bg={bg} minH="100vh">
             <Heading size="md" mb={4}>
                 {t("profit_report")}
             </Heading>
+            <style>
+                {`
+                @media print {
+                    button {
+                    display: none;
+                    }
+                    table {
+                    width: 100% !important;
+                    border-collapse: collapse;
+                    }
+                    th, td {
+                    border: 1px solid #ccc !important;
+                    padding: 8px !important;
+                    }
+                }
+                `}
+            </style>
 
             {/* Filter Form */}
             <Box bg={cardBg} p={6} rounded="xl" shadow="md" mb={8}>
@@ -102,7 +145,7 @@ const LocationProfitReport = () => {
                         gap={4}
                     >
                         {/* Location */}
-                        <GridItem>
+                        {/* <GridItem>
                             <FormControl>
                                 <FormLabel>Select Location</FormLabel>
                                 <Select
@@ -119,7 +162,7 @@ const LocationProfitReport = () => {
                                     ))}
                                 </Select>
                             </FormControl>
-                        </GridItem>
+                        </GridItem> */}
 
                         {/* Start Date */}
                         <GridItem>
@@ -151,85 +194,62 @@ const LocationProfitReport = () => {
             </Box>
 
             {/* Data Table */}
-            {tran_locations && tran_locations.length > 0 ? (
-                tran_locations.map((item, index) => (
-                    <Card key={index} mb={6}>
-                        <CardHeader fontWeight="bold" fontSize="lg">
-                            Location: {item.location} — Total Tax : ${item.total_tax.toFixed(2)},  Total Profit: ${item.total_profit.toFixed(2) - item.total_tax.toFixed(2)}
-                        </CardHeader>
+            <Card mb={6}>
+                <CardBody>
+                    <Button colorScheme="blue" onClick={handlePrint}>
+                        Print Report
+                    </Button>
+                    {/* Wrap the printable table in a plain div with ref */}
+                    <div ref={componentRef}>
+                        <TableContainer p={4} >
+                            <Table variant="simple">
+                                <Thead>
+                                    <Tr>
+                                        <Th>Flavor</Th>
+                                        <Th isNumeric>Total Quantity</Th>
+                                        <Th isNumeric>Price per Unit</Th>
+                                        <Th isNumeric>Cost per Bottle</Th>
+                                        <Th isNumeric>Net Price</Th>
+                                        <Th isNumeric>Total Profit</Th>
+                                    </Tr>
+                                </Thead>
 
-                        <CardBody>
-                            <TableContainer
-                                bg={cardBg}
-                                p={4}
-                                rounded="xl"
-                                shadow="md"
-                            >
-                                <Table variant="simple">
-                                    <Thead>
-                                        <Tr>
-                                            <Th>Flavor</Th>
-                                            <Th isNumeric>Total Quantity</Th>
-                                            <Th isNumeric>Price per Unit</Th>
-                                            <Th isNumeric>Cost per Bottle</Th>
-                                            <Th isNumeric>Net Price</Th>
-                                            <Th isNumeric>Deal Quantity</Th>
-                                            <Th isNumeric>Deal Cost</Th>
-                                            <Th isNumeric>Total Profit</Th>
-                                        </Tr>
-                                    </Thead>
-
-                                    <Tbody>
-                                        {item.flavors &&
-                                        item.flavors.length > 0 ? (
-                                            item.flavors.map((report, i) => (
-                                                <Tr key={i}>
-                                                    <Td>{report.flavor}</Td>
-                                                    <Td isNumeric>
-                                                        {report.total_quantity}
-                                                    </Td>
-                                                    <Td isNumeric>
-                                                        {report.price_per_unit}
-                                                    </Td>
-                                                    <Td isNumeric>
-                                                        {report.cost_per_bottle}
-                                                    </Td>
-                                                    <Td isNumeric>
-                                                        {report.net_price}
-                                                    </Td>
-                                                    <Td isNumeric>
-                                                        {report.deal_quantity}
-                                                    </Td>
-                                                    <Td isNumeric>
-                                                        {report.deal_cost}
-                                                    </Td>
-                                                    <Td isNumeric>
-                                                        {report.total_profit}
-                                                    </Td>
-                                                </Tr>
-                                            ))
-                                        ) : (
-                                            <Tr>
-                                                <Td
-                                                    colSpan={8}
-                                                    textAlign="center"
-                                                    py={6}
-                                                >
-                                                    No flavors found
-                                                </Td>
+                                <Tbody>
+                                    {reports && reports.length > 0 ? (
+                                        reports.map((report, i) => (
+                                            <Tr key={i}>
+                                                <Td>{report.flavor}</Td>
+                                                <Td isNumeric>{report.total_quantity}</Td>
+                                                <Td isNumeric>{formatAmount(report.price_per_unit)}</Td>
+                                                <Td isNumeric>{formatAmount(report.cost_per_bottle)}</Td>
+                                                <Td isNumeric>{formatAmount(report.net_price)}</Td>
+                                                <Td isNumeric>{formatAmount(report.total_profit)}</Td>
                                             </Tr>
-                                        )}
-                                    </Tbody>
-                                </Table>
-                            </TableContainer>
-                        </CardBody>
-                    </Card>
-                ))
-            ) : (
-                <Box textAlign="center" py={10}>
-                    No locations found
-                </Box>
-            )}
+                                        ))
+                                    ) : (
+                                        <Tr>
+                                            <Td colSpan={6} textAlign="center" py={6}>
+                                                No flavors found
+                                            </Td>
+                                        </Tr>
+                                    )}
+                                </Tbody>
+
+                                <Tfoot>
+                                    <Tr>
+                                        <Td colSpan={5} textAlign="right" fontWeight="bold">
+                                            Total Profit
+                                        </Td>
+                                        <Td textAlign="right" fontWeight="bold">
+                                            {formatAmount(totals.totalProfit)}
+                                        </Td>
+                                    </Tr>
+                                </Tfoot>
+                            </Table>
+                        </TableContainer>
+                    </div>
+                </CardBody>
+            </Card>
         </Box>
     );
 };

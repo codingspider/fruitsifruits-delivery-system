@@ -1,0 +1,15 @@
+@media print {
+  button {
+    display: none; /* hide print buttons */
+  }
+
+  table {
+    width: 100% !important;
+    border-collapse: collapse;
+  }
+
+  th, td {
+    border: 1px solid #ccc !important;
+    padding: 8px !important;
+  }
+}

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\API;
 
+use App\Models\Flavour;
 use App\Models\Product;
 use App\Models\MfgRecipe;
 use Illuminate\Http\Request;
@@ -28,7 +29,7 @@ class RecipeController extends BaseController
      */
     public function show($id)
     {
-        $product = MfgRecipe::with('recipe_items')->find($id);
+        $product = MfgRecipe::with('recipe_items', 'flavor')->find($id);
         return $this->sendResponse($product, 'Recipe retrieved successfully.');
     }
 
@@ -37,7 +38,7 @@ class RecipeController extends BaseController
      */
     public function edit($id)
     {
-        $product = MfgRecipe::find($id);
+        $product = MfgRecipe::with('flavor')->find($id);
         return $this->sendResponse($product, 'Recipe retrieved successfully.');
     }
 
@@ -76,7 +77,12 @@ class RecipeController extends BaseController
             $mfg->created_by = auth()->user()->id;
             $mfg->save();
 
+            $total = 0;
             foreach($request->products as $product){
+
+                $pro = Product::find($product['product_id']);
+                $total += $pro->cost_price * $product['quantity'];
+
                 $line = new MfgRecipeIngredient();
                 $line->mfg_recipe_id = $mfg->id;
                 $line->product_id = $product['product_id'];
@@ -85,6 +91,14 @@ class RecipeController extends BaseController
                 $line->unit = $product['unit'];
                 $line->save();
             }
+
+            $flavor = Flavour::find($request->flavour_id);
+            if($flavor){
+                $flavor->batch_yield = $request->output_quantity;
+                $flavor->batch_ingredient_cost = $total / $request->output_quantity ?? 0;
+                $flavor->save();
+            }
+            
 
             DB::commit();
             return $this->sendResponse($mfg, 'Data saved successfully.');
@@ -146,6 +160,13 @@ class RecipeController extends BaseController
             if ($total != $request->ingredients_cost) {
                 $mfg->ingredients_cost = $total;
                 $mfg->save();
+            }
+
+            $flavor = Flavour::find($request->flavour_id);
+            if($flavor){
+                $flavor->batch_yield = $request->output_quantity ?? 0;
+                $flavor->batch_ingredient_cost = $total / $request->output_quantity ?? 0;
+                $flavor->save();
             }
 
 

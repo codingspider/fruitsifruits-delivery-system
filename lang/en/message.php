@@ -193,4 +193,5 @@ return [
     'payment_details' => 'Payment Details',
     'close' => 'Close',
     'previous_due' => 'Previous Due',
+    'output_quantity' => 'Total Output Quantity',
 ];
