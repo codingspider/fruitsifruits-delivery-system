@@ -150,7 +150,7 @@ const FlavourCreate = () => {
                                         {...register("price", {
                                             required: true,
                                         })}
-                                        type="number"
+                                        type="text"
                                         placeholder={t("price")}
                                     />
                                 </FormControl>

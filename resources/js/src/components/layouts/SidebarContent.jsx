@@ -104,7 +104,7 @@ const SidebarContent = ({ onClose, ...rest }) => {
       
       {/* ----- Static links ----- */}
       <NavLink to={DASHBOARD_PATH} icon={FcHome} activeBg={activeBg} activeColor={activeColor} hoverBg={hoverBg} active={isActive(DASHBOARD_PATH)} label={t('dashboard')} />
-      <NavLink to={JUICE_ALLOCATION_LIST_PATH}      icon={FcShop} activeBg={activeBg} activeColor={activeColor} hoverBg={hoverBg} active={isActive(JUICE_ALLOCATION_LIST_PATH)} label={t('driver_allocation')} />
+      
       <NavLink to={DRIVER_ROUTE_LIST_PATH}  icon={FcList} activeBg={activeBg} activeColor={activeColor} hoverBg={hoverBg} active={isActive(DRIVER_ROUTE_LIST_PATH)} label={t('manage_route')} />
       <NavLink to={LOCATION_LIST_PATH} icon={FcHeatMap } activeBg={activeBg} activeColor={activeColor} hoverBg={hoverBg} active={isActive(LOCATION_LIST_PATH)} label={t('manage_locations')} />
       <NavLink to={INGREDIENT_LIST_PATH} icon={FcTimeline } activeBg={activeBg} activeColor={activeColor} hoverBg={hoverBg} active={isActive(INGREDIENT_LIST_PATH)} label={t('manage_ingredients')} />
@@ -143,6 +143,8 @@ const SidebarContent = ({ onClose, ...rest }) => {
       <Collapse in={open.delivery || location.pathname.startsWith('/super/admin/driver/list')} animateOpacity>
         <Box ml="8" mt="1"  borderRadius="md">
           <NavLink to="/super/admin/driver/list" icon={null} activeBg={activeBg} activeColor={activeColor} hoverBg={hoverBg} active={isActive('/super/admin/driver/list')} label={t('driver_list')} small />
+
+          <NavLink to={JUICE_ALLOCATION_LIST_PATH}  activeBg={activeBg} activeColor={activeColor} hoverBg={hoverBg} active={isActive(JUICE_ALLOCATION_LIST_PATH)} label={t('driver_allocation')} small />
         </Box>
       </Collapse>
 

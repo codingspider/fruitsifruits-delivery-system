@@ -379,22 +379,6 @@ const RecipeEdit = () => {
                                                 </Select>
                                             </FormControl>
 
-                                            <FormControl>
-                                                <FormLabel>{t("bottle")}</FormLabel>
-                                                <Select
-                                                    placeholder="Select"
-                                                    value={item.bottle_id}
-                                                    onChange={(e) =>
-                                                        handleChange(index, "bottle_id", e.target.value)
-                                                    }
-                                                >
-                                                    {bottles.map((bottle) => (
-                                                        <option key={bottle.id} value={bottle.id}>
-                                                            {bottle.name}
-                                                        </option>
-                                                    ))}
-                                                </Select>
-                                            </FormControl> 
 
                                             {/* Quantity */}
                                             <FormControl>

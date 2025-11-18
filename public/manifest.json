@@ -6,6 +6,7 @@
     "description": "A Progressive Web Application setup for Laravel projects.",
     "theme_color": "#6777ef",
     "start_url": "/",
+    "scope":"/build/",
     "icons": [
         {
             "src": "logo.png",

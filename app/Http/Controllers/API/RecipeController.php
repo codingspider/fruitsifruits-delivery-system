@@ -17,7 +17,7 @@ class RecipeController extends BaseController
     public function index(Request $request)
     {
         try {
-            $purchases = MfgRecipe::with(['user', 'product'])->latest()->paginate(10);
+            $purchases = MfgRecipe::with(['user', 'product', 'flavor'])->latest()->paginate(10);
             return $this->sendResponse($purchases, 'Recipe retrieved successfully.');
         } catch (\Exception $e) {
             return $this->sendError('Server Error: '.$e->getMessage());
@@ -60,12 +60,6 @@ class RecipeController extends BaseController
             return $this->sendError('Validation Error.', $validator->errors(), 422);
         }
 
-        $recipe = MfgRecipe::where('product_id',$request->product_id)->first();
-
-        if ($recipe) {
-            return $this->sendError('Data Error.', 'Recipe already exist for this product', 422);
-        }
-
         DB::beginTransaction();
         try {
             $mfg = new MfgRecipe();
@@ -86,7 +80,6 @@ class RecipeController extends BaseController
                 $line = new MfgRecipeIngredient();
                 $line->mfg_recipe_id = $mfg->id;
                 $line->product_id = $product['product_id'];
-                $line->bottle_id = $product['bottle_id'];
                 $line->quantity = $product['quantity'];
                 $line->unit = $product['unit'];
                 $line->save();
@@ -150,7 +143,6 @@ class RecipeController extends BaseController
                 $line = new MfgRecipeIngredient();
                 $line->mfg_recipe_id = $mfg->id;
                 $line->product_id = $product['product_id'];
-                $line->bottle_id = $product['bottle_id'];
                 $line->quantity = $product['quantity'];
                 $line->unit = $product['unit'];
                 $line->save();

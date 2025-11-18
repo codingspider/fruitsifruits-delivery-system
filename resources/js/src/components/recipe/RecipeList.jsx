@@ -101,7 +101,8 @@ export default function RecipeList() {
     };
     const columns = [
         { header: "ID", accessorKey: "id"},
-        { header: "Product", accessorFn: row => row.product.name || ""},
+        // { header: "Product", accessorFn: row => row.product.name || ""},
+        { header: "Flavor", accessorFn: row => row.flavor.name || ""},
         { header: "Created By",
             accessorFn: row => row.user.name || "", 
         },
