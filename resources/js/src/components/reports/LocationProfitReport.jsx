@@ -23,6 +23,7 @@ import {
     CardHeader,
     CardBody,
     Tfoot,
+    Text
 } from "@chakra-ui/react";
 import { t } from "i18next";
 import api from "../../axios";
@@ -62,7 +63,7 @@ const LocationProfitReport = () => {
     useEffect(() => {
         const app_name = localStorage.getItem("app_name") || "App";
         document.title = `${app_name} | Location Profit Report`;
-        getLocations();
+
     }, []);
 
     const onSubmit = async (data) => {
@@ -100,19 +101,6 @@ const LocationProfitReport = () => {
         }
     };
 
-    const totals = reports?.reduce(
-        (acc, row) => {
-            acc.totalQuantity += Number(row.total_quantity);
-            acc.totalNetPrice += Number(row.net_price);
-            acc.totalProfit += Number(row.total_profit);
-            return acc;
-        },
-        {
-            totalQuantity: 0,
-            totalNetPrice: 0,
-            totalProfit: 0,
-        }
-    );
 
     return (
         <Box p={6} bg={bg} minH="100vh">
@@ -131,7 +119,7 @@ const LocationProfitReport = () => {
                     }
                     th, td {
                     border: 1px solid #ccc !important;
-                    padding: 8px !important;
+                    padding: 3px !important;
                     }
                 }
                 `}
@@ -201,53 +189,77 @@ const LocationProfitReport = () => {
                     </Button>
                     {/* Wrap the printable table in a plain div with ref */}
                     <div ref={componentRef}>
-                        <TableContainer p={4} >
-                            <Table variant="simple">
+                        {reports.map((location, index) => {
+
+                        // Calculate totals for this location
+                        const totalQuantity = location.location_flavours.reduce((acc, item) => acc + (parseInt(item.sold_qty) || 0), 0);
+                        const totalPrice = location.location_flavours.reduce((acc, item) => acc + (item.flavour.price || 0), 0);
+                        const totalCostPerBottle = location.location_flavours.reduce((acc, item) => acc + (item.flavour.batch_ingredient_cost || 0), 0);
+                        const totalNetPrice = location.location_flavours.reduce((acc, item) => acc + ((item.flavour.price - item.flavour.batch_ingredient_cost) || 0), 0);
+                        const totalDealQuantity = location.location_flavours.reduce((acc, item) => acc + (parseInt(item.deal_quantity)), 0);
+                        const totalDealCost = location.location_flavours.reduce((acc, item) => acc + ((item.deal_quantity * item.flavour.price) || 0), 0);
+                        const totalProfit = location.location_flavours.reduce((acc, item) => acc + ((item.sold_qty * (item.flavour.price - item.flavour.batch_ingredient_cost)) || 0), 0);
+
+                        return (
+                            <Box key={index} mb={8}>
+                            <Text align="center" fontWeight='bold' mt={10}>{location.name}</Text>
+                            <TableContainer>
+                                <Table variant="simple">
                                 <Thead>
                                     <Tr>
-                                        <Th>Flavor</Th>
-                                        <Th isNumeric>Total Quantity</Th>
-                                        <Th isNumeric>Price per Unit</Th>
-                                        <Th isNumeric>Cost per Bottle</Th>
-                                        <Th isNumeric>Net Price</Th>
-                                        <Th isNumeric>Total Profit</Th>
+                                    <Th textAlign="center">Flavor</Th>
+                                    <Th textAlign="center">Total Quantity</Th>
+                                    <Th textAlign="center">Price per Unit</Th>
+                                    <Th textAlign="center">Cost per Bottle</Th>
+                                    <Th textAlign="center">Net Price</Th>
+                                    <Th textAlign="center">Deal Quantity</Th>
+                                    <Th textAlign="center">Deal Cost </Th>
+                                    <Th textAlign="center">Total Profit</Th>
                                     </Tr>
                                 </Thead>
 
                                 <Tbody>
-                                    {reports && reports.length > 0 ? (
-                                        reports.map((report, i) => (
-                                            <Tr key={i}>
-                                                <Td>{report.flavor}</Td>
-                                                <Td isNumeric>{report.total_quantity}</Td>
-                                                <Td isNumeric>{formatAmount(report.price_per_unit)}</Td>
-                                                <Td isNumeric>{formatAmount(report.cost_per_bottle)}</Td>
-                                                <Td isNumeric>{formatAmount(report.net_price)}</Td>
-                                                <Td isNumeric>{formatAmount(report.total_profit)}</Td>
-                                            </Tr>
-                                        ))
-                                    ) : (
-                                        <Tr>
-                                            <Td colSpan={6} textAlign="center" py={6}>
-                                                No flavors found
-                                            </Td>
-                                        </Tr>
-                                    )}
+                                    {location.location_flavours.map((flavor, index) => (
+                                    <Tr key={index}>
+                                        <Td textAlign="center">{flavor.flavour.name}</Td>
+                                        <Td textAlign="center">{flavor.sold_qty}</Td>
+                                        <Td textAlign="center">{formatAmount(flavor.flavour.price)}</Td>
+                                        <Td textAlign="center">{formatAmount(flavor.flavour.batch_ingredient_cost)}</Td>
+                                        <Td textAlign="center">{formatAmount(flavor.flavour.price - flavor.flavour.batch_ingredient_cost)}</Td>
+                                        <Td textAlign="center">{flavor.deal_quantity}</Td>
+                                        <Td textAlign="center">{formatAmount(flavor.deal_quantity * flavor.flavour.price)}</Td>
+                                        <Td textAlign="center">{formatAmount(flavor.sold_qty * (flavor.flavour.price - flavor.flavour.batch_ingredient_cost))}</Td>
+                                    </Tr>
+                                    ))}
                                 </Tbody>
 
                                 <Tfoot>
-                                    <Tr>
-                                        <Td colSpan={5} textAlign="right" fontWeight="bold">
-                                            Total Profit
-                                        </Td>
-                                        <Td textAlign="right" fontWeight="bold">
-                                            {formatAmount(totals.totalProfit)}
-                                        </Td>
+                                    <Tr bg="gray.100">
+                                    <Td textAlign="center" fontWeight="bold">Total</Td>
+                                    <Td textAlign="center" fontWeight="bold">{totalQuantity}</Td>
+                                    <Td textAlign="center" fontWeight="bold">{formatAmount(totalPrice)}</Td>
+                                    <Td textAlign="center" fontWeight="bold">{formatAmount(totalCostPerBottle)}</Td>
+                                    <Td textAlign="center" fontWeight="bold">{formatAmount(totalNetPrice)}</Td>
+                                    <Td textAlign="center" fontWeight="bold">{totalDealQuantity}</Td>
+                                    <Td textAlign="center" fontWeight="bold">{formatAmount(totalDealCost)}</Td>
+                                    <Td textAlign="center" fontWeight="bold">{formatAmount(totalProfit)}</Td>
                                     </Tr>
                                 </Tfoot>
-                            </Table>
-                        </TableContainer>
+                                </Table>
+                                
+                                <Box mr={5}>
+                                    <Text align="right" fontWeight='bold'>{t('profit')} : {formatAmount(totalProfit)}</Text>
+                                    <Text align="right" fontWeight='bold'>{t('tax')} : {formatAmount(location.total_tax)}</Text>
+                                    <Text align="right" fontWeight='bold'>{t('net_profit')} : {formatAmount(totalProfit - location.total_tax)}</Text>
+                                </Box>
+
+                            </TableContainer>
+                            </Box>
+                        )
+                        })}
+
                     </div>
+
                 </CardBody>
             </Card>
         </Box>

@@ -194,4 +194,6 @@ return [
     'close' => 'Close',
     'previous_due' => 'Previous Due',
     'output_quantity' => 'Total Output Quantity',
+    'profit' => 'Profit',
+    'net_profit' => 'Net Profit',
 ];

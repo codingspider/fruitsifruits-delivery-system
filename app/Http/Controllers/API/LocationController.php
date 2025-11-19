@@ -17,7 +17,7 @@ class LocationController extends BaseController
     public function index(Request $request)
     {
         try {
-            $locations = Location::with('location_flavours')->latest()->paginate(10);
+            $locations = Location::with('location_flavours', 'location_flavours.flavour')->latest()->paginate(10);
             return $this->sendResponse($locations, 'Location retrieved successfully.');
         } catch (\Exception $e) {
             return $this->sendError('Server Error: '.$e->getMessage());

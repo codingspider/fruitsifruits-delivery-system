@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\API;
 
+use App\Models\Location;
 use App\Models\Transaction;
 use Illuminate\Http\Request;
 use App\Models\MfgProduction;
@@ -14,71 +15,30 @@ class ReportController extends BaseController
     {
         try {
 
-            $query = MfgProduction::query()
-                ->with([
-                    'location:id,name',
-                    'product',
-                    'items',
-                    'items.flavour:id,name,price,batch_yield,batch_ingredient_cost',
-                ]);
+            $startDate = $request->start_date;
+            $endDate = $request->end_date;
 
-            // Filters
-            if ($request->start_date && $request->end_date) {
-                $query->whereBetween('created_at', [
-                    $request->start_date,
-                    $request->end_date
-                ]);
+            $locations = Location::with('location_flavours', 'location_flavours.flavour')->latest()->get();
+
+            foreach ($locations as $location) {
+                $location->total_tax = getTaxByLocation(
+                    $location->id,
+                    $startDate,
+                    $endDate
+                );
+
+                foreach ($location->location_flavours as $lf) {
+                    $lf->sold_qty = getSoldQtyByLocation(
+                        $location->id,
+                        $lf->flavour_id,
+                        $startDate,
+                        $endDate
+                    );
+                    
+                }
             }
-
-            if ($request->location_id) {
-                $query->where('location_id', $request->location_id);
-            }
-
-            $result = $query->get();
-
-            // STEP 1 — Flatten rows
-            $rows = $result->flatMap(function ($production) {
-
-                return $production->items->map(function ($line) use ($production) {
-
-                    $flavour = $line->flavour;
-
-                    // Bottle cost calculation
-                    $batchYield = $flavour->batch_yield ?? 0;
-                    $costPerBottle  = $flavour->batch_ingredient_cost ?? 0;
-
-                    $pricePerUnit = $flavour->price ?? 0;
-                    $quantity     = $line->quantity;
-                    $netPrice = $pricePerUnit - $costPerBottle;
-                    $profit = $netPrice * $quantity;
-
-                    return [
-                        'flavor'          => $flavour->name,
-                        'product'         => optional($production->product)->name,
-                        'total_quantity'  => $quantity,
-                        'price_per_unit'  => $pricePerUnit,
-                        'cost_per_bottle' => $costPerBottle,
-                        'net_price'       => $netPrice,
-                        'total_profit'    => $profit,
-                    ];
-                });
-            });
-
-            // STEP 2 — GROUP by flavor
-            $final = $rows->groupBy('flavor')->map(function ($group) {
-
-                return [
-                    'flavor'          => $group->first()['flavor'],
-                    'total_quantity'  => $group->sum('total_quantity'),
-                    'price_per_unit'  => $group->first()['price_per_unit'],
-                    'cost_per_bottle' => $group->first()['cost_per_bottle'],
-                    'net_price'       => $group->first()['net_price'],
-                    'total_profit'    => $group->sum('total_profit'),
-                ];
-            })->values();
-
-
-            return $this->sendResponse($final, 'Report retrieved successfully.');
+            
+            return $this->sendResponse($locations, 'Report retrieved successfully.');
 
         } catch (\Exception $e) {
             return $this->sendError('Server Error: ' . $e->getMessage());

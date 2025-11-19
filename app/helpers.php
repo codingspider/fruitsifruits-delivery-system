@@ -516,3 +516,45 @@ function getReturned($startDate, $endDate, $flavour_id, $bottle_id){
     $data = $query->where('flavour_id', $flavour_id)->where('bottle_id', $bottle_id)->sum('quantity');
     return $data;
 }
+
+
+function getSoldQtyByLocation($location_id, $flavour_id, $startDate = null, $endDate = null)
+{
+    // Build query on SellLine joined with Transactions
+    $query = SellLine::query()
+        ->join('transactions', 'sell_lines.transaction_id', '=', 'transactions.id')
+        ->where('transactions.location_id', $location_id)
+        ->where('transactions.transaction_type', 'sell')
+        ->where('sell_lines.flavour_id', $flavour_id);
+
+    // Filter by date if provided
+    if ($startDate && $endDate) {
+        $query->whereBetween('transactions.created_at', [
+            $startDate . ' 00:00:00',
+            $endDate . ' 23:59:59'
+        ]);
+    }
+
+    // Return the sum
+    return $query->sum('sell_lines.to_be_filled');
+}
+
+function getTaxByLocation($location_id, $startDate = null, $endDate = null)
+{
+    // Build query on SellLine joined with Transactions
+    $query = Transaction::query()
+        ->join('sells', 'sells.transaction_id', '=', 'transactions.id')
+        ->where('transactions.transaction_type', 'sell')
+        ->where('transactions.location_id', $location_id);
+
+    // Filter by date if provided
+    if ($startDate && $endDate) {
+        $query->whereBetween('transactions.created_at', [
+            $startDate . ' 00:00:00',
+            $endDate . ' 23:59:59'
+        ]);
+    }
+
+    // Return the sum
+    return $query->sum('sells.tax');
+}
