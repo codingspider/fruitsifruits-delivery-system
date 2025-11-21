@@ -76,8 +76,8 @@ import LocationOverview from "./components/driver/LocationOverview";
 import LocationProfitReport from "./components/reports/LocationProfitReport";
 import DeliverySummeryReport from "./components/reports/DeliverySummeryReport";
 import DailyCollection from "./components/driver/DailyCollection";
-
 import DriverReportStats from "./components/driver/DriverStats";
+import SellReport from "./components/reports/SellReport";
 
 // ✅ Public Routes
 export const ROOT = '/';
@@ -222,6 +222,7 @@ export const LOGIN_HISTORY_PATH = `${SUPER_ADMIN_BASE}/login/history`;
 
 export const LOCAITON_PROFIT_REPORT_PATH = `${SUPER_ADMIN_BASE}/location/profit/report`;
 export const DELIVERY_SUMMERY_REPORT_PATH = `${SUPER_ADMIN_BASE}/delivery/summery/report`;
+export const SELL_REPORT_PATH = `${SUPER_ADMIN_BASE}/sell/report`;
 
 const router = createBrowserRouter([
   {
@@ -311,6 +312,8 @@ const router = createBrowserRouter([
       { path: LOGIN_HISTORY_PATH, element: <ProtectedRoute role="superadmin"><LoginHistory /></ProtectedRoute> },
       { path: LOCAITON_PROFIT_REPORT_PATH, element: <ProtectedRoute role="superadmin"><LocationProfitReport /></ProtectedRoute> },
       { path: DELIVERY_SUMMERY_REPORT_PATH, element: <ProtectedRoute role="superadmin"><DeliverySummeryReport /></ProtectedRoute> },
+
+      { path: SELL_REPORT_PATH, element: <ProtectedRoute role={["superadmin", "driver"]}><SellReport /></ProtectedRoute> },
     ],
   },
   {

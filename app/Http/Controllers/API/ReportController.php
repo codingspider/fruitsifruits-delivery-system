@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\API;
 
+use App\Models\Setting;
 use App\Models\Location;
 use App\Models\Transaction;
 use Illuminate\Http\Request;
@@ -99,6 +100,63 @@ class ReportController extends BaseController
             })->values();
 
             return $this->sendResponse($grouped, 'Report retrieved successfully.');
+        } catch (\Exception $e) {
+            return $this->sendError('Server Error: ' . $e->getMessage());
+        }
+    }
+
+    public function getSellReport(Request $request){
+        try {
+
+            $startDate = $request->start_date;
+            $endDate = $request->end_date;
+
+            $query = Transaction::query()->with('sell', 'location');
+            if ($request->start_date && $request->end_date) {
+                $query->whereBetween('created_at', [$request->start_date, $request->end_date]);
+            }
+
+            if ($request->location_id) {
+                $query->where('location_id', $request->location_id);
+            }
+
+            // ✅ Fetch transactions
+            $transactions = $query->get();
+            
+            return $this->sendResponse($transactions ?? [], 'Report retrieved successfully.');
+
+        } catch (\Exception $e) {
+            return $this->sendError('Server Error: ' . $e->getMessage());
+        }
+    }
+    
+    public function getSellDetail($id){
+        try {
+            $user = auth()->user();
+
+            // Base query
+            $query = Transaction::with([
+                'sell',
+                'location',
+                'sell_lines',
+                'sell_lines.product',
+                'sell_lines.flavor',
+                'sell_lines.bottle'
+            ])->where('id', $id);
+
+            // Restrict for driver role
+            if ($user->role === 'driver') {
+                $query->where('created_by', $user->id);
+            }
+
+            // Fetch transaction
+            $transaction = $query->firstOrFail();
+
+            // Attach settings safely
+            $transaction->setting = Setting::latest()->first();
+
+            return $this->sendResponse($transaction, 'Report retrieved successfully.');
+
         } catch (\Exception $e) {
             return $this->sendError('Server Error: ' . $e->getMessage());
         }

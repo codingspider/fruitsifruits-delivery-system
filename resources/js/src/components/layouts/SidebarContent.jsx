@@ -26,6 +26,7 @@ import {
   FcBusinessman,
   FcIcons8Cup,
   FcPanorama,
+  FcBullish,
 } from 'react-icons/fc';
 import { Link as RouterLink, useLocation } from 'react-router-dom';
 import {
@@ -40,7 +41,7 @@ import {
 } from '@chakra-ui/react';
 
 import { useTranslation } from 'react-i18next';
-import { BACKUP_PROCESSING_PATH, DRIVER_ROUTE_LIST_PATH, FINISH_GOOD_LIST_PATH, FLAVOUR_LIST_PATH, INGREDIENT_LIST_PATH, JUICE_ALLOCATION_LIST_PATH, LOCATION_LIST_PATH, LOGIN_HISTORY_PATH, PRODUCTION_LIST_PATH, PURCHASE_LIST_PATH, RECIPE_LIST_PATH, USER_LIST_PATH, BOTTLE_LIST_PATH, ASSIGN_TASK_PATH, DRIVER_DASHBOARD_PATH, JUICE_ALLOCATION_PATH, DRIVER_REPORT_PATH, RETURN_LEFTOVER_PATH, DRIVER_PROFILE_PATH, JPS_DASHBOARD_PATH, JPS_REPORT_PATH, DRIVER_LOCATION_OVERVIEW,DASHBOARD_PATH, LOCAITON_PROFIT_REPORT_PATH, DELIVERY_SUMMERY_REPORT_PATH, DRIVER_DAILY_COLLECTION } from '../../router';
+import { BACKUP_PROCESSING_PATH, DRIVER_ROUTE_LIST_PATH, FINISH_GOOD_LIST_PATH, FLAVOUR_LIST_PATH, INGREDIENT_LIST_PATH, JUICE_ALLOCATION_LIST_PATH, LOCATION_LIST_PATH, LOGIN_HISTORY_PATH, PRODUCTION_LIST_PATH, PURCHASE_LIST_PATH, RECIPE_LIST_PATH, USER_LIST_PATH, BOTTLE_LIST_PATH, ASSIGN_TASK_PATH, DRIVER_DASHBOARD_PATH, JUICE_ALLOCATION_PATH, DRIVER_REPORT_PATH, RETURN_LEFTOVER_PATH, DRIVER_PROFILE_PATH, JPS_DASHBOARD_PATH, JPS_REPORT_PATH, DRIVER_LOCATION_OVERVIEW,DASHBOARD_PATH, LOCAITON_PROFIT_REPORT_PATH, DELIVERY_SUMMERY_REPORT_PATH, DRIVER_DAILY_COLLECTION, SELL_REPORT_PATH } from '../../router';
 import { logoutUser } from '../../services/authService';
 import { useNavigate } from "react-router-dom";
 
@@ -104,18 +105,14 @@ const SidebarContent = ({ onClose, ...rest }) => {
       
       {/* ----- Static links ----- */}
       <NavLink to={DASHBOARD_PATH} icon={FcHome} activeBg={activeBg} activeColor={activeColor} hoverBg={hoverBg} active={isActive(DASHBOARD_PATH)} label={t('dashboard')} />
-      
       <NavLink to={DRIVER_ROUTE_LIST_PATH}  icon={FcList} activeBg={activeBg} activeColor={activeColor} hoverBg={hoverBg} active={isActive(DRIVER_ROUTE_LIST_PATH)} label={t('manage_route')} />
       <NavLink to={LOCATION_LIST_PATH} icon={FcHeatMap } activeBg={activeBg} activeColor={activeColor} hoverBg={hoverBg} active={isActive(LOCATION_LIST_PATH)} label={t('manage_locations')} />
       <NavLink to={INGREDIENT_LIST_PATH} icon={FcTimeline } activeBg={activeBg} activeColor={activeColor} hoverBg={hoverBg} active={isActive(INGREDIENT_LIST_PATH)} label={t('manage_ingredients')} />
       <NavLink to={BOTTLE_LIST_PATH} icon={FcIcons8Cup } activeBg={activeBg} activeColor={activeColor} hoverBg={hoverBg} active={isActive(BOTTLE_LIST_PATH)} label={t('manage_bottle')} />
-      
       <NavLink to={FINISH_GOOD_LIST_PATH} icon={FcOk } activeBg={activeBg} activeColor={activeColor} hoverBg={hoverBg} active={isActive(FINISH_GOOD_LIST_PATH)} label={t('products')} />
       <NavLink to={RECIPE_LIST_PATH} icon={FcMultipleInputs } activeBg={activeBg} activeColor={activeColor} hoverBg={hoverBg} active={isActive(RECIPE_LIST_PATH)} label={t('recipe')} />
       <NavLink to={PRODUCTION_LIST_PATH} icon={FcFactory } activeBg={activeBg} activeColor={activeColor} hoverBg={hoverBg} active={isActive(PRODUCTION_LIST_PATH)} label={t('juice_production')} />
-      
       <NavLink to={FLAVOUR_LIST_PATH} icon={FcFilledFilter } activeBg={activeBg} activeColor={activeColor} hoverBg={hoverBg} active={isActive(FLAVOUR_LIST_PATH)} label={t('manage_flavour')} />
-      {/* <NavLink to={PURCHASE_LIST_PATH} icon={FcMoneyTransfer } activeBg={activeBg} activeColor={activeColor} hoverBg={hoverBg} active={isActive(PURCHASE_LIST_PATH)} label={t('purchase')} /> */}
 
       {/* ----- Dropdown: user management ----- */}
       <DropdownHeader
@@ -143,7 +140,6 @@ const SidebarContent = ({ onClose, ...rest }) => {
       <Collapse in={open.delivery || location.pathname.startsWith('/super/admin/driver/list')} animateOpacity>
         <Box ml="8" mt="1"  borderRadius="md">
           <NavLink to="/super/admin/driver/list" icon={null} activeBg={activeBg} activeColor={activeColor} hoverBg={hoverBg} active={isActive('/super/admin/driver/list')} label={t('driver_list')} small />
-
           <NavLink to={JUICE_ALLOCATION_LIST_PATH}  activeBg={activeBg} activeColor={activeColor} hoverBg={hoverBg} active={isActive(JUICE_ALLOCATION_LIST_PATH)} label={t('driver_allocation')} small />
         </Box>
       </Collapse>
@@ -160,6 +156,7 @@ const SidebarContent = ({ onClose, ...rest }) => {
         <Box ml="8" mt="1"  borderRadius="md">
           <NavLink to={LOCAITON_PROFIT_REPORT_PATH}    icon={null} activeBg={activeBg} activeColor={activeColor} hoverBg={hoverBg} active={isActive(LOCAITON_PROFIT_REPORT_PATH)}    label={t('profit_report')}   small />
           <NavLink to={DELIVERY_SUMMERY_REPORT_PATH}  icon={null} activeBg={activeBg} activeColor={activeColor} hoverBg={hoverBg} active={isActive(DELIVERY_SUMMERY_REPORT_PATH)}  label={t('delivery_summery_report')} small />
+          <NavLink to={SELL_REPORT_PATH}  icon={null} activeBg={activeBg} activeColor={activeColor} hoverBg={hoverBg} active={isActive(SELL_REPORT_PATH)}  label={t('sell_report')} small />
         </Box>
       </Collapse>
       
@@ -174,7 +171,8 @@ const SidebarContent = ({ onClose, ...rest }) => {
         <NavLink to={DRIVER_DASHBOARD_PATH} icon={FcHome } activeBg={activeBg} activeColor={activeColor} hoverBg={hoverBg} active={isActive(DRIVER_DASHBOARD_PATH)} label={ t('dashboard') } />
         <NavLink to={ASSIGN_TASK_PATH} icon={FcList } activeBg={activeBg} activeColor={activeColor} hoverBg={hoverBg} active={isActive(ASSIGN_TASK_PATH)} label={ t('assign_task') } />
         <NavLink to={JUICE_ALLOCATION_PATH} icon={FcFlowChart } activeBg={activeBg} activeColor={activeColor} hoverBg={hoverBg} active={isActive(JUICE_ALLOCATION_PATH)} label={ t('juice_allocation') } />
-        <NavLink to={DRIVER_REPORT_PATH} icon={FcBarChart } activeBg={activeBg} activeColor={activeColor} hoverBg={hoverBg} active={isActive(DRIVER_REPORT_PATH)} label={ t('report') } />
+        {/* <NavLink to={DRIVER_REPORT_PATH} icon={FcBarChart } activeBg={activeBg} activeColor={activeColor} hoverBg={hoverBg} active={isActive(DRIVER_REPORT_PATH)} label={ t('report') } /> */}
+        <NavLink to={SELL_REPORT_PATH}  icon={FcBullish} activeBg={activeBg} activeColor={activeColor} hoverBg={hoverBg} active={isActive(SELL_REPORT_PATH)}  label={t('sell_report')} />
         <NavLink to={RETURN_LEFTOVER_PATH} icon={FcUndo } activeBg={activeBg} activeColor={activeColor} hoverBg={hoverBg} active={isActive(RETURN_LEFTOVER_PATH)} label={ t('return_leftover') } />
         <NavLink to={DRIVER_PROFILE_PATH} icon={FcBusinessman } activeBg={activeBg} activeColor={activeColor} hoverBg={hoverBg} active={isActive(DRIVER_PROFILE_PATH)} label={ t('driver_profile') } />
         <NavLink to={DRIVER_LOCATION_OVERVIEW} icon={FcPanorama } activeBg={activeBg} activeColor={activeColor} hoverBg={hoverBg} active={isActive(DRIVER_LOCATION_OVERVIEW)} label={ t('location_overview') } />

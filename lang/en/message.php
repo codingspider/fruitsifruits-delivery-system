@@ -196,4 +196,5 @@ return [
     'output_quantity' => 'Total Output Quantity',
     'profit' => 'Profit',
     'net_profit' => 'Net Profit',
+    'sell_report' => 'Sell Report',
 ];
