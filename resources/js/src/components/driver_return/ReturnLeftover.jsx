@@ -35,6 +35,7 @@ const ReturnLeftover = () => {
     const [products, setProducts] = useState([]);
     const [drivers, setDrivers] = useState([]);
     const [bottles, setBottles] = useState([]);
+    const [locations, setLocations] = useState([]);
     const toast = useToast();
     const navigate = useNavigate();
 
@@ -47,6 +48,7 @@ const ReturnLeftover = () => {
     const [form, setForm] = useState({
         product_id: "",
         driver_id: "",
+        location_id: "",
         allocation_date: "",
     });
 
@@ -74,6 +76,7 @@ const ReturnLeftover = () => {
         try {
             const payload = {
                 product_id: form.product_id,
+                // location_id: form.location_id,
                 allocation_date: form.allocation_date,
                 lines: items.map((item) => ({
                     flavour_id: item.flavour_id,
@@ -125,6 +128,11 @@ const ReturnLeftover = () => {
         const res = await api.get("superadmin/get/bottles");
         setBottles(res.data.data.data);
     };
+    
+    const getLocations = async () => {
+        const res = await api.get("superadmin/get/locations");
+        setLocations(res.data.data);
+    };
 
     // ⚡ Load on mount
     useEffect(() => {
@@ -133,6 +141,7 @@ const ReturnLeftover = () => {
         getFlavours();
         getProducts();
         getBottles();
+        getLocations();
     }, []);
 
     return (
@@ -167,10 +176,30 @@ const ReturnLeftover = () => {
                         <form onSubmit={handleSubmit(onSubmit)}>
                             <SimpleGrid columns={{ base: 2, md: 2 }} spacing={6}>
                                 {/* Product */}
+                                {/* <FormControl isRequired>
+                                    <FormLabel>{t("location")}</FormLabel>
+                                    <Select
+                                        placeholder="Select"
+                                        value={form.location_id}
+                                        onChange={(e) =>
+                                            setForm((prev) => ({
+                                                ...prev,
+                                                location_id: e.target.value,
+                                            }))
+                                        }
+                                    >
+                                        {locations.map((location) => (
+                                            <option key={location.id} value={location.id}>
+                                                {location.name}
+                                            </option>
+                                        ))}
+                                    </Select>
+                                </FormControl> */}
+
                                 <FormControl isRequired>
                                     <FormLabel>{t("product")}</FormLabel>
                                     <Select
-                                        placeholder="Select Product"
+                                        placeholder="Select"
                                         value={form.product_id}
                                         onChange={(e) =>
                                             setForm((prev) => ({

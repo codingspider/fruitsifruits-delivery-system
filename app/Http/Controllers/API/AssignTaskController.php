@@ -215,6 +215,7 @@ class AssignTaskController extends BaseController
 
             $allocation = new ReturnLeftover();
             $allocation->product_id = $request->product_id;
+            // $allocation->location_id = $request->location_id;
             $allocation->allocation_date = $request->allocation_date;
             $allocation->driver_id = auth()->user()->id;
             $allocation->save();

@@ -98,6 +98,8 @@ Route::middleware(['auth:sanctum'])->prefix('superadmin')->group(function () {
     Route::get('get/recent/payments', [AdminDashboardController::class, 'getRecentPayments']);
     Route::post('get/sell/report', [ReportController::class, 'getSellReport']);
     Route::get('get/sell/details/{id}', [ReportController::class, 'getSellDetail']);
+    Route::get('get/locations', [LocationController::class, 'getLocation']);
+    Route::post('get/sell/return/report', [ReportController::class, 'getReturnReport']);
 
     Route::get('/backup-and-download', function () {
         Artisan::call('backup:run');

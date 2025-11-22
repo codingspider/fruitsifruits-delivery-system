@@ -32,6 +32,12 @@ class LocationController extends BaseController
         $product = Location::with('location_flavours')->find($id);
         return $this->sendResponse($product, 'Product retrieved successfully.');
     }
+    
+    public function getLocation()
+    {
+        $location = Location::all();
+        return $this->sendResponse($location, 'location retrieved successfully.');
+    }
 
     /**
      * Edit product (same as show)

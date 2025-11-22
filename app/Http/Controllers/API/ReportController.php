@@ -45,6 +45,58 @@ class ReportController extends BaseController
             return $this->sendError('Server Error: ' . $e->getMessage());
         }
     }
+    
+    public function getReturnReport(Request $request)
+    {
+        try {
+
+            $startDate = $request->start_date;
+            $endDate   = $request->end_date;
+            $query = Transaction::with([
+                'location',
+                'sell_returns',
+                'sell_returns.flavor',
+                'sell_returns.bottle'
+            ]);
+
+            $query->whereHas('sell_returns');
+
+            $role = auth()->user()->role;
+            if($role == 'dirver'){
+                $query->where('created_by', auth()->user()->id);
+            }
+
+            if ($startDate) {
+                $query->whereDate('created_at', '>=', $startDate);
+            }
+
+            if ($endDate) {
+                $query->whereDate('created_at', '<=', $endDate);
+            }
+
+            if($request->location_id){
+                $query->where('location_id', $request->location_id);
+            }
+
+            $transactions = $query->groupBy('location_id')->get();
+
+            foreach ($transactions as $transaction) {
+                foreach ($transaction->sell_returns as $sr) {
+                    $sr->return_qty = getReturnQuantity(
+                        $sr->flavour_id,
+                        $startDate,
+                        $endDate
+                    );
+                }
+            }
+
+            
+            return $this->sendResponse($transactions, 'Report retrieved successfully.');
+
+        } catch (\Exception $e) {
+            return $this->sendError('Server Error: ' . $e->getMessage());
+        }
+    }
 
     public function deliverySummeryReport(Request $request)
     {

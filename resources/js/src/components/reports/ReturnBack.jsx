@@ -32,7 +32,7 @@ import { useCurrencyFormatter } from "../../useCurrencyFormatter";
 import { useRef } from "react";
 import { useReactToPrint } from "react-to-print";
 
-const LocationProfitReport = () => {
+const ReturnBack = () => {
     const bg = useColorModeValue("gray.50", "gray.800");
     const cardBg = useColorModeValue("white", "gray.700");
     const [locations, setLocations] = useState([]);
@@ -62,14 +62,15 @@ const LocationProfitReport = () => {
 
     useEffect(() => {
         const app_name = localStorage.getItem("app_name") || "App";
-        document.title = `${app_name} | Location Profit Report`;
+        document.title = `${app_name} | Location Return Report`;
+        getLocations();
 
     }, []);
 
     const onSubmit = async (data) => {
         setIsSubmitting(true);
         try {
-            const res = await api.post("superadmin/get/profit/report", data);
+            const res = await api.post("superadmin/get/sell/return/report", data);
             console.log(res.data.data);
             setReports(res.data.data);
         } catch (err) {
@@ -105,7 +106,7 @@ const LocationProfitReport = () => {
     return (
         <Box p={6} bg={bg} minH="100vh">
             <Heading size="md" mb={4}>
-                {t("profit_report")}
+                {t("return_back_report")}
             </Heading>
             <style>
                 {`
@@ -133,7 +134,7 @@ const LocationProfitReport = () => {
                         gap={4}
                     >
                         {/* Location */}
-                        {/* <GridItem>
+                        <GridItem>
                             <FormControl>
                                 <FormLabel>Select Location</FormLabel>
                                 <Select
@@ -150,7 +151,7 @@ const LocationProfitReport = () => {
                                     ))}
                                 </Select>
                             </FormControl>
-                        </GridItem> */}
+                        </GridItem>
 
                         {/* Start Date */}
                         <GridItem>
@@ -189,69 +190,32 @@ const LocationProfitReport = () => {
                     </Button>
                     {/* Wrap the printable table in a plain div with ref */}
                     <div ref={componentRef}>
-                        {reports.map((location, index) => {
-
-                        // Calculate totals for this location
-                        const totalQuantity = location.location_flavours.reduce((acc, item) => acc + (parseInt(item.sold_qty) || 0), 0);
-                        const totalPrice = location.location_flavours.reduce((acc, item) => acc + (item.flavour.price || 0), 0);
-                        const totalCostPerBottle = location.location_flavours.reduce((acc, item) => acc + (item.flavour.batch_ingredient_cost || 0), 0);
-                        const totalNetPrice = location.location_flavours.reduce((acc, item) => acc + ((item.flavour.price - item.flavour.batch_ingredient_cost) || 0), 0);
-                        const totalDealQuantity = location.location_flavours.reduce((acc, item) => acc + (parseInt(item.deal_quantity)), 0);
-                        const totalDealCost = location.location_flavours.reduce((acc, item) => acc + ((item.deal_quantity * item.flavour.price) || 0), 0);
-                        const totalProfit = location.location_flavours.reduce((acc, item) => acc + ((item.sold_qty * (item.flavour.price - item.flavour.batch_ingredient_cost)) || 0), 0);
+                        {reports.map((report, index) => {
 
                         return (
                             <Box key={index} mb={8}>
-                            <Text align="center" fontWeight='bold' mt={10}>{location.name}</Text>
+                            <Text align="center" fontWeight='bold' mt={10}>{report.location.name}</Text>
                             <TableContainer>
                                 <Table variant="simple">
                                 <Thead>
                                     <Tr>
-                                    <Th textAlign="center">Flavor</Th>
-                                    <Th textAlign="center">Total Quantity</Th>
-                                    <Th textAlign="center">Price per Unit</Th>
-                                    <Th textAlign="center">Cost per Bottle</Th>
-                                    <Th textAlign="center">Net Price</Th>
-                                    <Th textAlign="center">Deal Quantity</Th>
-                                    <Th textAlign="center">Deal Cost </Th>
-                                    <Th textAlign="center">Total Profit</Th>
+                                        <Th textAlign="center">Flavor</Th>
+                                        <Th textAlign="center">Bottle</Th>
+                                        <Th textAlign="center">Total Quantity</Th>
                                     </Tr>
                                 </Thead>
 
                                 <Tbody>
-                                    {location.location_flavours.map((flavor, index) => (
+                                    {report.sell_returns && report.sell_returns.map((flavor, index) => (
                                     <Tr key={index}>
-                                        <Td textAlign="center">{flavor.flavour.name}</Td>
-                                        <Td textAlign="center">{flavor.sold_qty}</Td>
-                                        <Td textAlign="center">{formatAmount(flavor.flavour.price)}</Td>
-                                        <Td textAlign="center">{formatAmount(flavor.flavour.batch_ingredient_cost)}</Td>
-                                        <Td textAlign="center">{formatAmount(flavor.flavour.price - flavor.flavour.batch_ingredient_cost)}</Td>
-                                        <Td textAlign="center">{flavor.deal_quantity}</Td>
-                                        <Td textAlign="center">{formatAmount(flavor.deal_quantity * flavor.flavour.price)}</Td>
-                                        <Td textAlign="center">{formatAmount(flavor.sold_qty * (flavor.flavour.price - flavor.flavour.batch_ingredient_cost))}</Td>
+                                        <Td textAlign="center">{flavor.flavor?.name}</Td>
+                                        <Td textAlign="center">{flavor.bottle?.name}</Td>
+                                        <Td textAlign="center">{flavor.return_qty}</Td>
                                     </Tr>
                                     ))}
                                 </Tbody>
 
-                                <Tfoot>
-                                    <Tr bg="gray.100">
-                                    <Td textAlign="center" fontWeight="bold">Total</Td>
-                                    <Td textAlign="center" fontWeight="bold">{totalQuantity}</Td>
-                                    <Td textAlign="center" fontWeight="bold">{formatAmount(totalPrice)}</Td>
-                                    <Td textAlign="center" fontWeight="bold">{formatAmount(totalCostPerBottle)}</Td>
-                                    <Td textAlign="center" fontWeight="bold">{formatAmount(totalNetPrice)}</Td>
-                                    <Td textAlign="center" fontWeight="bold">{totalDealQuantity ?? 0}</Td>
-                                    <Td textAlign="center" fontWeight="bold">{formatAmount(totalDealCost)}</Td>
-                                    <Td textAlign="center" fontWeight="bold">{formatAmount(totalProfit)}</Td>
-                                    </Tr>
-                                </Tfoot>
                                 </Table>
-                                
-                                <Box mr={5}>
-                                    <Text align="right" fontWeight='bold'>{t('profit')} : {formatAmount(totalProfit)}</Text>
-                                    <Text align="right" fontWeight='bold'>{t('tax')} : {formatAmount(location.total_tax)}</Text>
-                                    <Text align="right" fontWeight='bold'>{t('net_profit')} : {formatAmount(totalProfit - location.total_tax)}</Text>
-                                </Box>
 
                             </TableContainer>
                             </Box>
@@ -266,4 +230,4 @@ const LocationProfitReport = () => {
     );
 };
 
-export default LocationProfitReport;
+export default ReturnBack;

@@ -24,6 +24,10 @@ class Transaction extends Model
     public function payment_lines() { 
         return $this->hasMany(PaymentLine::class); 
     }
+    
+    public function sell_returns() { 
+        return $this->hasMany(SellReturn::class); 
+    }
 
     public function sell() { 
         return $this->hasOne(Sell::class); 

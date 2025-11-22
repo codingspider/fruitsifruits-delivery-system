@@ -197,4 +197,5 @@ return [
     'profit' => 'Profit',
     'net_profit' => 'Net Profit',
     'sell_report' => 'Sell Report',
+    'return_back_report' => 'Return Back',
 ];

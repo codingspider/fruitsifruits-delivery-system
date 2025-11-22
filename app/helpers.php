@@ -2,6 +2,7 @@
 
 use Carbon\Carbon;
 use App\Models\SellLine;
+use App\Models\SellReturn;
 use App\Models\Transaction;
 use App\Models\ReturnLeftoverItem;
 use App\Models\DriverJuiceAllocationLine;
@@ -537,6 +538,18 @@ function getSoldQtyByLocation($location_id, $flavour_id, $startDate = null, $end
 
     // Return the sum
     return $query->sum('sell_lines.to_be_filled');
+}
+
+
+function getReturnQuantity($flavour_id, $startDate = null, $endDate = null)
+{
+    // Build query on SellLine joined with Transactions
+    $query = SellReturn::query()->where('flavour_id', $flavour_id);
+    if ($startDate && $endDate) {
+        $query->whereBetween('created_at', [$startDate, $endDate]);
+    }
+
+    return $query->sum('qty');
 }
 
 function getTaxByLocation($location_id, $startDate = null, $endDate = null)
